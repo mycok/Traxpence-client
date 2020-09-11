@@ -8,6 +8,8 @@ import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
 import Assessment from "@material-ui/icons/Assessment";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
+import Home from './pages/Home';
+
 type MainProps = {
   classes: any,
   anchorEl: any,
@@ -22,18 +24,32 @@ type RouteProps = {
   history: {}
 }
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
   createStyles({
     paper: {
-      height: "100%",
-      width: "100%",
-      backgroundColor: "teal"
+      height: "100vh",
+      width: "100%"
+    },
+    drawer: {
+      width: 140,
+      flexShrink: 0,
+      zIndex: 10
+    },
+    drawerPaper: {
+      width: 140,
+      zIndex: 20
     },
     drawerList: {
       marginTop: 30
     },
     listItem: {
-      margin: 20
+      margin: 20,
+      width: 60
+    },
+    menu: {
+      zIndex: 30,
+      margin: 10,
+      backgroundColor: theme.palette.primary.main
     }
   })
 );
@@ -75,14 +91,14 @@ function Layout({ classes, anchorEl, itemList, handleClick, handleClose }: Parti
     <Grid container>
       <CssBaseline />
       <Grid item xs={1}>
-        <Drawer variant="permanent">
+        <Drawer variant="permanent" className={classes.drawer} classes={{ paper: classes.drawerPaper }}>
           <RenderList itemList={itemList} classes={classes} handleClick={handleClick} />
-          <UserMenu anchorEl={anchorEl} handleClose={handleClose} />
+          <UserMenu classes={classes} anchorEl={anchorEl} handleClose={handleClose} />
         </Drawer>
       </Grid>
       <Grid item xs={11}>
         <Paper className={classes.paper}>
-          <div>Content Area</div>
+            <Home />
         </Paper>
       </Grid>
     </Grid>
@@ -99,6 +115,7 @@ function RenderList({ itemList, classes, handleClick }: Partial<MainProps>) {
               className={classes.listItem}
               button
               key={icon.name}
+              // selected={icon.name === 'Account'}
               onClick={icon.name === "Account" ? handleClick : undefined}
             >
               <ListItemIcon>
@@ -112,12 +129,13 @@ function RenderList({ itemList, classes, handleClick }: Partial<MainProps>) {
   )
 }
 
-function UserMenu({ anchorEl, handleClose }: Partial<MainProps>) {
+function UserMenu({ classes, anchorEl, handleClose }: Partial<MainProps>) {
   return (
     <Popper
+      className={classes.menu}
       open={Boolean(anchorEl)}
       anchorEl={anchorEl}
-      placement="right-end"
+      placement="right"
       role={undefined}
       transition
     >
