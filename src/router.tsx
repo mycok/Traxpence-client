@@ -1,15 +1,19 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 
-import App from "./App";
+import Signup from './pages/user/Signup';
+import Signin from './pages/auth/Signin';
+import Home from './pages/Home';
 
-function AppRouter () {
+function AppRouter() {
     return (
-        <Router>
+        <>
             <Switch>
-                <Route path="/" render={(props) => <App {...props} />} />
+                <Route exact path="/" component={Home} />
+                <Route exact path="/signup" component={Signup} />
+                <Route exact path="/signin" component={Signin} />
             </Switch>
-        </Router>
+        </>
     )
 }
 
