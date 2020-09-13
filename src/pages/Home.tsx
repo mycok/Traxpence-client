@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import { ReactComponent as Wallet } from "../images/wallet.svg";
 
 const useStyles = makeStyles(() =>
@@ -28,7 +29,7 @@ function Home() {
             <div>
                 <Wallet />
             </div>
-            <div>
+            <div className={classes.child}>
                 <Typography variant="h6" align="center">
                     Thank you choosing Traxpense for all your expense tracking needs
                 </Typography>
@@ -39,9 +40,26 @@ function Home() {
                     variant="contained"
                     fullWidth
                     color="secondary"
+                    component={Link}
+                    to="/signin"
                 >
-                    Create Account
+                    Sign In
                 </Button>
+            </div>
+            <div>
+                <Typography>OR</Typography>
+            </div>
+            <div>
+            <Button
+                    className={classes.mainButton}
+                    variant="text"
+                    fullWidth
+                    color="secondary"
+                    component={Link}
+                    to="/signup"
+                >
+                    Sign Up
+                </Button> 
             </div>
         </div>
     )
