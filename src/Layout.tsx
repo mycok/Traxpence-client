@@ -1,13 +1,14 @@
 import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
-import { Grid, Drawer, Paper, List, ListItem, ListItemIcon, MenuItem, Grow, Popper, ClickAwayListener } from "@material-ui/core";
+import { Grid, Drawer, Paper, List, ListItem, ListItemIcon, MenuItem, Grow, Popper, ClickAwayListener, Fab } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Account from "@material-ui/icons/AccountCircleSharp";
 import Date from "@material-ui/icons/DateRangeSharp";
 import AccBalance from "@material-ui/icons/AccountBalanceSharp";
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
 import Assessment from "@material-ui/icons/Assessment";
+import Add from "@material-ui/icons/Add";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import AppRouter from './router';
@@ -16,15 +17,11 @@ type MainProps = {
     classes: any,
     anchorEl: any,
     itemList: Array<any>,
+    selected?: string,
     handleClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void | undefined,
     handleClose: any
+    selectionHandler: any
 }
-
-// type RouteProps = {
-//     location: {},
-//     match: {},
-//     history: {}
-// }
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -47,16 +44,32 @@ const useStyles = makeStyles((theme) =>
             zIndex: 20
         },
         drawerList: {
-            marginTop: 50
+            marginTop: 50,
+            backgroundColor: theme.palette.background.paper,
         },
         listItem: {
             margin: 20,
-            width: 70
+            width: 70,
+            // "&:hover": {
+            //     backgroundColor: "green" 
+            // },
         },
         menu: {
             zIndex: 30,
             margin: 10,
             backgroundColor: theme.palette.primary.main
+        },
+        addButtonContainer: {
+            position: "absolute",
+            margin: 0,
+            bottom: 30
+        },
+        addButton: {
+            color: theme.palette.common.black,
+            backgroundColor: theme.palette.secondary.main,
+            '&:hover': {
+                backgroundColor: theme.palette.secondary.dark,
+            },
         }
     })
 );
@@ -72,6 +85,7 @@ const iconList = [
 function Layout() {
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [selected, setSelected] = React.useState<string>("");
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -86,9 +100,22 @@ function Layout() {
             <Grid container>
                 <CssBaseline />
                 <Grid item xs={1}>
-                    <Drawer variant="permanent" className={classes.drawer} classes={{ paper: classes.drawerPaper }}>
-                        <RenderList itemList={iconList} classes={classes} handleClick={handleClick} />
-                        <UserMenu classes={classes} anchorEl={anchorEl} handleClose={handleClose} />
+                    <Drawer
+                        variant="permanent"
+                        className={classes.drawer}
+                        classes={{ paper: classes.drawerPaper }}>
+                        <RenderList
+                            itemList={iconList}
+                            selected={selected}
+                            classes={classes}
+                            handleClick={handleClick}
+                            selectionHandler={setSelected}
+                        />
+                        <UserMenu
+                            classes={classes}
+                            anchorEl={anchorEl}
+                            handleClose={handleClose} />
+                        <AddButton classes={classes} />
                     </Drawer>
                 </Grid>
                 <Grid item xs={11}>
@@ -101,7 +128,7 @@ function Layout() {
     );
 }
 
-function RenderList({ itemList, classes, handleClick }: Partial<MainProps>) {
+function RenderList({ itemList, classes, selected, handleClick, selectionHandler }: Partial<MainProps>) {
     return (
         <List className={classes.drawerList}>
             {
@@ -111,8 +138,9 @@ function RenderList({ itemList, classes, handleClick }: Partial<MainProps>) {
                             className={classes.listItem}
                             button
                             key={icon.name}
-                            // selected={icon.name === 'Account'}
-                            onClick={icon.name === "Account" ? handleClick : undefined}
+                            selected={selected === icon.name}
+                            autoFocus={icon.name === "Account"}
+                            onClick={icon.name === "Account" ? handleClick : () => selectionHandler(icon.name)}
                         >
                             <ListItemIcon>
                                 {icon.icon}
@@ -145,6 +173,18 @@ function UserMenu({ classes, anchorEl, handleClose }: Partial<MainProps>) {
                 </Grow>
             )}
         </Popper>
+    )
+}
+
+function AddButton({ classes }: { classes: any }) {
+    return (
+        <div className={classes.addButtonContainer}>
+            <Link to="/new-expense">
+                <Fab aria-label="add new expense" className={classes.addButton}>
+                    <Add fontSize="large" />
+                </Fab>
+            </Link>
+        </div>
     )
 }
 

@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             '& label.Mui-focused': {
-                color: theme.palette.secondary.main,
+                color: theme.palette.primary.main,
             },
             '& .MuiInput-underline:after': {
                 borderBottomColor: theme.palette.primary.main,
@@ -16,10 +16,10 @@ const useStyles = makeStyles((theme) =>
                     borderColor: theme.palette.primary.main,
                 },
                 '&:hover fieldset': {
-                    borderColor: theme.palette.secondary.main,
+                    borderColor: theme.palette.primary.main,
                 },
                 '&.Mui-focused fieldset': {
-                    borderColor: theme.palette.secondary.main,
+                    borderColor: theme.palette.primary.main,
                 },
             },
         },
@@ -49,10 +49,13 @@ const useStyles = makeStyles((theme) =>
 
 type FormProps = {
     fields: number,
+    username?: string,
+    email: string,
+    password: string,
     handler(event: React.FormEvent<HTMLFormElement>): void | undefined,
 }
 
-function Form({ fields, handler }: FormProps) {
+function Form({ fields, username, email, password, handler }: FormProps) {
     const classes = useStyles();
 
     return (
@@ -66,25 +69,31 @@ function Form({ fields, handler }: FormProps) {
                     fields === 3 && (
                         <TextField
                             id="username"
+                            required
                             className={classes.textField}
                             variant="outlined"
                             label="Username"
+                            value={username}
                         />
                     )
                 }
 
                 <TextField
                     id="email"
+                    required
                     variant="outlined"
                     className={classes.textField}
                     label="Email"
+                    value={email}
                 />
                 <TextField
                     id="password"
+                    required
                     type="password"
                     variant="outlined"
                     className={classes.textField}
                     label="Password"
+                    value={password}
                 />
                 <Button
                     variant="contained"
