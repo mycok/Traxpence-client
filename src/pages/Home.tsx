@@ -4,7 +4,7 @@ import { Typography, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { ReactComponent as Wallet } from "../images/wallet.svg";
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             display: "flex",
@@ -17,7 +17,16 @@ const useStyles = makeStyles(() =>
             margin: 20
         },
         mainButton: {
-            width: 300
+            width: 500,
+            fontSize: 18,
+            textTransform: "capitalize"
+        },
+        text: {
+            fontFamily: "Raleway",
+            fontSize: 40,
+            fontWeight: 900,
+            letterSpacing: 0.6,
+            textTransform: "capitalize"
         }
     })
 );
@@ -30,8 +39,8 @@ function Home() {
                 <Wallet />
             </div>
             <div className={classes.child}>
-                <Typography variant="h6" align="center">
-                    Thank you choosing Traxpense for all your expense tracking needs
+                <Typography className={classes.text} variant="subtitle2" align="center">
+                    Thank you choosing Traxpense
                 </Typography>
             </div>
             <div className={classes.child}>
