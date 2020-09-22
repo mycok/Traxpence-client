@@ -1,6 +1,16 @@
-import React from 'react';
+import React from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-import Form from '../../pages/auth/AuthForm';
+import Form from "../../pages/auth/AuthForm";
+
+const useStyles = makeStyles(() => 
+    createStyles({
+        root: {
+            display: "flex",
+            alignItems: "center"
+        }
+    })
+)
 
 type SignupState = {
     username: string,
@@ -20,6 +30,7 @@ const initialState = {
 }
 
 function Signup() {
+    const classes = useStyles();
     const [state, dispatch] = React.useReducer((state: SignupState, action: Action) => {
         return state;
     }, initialState);
@@ -31,13 +42,15 @@ function Signup() {
     };
 
     return (
-        <Form
-            fields={3}
-            username={state?.username}
-            email={state?.email}
-            password={state?.password}
-            handler={handleSignup}
-        />
+        <div className={classes.root}>
+            <Form
+                fields={3}
+                username={state?.username}
+                email={state?.email}
+                password={state?.password}
+                handler={handleSignup}
+            />
+        </div>
     )
 }
 

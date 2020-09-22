@@ -1,6 +1,16 @@
-import React from 'react';
+import React from "react";
+import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-import Form from '../../pages/auth/AuthForm';
+import Form from "../../pages/auth/AuthForm";
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            display: "flex",
+            alignItems: "center"
+        }
+    })
+)
 
 type SigninState = {
     email: string,
@@ -18,6 +28,7 @@ const initialState = {
 };
 
 function Signin() {
+    const classes = useStyles();
     const [state, dispatch] = React.useReducer((state: SigninState, action: Action) => {
         return state;
     }, initialState);
@@ -29,12 +40,14 @@ function Signin() {
     };
 
     return (
-        <Form
-            fields={2}
-            email={state?.email}
-            password={state?.password}
-            handler={handleSignin}
-        />
+        <div className={classes.root}>
+            <Form
+                fields={2}
+                email={state?.email}
+                password={state?.password}
+                handler={handleSignin}
+            />
+        </div>
     )
 }
 

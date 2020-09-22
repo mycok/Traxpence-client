@@ -5,20 +5,20 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            '& label.Mui-focused': {
+            "& label.Mui-focused": {
                 color: theme.palette.primary.main,
             },
-            '& .MuiInput-underline:after': {
+            "& .MuiInput-underline:after": {
                 borderBottomColor: theme.palette.primary.main,
             },
-            '& .MuiOutlinedInput-root': {
-                '& fieldset': {
+            "& .MuiOutlinedInput-root": {
+                "& fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
-                '&:hover fieldset': {
+                "&:hover fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
-                '&.Mui-focused fieldset': {
+                "&.Mui-focused fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
             },
@@ -41,13 +41,13 @@ const useStyles = makeStyles((theme) =>
             width: 400
         },
         submitButton: {
-            width: 300,
+            width: 180,
             margin: 10
         }
     })
 )
 
-type FormProps = {
+type FormComponentProps = {
     fields: number,
     username?: string,
     email: string,
@@ -55,7 +55,7 @@ type FormProps = {
     handler(event: React.FormEvent<HTMLFormElement>): void | undefined,
 }
 
-function Form({ fields, username, email, password, handler }: FormProps) {
+function Form({ fields, username, email, password, handler }: FormComponentProps) {
     const classes = useStyles();
 
     return (
