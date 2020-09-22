@@ -1,6 +1,7 @@
 import React from "react";
-import { TextField, Paper, Button } from "@material-ui/core";
+import { TextField, Paper, Button, MenuItem } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { red } from "@material-ui/core/colors";
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import NumberFormat from "react-number-format";
@@ -8,23 +9,25 @@ import NumberFormat from "react-number-format";
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
-            '& label.Mui-focused': {
+            "& label.Mui-focused": {
                 color: theme.palette.primary.main,
             },
-            '& .MuiInput-underline:after': {
+            "& .MuiInput-underline:after": {
                 borderBottomColor: theme.palette.primary.main,
             },
-            '& .MuiOutlinedInput-root': {
-                '& fieldset': {
+            "& .MuiOutlinedInput-root": {
+                "& fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
-                '&:hover fieldset': {
+                "&:hover fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
-                '&.Mui-focused fieldset': {
+                "&.Mui-focused fieldset": {
                     borderColor: theme.palette.primary.main,
                 },
             },
+            display: "flex",
+            alignItems: "center"
         },
         container: {
             border: "1px solid #fff",
@@ -44,13 +47,19 @@ const useStyles = makeStyles((theme) =>
             width: 400
         },
         submitButton: {
-            width: 300,
+            width: 180,
             margin: 20
+        },
+        deleteButton: {
+            width: 180,
+            margin: 20,
+            color: "#fff",
+            backgroundColor: red[900]
         }
     })
 )
 
-type NewExpenseProps = {
+type NewExpenseComponentProps = {
     handler(event: React.FormEvent<HTMLFormElement>): void | undefined,
 }
 
@@ -75,8 +84,16 @@ const initialState = {
     notes: ""
 }
 
-function NewExpense({ handler }: NewExpenseProps) {
+const categoryList = [
+    { _id: 1, title: "Entertainment" },
+    { _id: 2, title: "Food" },
+    { _id: 3, title: "Utilities" },
+    { _id: 4, title: "Car" },
+]
+
+function NewExpense({ handler }: NewExpenseComponentProps) {
     const classes = useStyles();
+    const isEditing = false;
     const [state, dispatch] = React.useReducer((state: ExpenseState, action: Action) => {
         switch (action.type) {
             case "SET_TITTLE":
@@ -127,7 +144,12 @@ function NewExpense({ handler }: NewExpenseProps) {
                     label="Category"
                     value={state?.category}
                     required
-                />
+                    select
+                >
+                    {
+                        categoryList.map((cat) => <MenuItem key={cat?._id}>{cat?.title}</MenuItem>)
+                    }
+                </TextField>
 
                 <TextField
                     id="notes"
@@ -165,18 +187,32 @@ function NewExpense({ handler }: NewExpenseProps) {
                                 horizontal: "right",
                             }
                         }}
-                        showTodayButton
                     />
                 </MuiPickersUtilsProvider>
-                <Button
-                    variant="contained"
-                    fullWidth
-                    color="secondary"
-                    type="submit"
-                    className={classes.submitButton}
-                >
-                    Create
+                <div>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        color="secondary"
+                        type="submit"
+                        className={classes.submitButton}
+                    >
+                        Create
                 </Button>
+                    {
+                        isEditing && (
+                            <Button
+                                variant="contained"
+                                fullWidth
+                                type="submit"
+                                className={classes.deleteButton}
+                            >
+                                Delete
+                            </Button>
+                        )
+                    }
+
+                </div>
             </Paper>
         </form>
     )

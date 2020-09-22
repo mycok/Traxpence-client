@@ -13,22 +13,11 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import AppRouter from './router';
 
-type MainProps = {
-    classes: any,
-    anchorEl: any,
-    itemList: Array<any>,
-    selected?: string,
-    handleClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void | undefined,
-    handleClose: any
-    selectionHandler: any
-}
-
 const useStyles = makeStyles((theme) =>
     createStyles({
         paper: {
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
             height: "100vh",
             width: "100%"
         },
@@ -50,9 +39,6 @@ const useStyles = makeStyles((theme) =>
         listItem: {
             margin: 20,
             width: 70,
-            // "&:hover": {
-            //     backgroundColor: "green" 
-            // },
         },
         menu: {
             zIndex: 30,
@@ -73,6 +59,16 @@ const useStyles = makeStyles((theme) =>
         }
     })
 );
+
+type LayoutProps = {
+    classes: any,
+    anchorEl: any,
+    itemList: Array<any>,
+    selected?: string,
+    handleClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void | undefined,
+    handleClose: any
+    selectionHandler: any
+}
 
 const iconList = [
     { name: "Account", icon: <Account fontSize="large" /> },
@@ -128,7 +124,7 @@ function Layout() {
     );
 }
 
-function RenderList({ itemList, classes, selected, handleClick, selectionHandler }: Partial<MainProps>) {
+function RenderList({ itemList, classes, selected, handleClick, selectionHandler }: Partial<LayoutProps>) {
     return (
         <List className={classes.drawerList}>
             {
@@ -153,7 +149,7 @@ function RenderList({ itemList, classes, selected, handleClick, selectionHandler
     )
 }
 
-function UserMenu({ classes, anchorEl, handleClose }: Partial<MainProps>) {
+function UserMenu({ classes, anchorEl, handleClose }: Partial<LayoutProps>) {
     return (
         <Popper
             className={classes.menu}
