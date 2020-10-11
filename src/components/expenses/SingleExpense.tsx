@@ -1,12 +1,12 @@
 import React from "react";
 import { Card, CardHeader, CardContent, IconButton, Typography } from "@material-ui/core";
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
-import EditIcon from "@material-ui/icons/EditSharp";
+import { EditSharp, DeleteSharp } from "@material-ui/icons";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import { IExpense } from './index';
 
-const useStyles = makeStyles(() =>
+const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             width: 600,
@@ -14,6 +14,10 @@ const useStyles = makeStyles(() =>
         },
         editButton: {
             marginTop: 12
+        },
+        deleteButton: {
+            marginTop: 12,
+            color: theme.palette.secondary.main
         },
         cardContent: {
             marginLeft: 50,
@@ -47,9 +51,14 @@ function SingleExpense({ expense }: ExpenseComponentProps) {
                     <AccBalanceWallet fontSize="large" />
                 }
                 action={
+                    <>
                     <IconButton aria-label="edit" className={classes.editButton}>
-                        <EditIcon />
+                        <EditSharp />
                     </IconButton>
+                    <IconButton aria-label="delete" className={classes.deleteButton}>
+                        <DeleteSharp />
+                    </IconButton>
+                    </>
                 }
                 title={
                     <div className={classes.titleContainer}>

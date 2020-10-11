@@ -2,6 +2,7 @@ import React from "react";
 
 import ExpenseList from './ExpenseList';
 import DateRangeSearch from './DateRangeSearch';
+import NoExpenses from "./NoExpenses";
 
 export interface IExpense {
     _id: string,
@@ -50,10 +51,18 @@ const expenseList = [
 ]
 
 export default function () {
+    const [expenses] = React.useState(expenseList);
+
+    if (expenses.length === 0) {
+        return (
+            <NoExpenses />
+        )
+    }
+
     return (
         <div>
             <DateRangeSearch />
-            <ExpenseList expenses={expenseList} />
+            <ExpenseList expenses={expenses} />
         </div>
     )
 }
