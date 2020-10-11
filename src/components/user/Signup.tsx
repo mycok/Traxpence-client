@@ -1,7 +1,7 @@
 import React from "react";
 import { createStyles, makeStyles } from "@material-ui/core/styles";
 
-import Form from "../../pages/auth/AuthForm";
+import Form from "../auth/AuthForm";
 
 const useStyles = makeStyles(() => 
     createStyles({

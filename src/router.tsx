@@ -3,10 +3,10 @@ import { Route, Switch } from "react-router-dom";
 
 import Signup from './components/user/Signup';
 import Signin from './components/auth/Signin';
-import Home from './pages/Home';
-import NewExpense from './pages/expenses/NewExpense';
-import Expenses from './pages/expenses';
-
+import Home from './components/Home';
+import NewExpense from './components/expenses/NewExpense';
+import Expenses from './components/expenses';
+import Profile from "./components/profile/Profile";
 
 function AppRouter() {
     return (
@@ -17,6 +17,7 @@ function AppRouter() {
                 <Route exact path="/signin" component={Signin} />
                 <Route exact path="/new-expense" component={NewExpense}/>
                 <Route exact path="/expenses" component={Expenses}/>
+                <Route exact path="/profile" component={Profile} />
             </Switch>
         </>
     )

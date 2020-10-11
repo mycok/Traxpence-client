@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField, Paper, Button, MenuItem } from "@material-ui/core";
+import { TextField, Paper, Button, MenuItem, InputAdornment } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { red } from "@material-ui/core/colors";
 import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -105,9 +105,16 @@ function NewExpense({ handler }: NewExpenseComponentProps) {
         return state;
     }, initialState)
 
+    const [prefCurrency] = React.useState(localStorage.getItem("currency"));
+    const [selectedCategory, selectCategory] = React.useState("Food");
+
     function onDateChange(date: Date | null) {
         return dispatch({ type: "SET_DATE", payload: date });
     }
+
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+        selectCategory(event.target.value);
+    };
 
     return (
         <form
@@ -133,7 +140,9 @@ function NewExpense({ handler }: NewExpenseComponentProps) {
                     value={state?.amount}
                     required
                     InputProps={{
-                        inputComponent: NumberFormatterInput as any
+                        inputComponent: NumberFormatterInput as any,
+                        startAdornment: <InputAdornment position="start">{prefCurrency}</InputAdornment>
+                        
                     }}
 
                 />
@@ -142,12 +151,13 @@ function NewExpense({ handler }: NewExpenseComponentProps) {
                     variant="outlined"
                     className={classes.textField}
                     label="Category"
-                    value={state?.category}
+                    value={selectedCategory}
                     required
                     select
+                    onChange={handleChange}
                 >
                     {
-                        categoryList.map((cat) => <MenuItem key={cat?._id}>{cat?.title}</MenuItem>)
+                        categoryList.map((cat) => <MenuItem key={cat?._id} value={cat?.title}>{cat?.title}</MenuItem>)
                     }
                 </TextField>
 
@@ -241,7 +251,6 @@ function NumberFormatterInput(props: NumberFormatProps) {
             }}
             thousandSeparator
             isNumericString
-            prefix="$"
         />
     );
 }
