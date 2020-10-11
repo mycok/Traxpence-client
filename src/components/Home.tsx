@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Typography, Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
+
 import { ReactComponent as Wallet } from "../images/wallet.svg";
 
 const useStyles = makeStyles((theme) =>
