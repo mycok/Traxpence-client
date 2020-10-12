@@ -8,18 +8,7 @@ type Action = {
     payload: any;
 };
 
-const initialExpenseState = {
-    title: "",
-    amount: 0,
-    category: {
-        _id: "",
-        title: "",
-    },
-    notes: "",
-    incurredOn: Date.now(),
-};
-
-function NewExpense() {
+function EditExpense({ location }) {
     const [state, dispatch] = React.useReducer(
         (state: IExpense, action: Action) => {
             switch (action.type) {
@@ -31,11 +20,11 @@ function NewExpense() {
             }
             return state;
         },
-        initialExpenseState
+        location?.state
     );
 
     const [prefCurrency] = React.useState(localStorage.getItem("currency"));
-    const [selectedCategory, selectCategory] = React.useState("Food");
+    const [selectedCategory, selectCategory] = React.useState(state?.category?.title);
 
     function handleDateChange(date: Date | null) {
         return dispatch({ type: "SET_DATE", payload: date });
@@ -59,4 +48,4 @@ function NewExpense() {
     );
 }
 
-export default NewExpense;
+export default EditExpense;

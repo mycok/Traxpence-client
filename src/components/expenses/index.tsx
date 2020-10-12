@@ -5,24 +5,24 @@ import DateRangeSearch from './DateRangeSearch';
 import NoExpenses from "./NoExpenses";
 
 export interface IExpense {
-    _id: string,
-    name: string,
-    amount: number,
+    _id?: string;
+    title: string;
+    amount: number;
     category: {
         _id: string,
         title: string,
-    },
-    notes?: string,
+    };
+    notes?: string;
     incurredOn: any
 }
 
-const expenseList = [
+const expenseList: IExpense[] = [
     {
         _id: "54605",
-        name: "Lunch with olive",
+        title: "Lunch with olive",
         amount: 50000,
         category: {
-            _id: "87908",
+            _id: "53638",
             title: "Meals",
         },
         notes: "This was un planned for and expensive lunch and if it wasn't the fact that she is somewhat special, i wouldn't have spent that much.",
@@ -30,22 +30,24 @@ const expenseList = [
     },
     {
         _id: "54604",
-        name: "Yaka",
+        title: "Yaka",
         amount: 30000,
         category: {
             _id: "42351",
             title: "Utilities",
         },
+        notes: "",
         incurredOn: new Date().toDateString()
     },
     {
         _id: "67518",
-        name: "Hair Cut",
+        title: "Hair Cut",
         amount: 5000,
         category: {
             _id: "09877",
             title: "Personal Care",
         },
+        notes: "",
         incurredOn: new Date().toDateString()
     }
 ]

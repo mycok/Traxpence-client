@@ -3,6 +3,7 @@ import { Card, CardHeader, CardContent, IconButton, Typography } from "@material
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
 import { EditSharp, DeleteSharp } from "@material-ui/icons";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Link } from "react-router-dom";
 
 import { IExpense } from './index';
 
@@ -39,7 +40,7 @@ type ExpenseComponentProps = {
     expense: IExpense
 }
 
-const currency = "$"
+const currency = localStorage.getItem("currency");
 
 function SingleExpense({ expense }: ExpenseComponentProps) {
     const classes = useStyles();
@@ -52,18 +53,23 @@ function SingleExpense({ expense }: ExpenseComponentProps) {
                 }
                 action={
                     <>
-                    <IconButton aria-label="edit" className={classes.editButton}>
-                        <EditSharp />
-                    </IconButton>
-                    <IconButton aria-label="delete" className={classes.deleteButton}>
-                        <DeleteSharp />
-                    </IconButton>
+                        <Link to={{
+                            pathname: "/edit-expense",
+                            state: expense
+                        }}>
+                            <IconButton aria-label="edit" className={classes.editButton}>
+                                <EditSharp />
+                            </IconButton>
+                        </Link>
+                        <IconButton aria-label="delete" className={classes.deleteButton}>
+                            <DeleteSharp />
+                        </IconButton>
                     </>
                 }
                 title={
                     <div className={classes.titleContainer}>
                         <Typography variant="h6">
-                            {expense?.name}
+                            {expense?.title}
                         </Typography>
                         <Typography variant="caption" className={classes.categoryLabel}>
                             {expense?.category?.title}

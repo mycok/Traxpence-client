@@ -41,10 +41,10 @@ const useStyles = makeStyles(() =>
     })
 )
 
-type ProfileProps = {
+type ProfileComponentProps = {
     user: Partial<IUser>,
     classes: any,
-    currency: string,
+    currency: string | null,
     handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 }
 // TODO: consider using a currency component library
@@ -81,12 +81,19 @@ const user = {
 function Profile() {
     const classes = useStyles();
     
-    const [currency, setCurrency] = React.useState('EUR');
+    const [currency, setCurrency] = React.useState(localStorage.getItem('currency'));
 
     function handleChange (event: React.ChangeEvent<HTMLInputElement>) {
         setCurrency(event.target.value);
         localStorage.setItem('currency', event.target.value);
     };
+
+    React.useEffect(() => {
+        if (!currency) {
+            setCurrency(currencies[0].label);
+            localStorage.setItem('currency', currencies[0].label)
+        }
+    }, [])
 
     return (
         <div className={classes.container}>
@@ -101,7 +108,7 @@ function Profile() {
 }
 
 
-function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileProps>) {
+function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileComponentProps>) {
     return (
         <Card className={classes.root} elevation={5}>
             <CardHeader
@@ -143,7 +150,7 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileP
     )
 }
 
-function SettingsCard({ classes, currency, handleChange }: Partial<ProfileProps>) {
+function SettingsCard({ classes, currency, handleChange }: Partial<ProfileComponentProps>) {
     return (
         <CardContent className={classes.cardContent}>
             <>
@@ -161,7 +168,7 @@ function SettingsCard({ classes, currency, handleChange }: Partial<ProfileProps>
                             <MenuItem
                                 key={curr?.label}
                                 value={curr?.label}>
-                                {curr?.value}
+                                {curr?.label}
                             </MenuItem>
                         ))
                     }
