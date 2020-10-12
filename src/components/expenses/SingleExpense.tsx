@@ -40,10 +40,10 @@ type ExpenseComponentProps = {
     expense: IExpense
 }
 
-const currency = localStorage.getItem("currency");
-
 function SingleExpense({ expense }: ExpenseComponentProps) {
     const classes = useStyles();
+
+    const [currency] = React.useState(localStorage.getItem("currency") ?? "");
 
     return (
         <Card className={classes.root} elevation={5}>
