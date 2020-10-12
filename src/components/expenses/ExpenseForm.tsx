@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { TextField, Paper, Button, MenuItem, InputAdornment } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { red } from "@material-ui/core/colors";
@@ -40,9 +41,7 @@ const useStyles = makeStyles((theme) =>
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
-            width: 500,
-            height: 500
+            alignItems: "center"
         },
         textField: {
             margin: 10,
@@ -57,6 +56,9 @@ const useStyles = makeStyles((theme) =>
             margin: 20,
             color: "#fff",
             backgroundColor: red[900]
+        },
+        link: {
+            textDecoration: "none"
         }
     })
 )
@@ -86,7 +88,14 @@ const categoryList = [
 ]
 
 // TODO: add a useEffect mutation to fetch all categories
-function ExpenseForm({ state, prefCurrency, selectedCategory, handleSubmit, handleChange, handleDateChange }: ExpenseFormComponentProps) {
+function ExpenseForm({
+    state,
+    prefCurrency,
+    selectedCategory,
+    handleSubmit,
+    handleChange,
+    handleDateChange
+}: ExpenseFormComponentProps) {
     const classes = useStyles();
     return (
         <form
@@ -94,7 +103,7 @@ function ExpenseForm({ state, prefCurrency, selectedCategory, handleSubmit, hand
             noValidate autoComplete="off"
             onSubmit={handleSubmit}
         >
-            <Paper elevation={5} className={classes.textFieldsPaper}>
+            <Paper elevation={0} className={classes.textFieldsPaper}>
                 <TextField
                     id="title"
                     className={classes.textField}
@@ -114,7 +123,7 @@ function ExpenseForm({ state, prefCurrency, selectedCategory, handleSubmit, hand
                     InputProps={{
                         inputComponent: NumberFormatterInput as any,
                         startAdornment: <InputAdornment position="start">{prefCurrency}</InputAdornment>
-                        
+
                     }}
 
                 />
@@ -181,6 +190,16 @@ function ExpenseForm({ state, prefCurrency, selectedCategory, handleSubmit, hand
                     >
                         Save
                     </Button>
+                    <Link to="/expenses" className={classes.link}>
+                        <Button
+                            variant="outlined"
+                            fullWidth
+                            color="primary"
+                            className={classes.submitButton}
+                        >
+                            Cancel
+                    </Button>
+                    </Link>
                 </div>
             </Paper>
         </form>

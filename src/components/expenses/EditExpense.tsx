@@ -1,7 +1,21 @@
 import React from "react";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Paper } from "@material-ui/core";
 
 import { IExpense } from ".";
 import ExpenseForm from "./ExpenseForm";
+
+const useStyles = makeStyles(() =>
+    createStyles({
+        container: {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 500,
+        }
+    })
+)
 
 type Action = {
     type: string;
@@ -9,6 +23,8 @@ type Action = {
 };
 
 function EditExpense({ location }) {
+    const classes = useStyles();
+
     const [state, dispatch] = React.useReducer(
         (state: IExpense, action: Action) => {
             switch (action.type) {
@@ -37,14 +53,18 @@ function EditExpense({ location }) {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) { }
 
     return (
-        <ExpenseForm
-            state={state}
-            prefCurrency={prefCurrency}
-            selectedCategory={selectedCategory}
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
-            handleDateChange={handleDateChange}
-        />
+        <div className={classes.container}>
+            <Paper elevation={5}>
+                <ExpenseForm
+                    state={state}
+                    prefCurrency={prefCurrency}
+                    selectedCategory={selectedCategory}
+                    handleSubmit={handleSubmit}
+                    handleChange={handleChange}
+                    handleDateChange={handleDateChange}
+                />
+            </Paper>
+        </div>
     );
 }
 
