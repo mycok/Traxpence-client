@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { Card, CardHeader, CardContent, Avatar, Typography, IconButton, TextField, MenuItem } from '@material-ui/core';
-import { EditSharp } from '@material-ui/icons';
+import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import { IUser } from '../user';
@@ -80,10 +81,10 @@ const user = {
 
 function Profile() {
     const classes = useStyles();
-    
+
     const [currency, setCurrency] = React.useState(localStorage.getItem('currency'));
 
-    function handleChange (event: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
         setCurrency(event.target.value);
         localStorage.setItem('currency', event.target.value);
     };
@@ -116,9 +117,16 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileC
                     <Avatar src="" />
                 }
                 action={
-                    <IconButton aria-label="edit" className={classes.editButton}>
-                        <EditSharp />
-                    </IconButton>
+                    <>
+                        <IconButton aria-label="edit" className={classes.editButton}>
+                            <EditSharp />
+                        </IconButton>
+                        <Link to="/expenses">
+                            <IconButton aria-label="close" className={classes.editButton}>
+                                <CloseRounded />
+                            </IconButton>
+                        </Link>
+                    </>
                 }
                 title={
                     <div className={classes.titleContainer}>
@@ -159,7 +167,7 @@ function SettingsCard({ classes, currency, handleChange }: Partial<ProfileCompon
                     id="category"
                     variant="standard"
                     className={classes.textField}
-                    value={currency}
+                    value={currency ?? ""}
                     select
                     onChange={handleChange}
                 >
@@ -167,7 +175,8 @@ function SettingsCard({ classes, currency, handleChange }: Partial<ProfileCompon
                         currencies.map((curr) => (
                             <MenuItem
                                 key={curr?.label}
-                                value={curr?.label}>
+                                value={curr?.label}
+                                >
                                 {curr?.label}
                             </MenuItem>
                         ))
