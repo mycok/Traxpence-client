@@ -94,7 +94,7 @@ function Profile() {
             setCurrency(currencies[0].label);
             localStorage.setItem('currency', currencies[0].label)
         }
-    }, [])
+    }, [currency])
 
     return (
         <div className={classes.container}>
