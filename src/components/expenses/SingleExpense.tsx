@@ -5,7 +5,7 @@ import { EditSharp, DeleteSharp } from "@material-ui/icons";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 
-import { IExpense } from './index';
+import { IExpense } from '.';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -36,65 +36,71 @@ const useStyles = makeStyles((theme) =>
 )
 
 type ExpenseComponentProps = {
-    expense: IExpense
+    expense: IExpense,
+    handleOpen(): void
 }
 
-function SingleExpense({ expense }: ExpenseComponentProps) {
+function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
     const classes = useStyles();
-
     const [currency] = React.useState(localStorage.getItem("currency") ?? "");
 
     return (
-        <Card className={classes.root} elevation={5}>
-            <CardHeader
-                avatar={
-                    <AccBalanceWallet fontSize="large" />
-                }
-                title={
-                    <div className={classes.titleContainer}>
+        <>
+            <Card className={classes.root} elevation={5}>
+                <CardHeader
+                    avatar={
+                        <AccBalanceWallet fontSize="large" />
+                    }
+                    title={
+                        <div className={classes.titleContainer}>
+                            <>
+                                <Typography variant="h6">
+                                    {expense?.title}
+                                </Typography>
+                                <Chip
+                                    variant="outlined"
+                                    color="primary"
+                                    size="small"
+                                    label={expense?.category?.title}
+                                />
+                            </>
+                        </div>
+                    }
+                    subheader={
                         <>
-                            <Typography variant="h6">
-                                {expense?.title}
-                            </Typography>
-                            <Chip
-                                variant="outlined"
-                                color="primary"
-                                size="small"
-                                label={expense?.category?.title}
-                            />
+                            <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
+                            <Typography variant="caption">{expense?.incurredOn}</Typography>
                         </>
-                    </div>
-                }
-                subheader={
-                    <>
-                        <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
-                        <Typography variant="caption">{expense?.incurredOn}</Typography>
-                    </>
-                }
-                action={
-                    <>
-                        <Link to={{
-                            pathname: "/edit-expense",
-                            state: expense
-                        }}>
-                            <IconButton aria-label="edit" className={classes.editButton}>
-                                <EditSharp />
+                    }
+                    action={
+                        <>
+                            <Link to={{
+                                pathname: "/edit-expense",
+                                state: expense
+                            }}>
+                                <IconButton aria-label="edit" className={classes.editButton}>
+                                    <EditSharp />
+                                </IconButton>
+                            </Link>
+                            <IconButton
+                                aria-label="delete"
+                                className={classes.deleteButton}
+                                onClick={handleOpen}
+                            >
+                                <DeleteSharp />
                             </IconButton>
-                        </Link>
-                        <IconButton aria-label="delete" className={classes.deleteButton}>
-                            <DeleteSharp />
-                        </IconButton>
-                    </>
+                        </>
+                    }
+                />
+                {
+                    expense?.notes && (
+                        <CardContent className={classes.cardContent}>
+                            <Typography>{expense?.notes}</Typography>
+                        </CardContent>
+                    )
                 }
-            />
-            {
-                expense?.notes && (
-                    <CardContent className={classes.cardContent}>
-                        <Typography>{expense?.notes}</Typography>
-                    </CardContent>
-                )
-            }
-        </Card>
+            </Card>
+        </>
     )
 }
 

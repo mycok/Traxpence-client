@@ -13,16 +13,23 @@ const useStyles = makeStyles(() =>
 )
 
 type expenses = {
-    expenses: IExpense[]
+    expenses: IExpense[],
+    handleOpen(): void,
 };
 
-function ExpenseList({ expenses }: expenses) {
+function ExpenseList({ expenses, handleOpen }: expenses) {
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             {
-                expenses?.map((exp) => <SingleExpense key={exp?._id} expense={exp} />)
+                expenses?.map((exp) => (
+                    <SingleExpense
+                        key={exp?._id}
+                        expense={exp}
+                        handleOpen={handleOpen}
+                    />
+                ))
             }
         </div>
     )
