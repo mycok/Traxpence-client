@@ -5,13 +5,14 @@ import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import { IUser } from '../user';
+import CurrentExpenseSummary from '../expenses/CurrentExpenseSummary';
 
 const useStyles = makeStyles(() =>
     createStyles({
         root: {
             width: 600,
             margin: 5,
-            height: 400
+            height: 500
         },
         container: {
             display: "flex",
@@ -140,14 +141,7 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileC
                 }
             />
             <CardContent className={classes.cardContent}>
-                <Typography>
-                    Total Number of expenses
-                    <Typography component="span" color="primary" className={classes.expenseTotals}> 0</Typography>
-                </Typography>
-                <Typography>
-                    Total Expenditure
-                    <Typography component="span" color="primary" className={classes.expenseTotals}> 0.0</Typography>
-                </Typography>
+                <CurrentExpenseSummary />
             </CardContent>
             <SettingsCard
                 classes={classes}

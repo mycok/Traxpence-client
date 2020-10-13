@@ -24,10 +24,10 @@ function ConfirmDialog({ open, handleClose, handleDelete }: ConfirmDialogProps) 
                 Are you sure you want to delete this record?
             </DialogTitle>
             <DialogActions>
-                <Button autoFocus variant="outlined" color="primary" onClick={handleDelete}>
+                <Button autoFocus variant="contained" color="secondary" onClick={handleDelete}>
                     Yes
           </Button>
-                <Button color="secondary" onClick={handleClose}>
+                <Button color="primary" variant="outlined" onClick={handleClose}>
                     Cancel
           </Button>
             </DialogActions>
