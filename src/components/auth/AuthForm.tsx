@@ -23,18 +23,11 @@ const useStyles = makeStyles((theme) =>
                 },
             },
         },
-        container: {
-            border: "1px solid #fff",
-            margin: 0,
-            width: 500
-        },
         textFieldsPaper: {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
-            width: 500,
-            height: 500
+            alignItems: "center"
         },
         textField: {
             margin: 10,

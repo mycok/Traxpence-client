@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardHeader, CardContent, IconButton, Typography } from "@material-ui/core";
+import { Card, CardHeader, CardContent, IconButton, Typography, Chip } from "@material-ui/core";
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
 import { EditSharp, DeleteSharp } from "@material-ui/icons";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
@@ -14,10 +14,9 @@ const useStyles = makeStyles((theme) =>
             margin: 5
         },
         editButton: {
-            marginTop: 12
+            marginLeft: 10
         },
         deleteButton: {
-            marginTop: 12,
             color: theme.palette.secondary.main
         },
         cardContent: {
@@ -51,6 +50,27 @@ function SingleExpense({ expense }: ExpenseComponentProps) {
                 avatar={
                     <AccBalanceWallet fontSize="large" />
                 }
+                title={
+                    <div className={classes.titleContainer}>
+                        <>
+                            <Typography variant="h6">
+                                {expense?.title}
+                            </Typography>
+                            <Chip
+                                variant="outlined"
+                                color="primary"
+                                size="small"
+                                label={expense?.category?.title}
+                            />
+                        </>
+                    </div>
+                }
+                subheader={
+                    <>
+                        <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
+                        <Typography variant="caption">{expense?.incurredOn}</Typography>
+                    </>
+                }
                 action={
                     <>
                         <Link to={{
@@ -64,22 +84,6 @@ function SingleExpense({ expense }: ExpenseComponentProps) {
                         <IconButton aria-label="delete" className={classes.deleteButton}>
                             <DeleteSharp />
                         </IconButton>
-                    </>
-                }
-                title={
-                    <div className={classes.titleContainer}>
-                        <Typography variant="h6">
-                            {expense?.title}
-                        </Typography>
-                        <Typography variant="caption" className={classes.categoryLabel}>
-                            {expense?.category?.title}
-                        </Typography>
-                    </div>
-                }
-                subheader={
-                    <>
-                        <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
-                        <Typography variant="caption">{expense?.incurredOn}</Typography>
                     </>
                 }
             />
