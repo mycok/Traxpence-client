@@ -3,6 +3,7 @@ import React from "react";
 import ExpenseList from './ExpenseList';
 import DateRangeSearch from './DateRangeSearch';
 import NoExpenses from "./NoExpenses";
+import ConfirmDialog from '../../shared/ConfirmDialog';
 
 export interface IExpense {
     _id?: string;
@@ -54,6 +55,19 @@ const expenseList: IExpense[] = [
 
 export default function () {
     const [expenses] = React.useState(expenseList);
+    const [open, setOpen] = React.useState(false);
+
+    function handleOpen() {
+        setOpen(true);
+    }
+
+    function handleClose() {
+        setOpen(false);
+    }
+    
+    function handleDelete () {
+
+    }
 
     if (expenses.length === 0) {
         return (
@@ -63,8 +77,16 @@ export default function () {
 
     return (
         <div>
+            <ConfirmDialog
+                open={open}
+                handleClose={handleClose}
+                handleDelete={handleDelete}
+            />
             <DateRangeSearch />
-            <ExpenseList expenses={expenses} />
+            <ExpenseList
+                expenses={expenses}
+                handleOpen={handleOpen}
+              />
         </div>
     )
 }
