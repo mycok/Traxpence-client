@@ -5,7 +5,7 @@ import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import { IUser } from '../user';
-import CurrentExpenseSummary from '../expenses/CurrentExpenseSummary';
+import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 
 const useStyles = makeStyles(() =>
     createStyles({
