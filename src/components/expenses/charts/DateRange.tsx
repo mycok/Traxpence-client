@@ -2,7 +2,7 @@ import React from "react";
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Typography, TextField, MenuItem } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -24,13 +24,12 @@ const useStyles = makeStyles(() =>
     })
 );
 
-type DateRangeProps = {
-    charts: string[],
-    selectedChart: string,
-    selectChart(event: React.ChangeEvent<HTMLInputElement>): void
+type SingleDateRangeProps = {
+    selectedDate: Date,
+    selectDate(date: any, value?: any): void
 }
 
-function DateRange({ charts, selectedChart, selectChart }: DateRangeProps) {
+function DateRange({ selectedDate, selectDate }: SingleDateRangeProps) {
     const classes = useStyles();
 
     return (
@@ -43,33 +42,19 @@ function DateRange({ charts, selectedChart, selectChart }: DateRangeProps) {
                     Expenditure graph over the month of
                 </Typography>
             </div>
-            <>
+
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                     disableFuture
-                    format="MM/yyyy"
                     autoFocus
-                    views={["month"]}
+                    autoOk
+                    views={["month", "year"]}
                     inputVariant="standard"
                     variant="inline"
-                    value={Date.now()}
-                    onChange={() => null}
+                    value={selectedDate}
+                    onChange={selectDate}
                 />
             </MuiPickersUtilsProvider>
-            <TextField
-                    id="chart"
-                    variant="standard"
-                    className={classes.textField}
-                    value={selectedChart}
-                    required
-                    select
-                    onChange={selectChart}
-                >
-                    {
-                        charts.map((chart) => <MenuItem key={chart} value={chart}>{chart}</MenuItem>)
-                    }
-                </TextField>
-            </>
         </div>
     )
 }

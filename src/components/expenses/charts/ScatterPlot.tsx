@@ -1,7 +1,10 @@
 import React from 'react';
 import { VictoryChart, VictoryScatter, VictoryTheme, VictoryLabel, VictoryTooltip } from 'victory';
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { Paper } from '@material-ui/core';
 
 import DateRange from './DateRange';
+
 
 const data = [
     {
@@ -22,23 +25,32 @@ const data = [
     }
 ]
 
-type MonthlyExpScatterPlotProps = {
-    charts: string[],
-    selectedChart: string,
-    selectChart(event: React.ChangeEvent<HTMLInputElement>): void
-}
+const useStyles = makeStyles(() =>
+    createStyles({
+        root: {
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly"
+        },
+        paper: {
+            backgroundColor: "#fff"
+        }
+    })
+)
 
-function MonthlyExpScatterPlot({ charts, selectedChart, selectChart }: MonthlyExpScatterPlotProps) {
+function MonthlyExpScatterPlot() {
+    const classes = useStyles();
     const [plotData] = React.useState(data);
+    const [selectedDate, selectDate] = React.useState(new Date());
 
     return (
-        <div>
+        <div className={classes.root}>
             <DateRange
-                charts={charts}
-                selectedChart={selectedChart}
-                selectChart={selectChart}
+                selectedDate={selectedDate}
+                selectDate={selectDate}
             />
-                <VictoryChart
+            <Paper elevation={5} className={classes.paper}>
+            <VictoryChart
                     theme={VictoryTheme.grayscale}
                     height={300}
                     width={350}
@@ -61,7 +73,7 @@ function MonthlyExpScatterPlot({ charts, selectedChart, selectChart }: MonthlyEx
                     <VictoryLabel
                         textAnchor="middle"
                         style={{ fontSize: 10, fill: '#8b8b8b' }}
-                        x={320}
+                        x={310}
                         y={290}
                         text="Day of month"
                     />
@@ -73,6 +85,7 @@ function MonthlyExpScatterPlot({ charts, selectedChart, selectChart }: MonthlyEx
                         text="Amount $"
                     />
                 </VictoryChart>
+            </Paper>
         </div>
     )
 }
