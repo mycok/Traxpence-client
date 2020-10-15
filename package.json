@@ -20,7 +20,8 @@
     "react-number-format": "^4.4.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.2",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "victory": "^35.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -45,6 +46,7 @@
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
+    "@types/victory": "^33.1.4",
     "eslint-config-airbnb": "^18.2.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.3.1",
