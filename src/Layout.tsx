@@ -1,13 +1,13 @@
 import React from "react";
 import { BrowserRouter as Router, Link } from "react-router-dom";
 
-import { Grid, Drawer, Paper, List, ListItem, ListItemIcon, MenuItem, Grow, Popper, ClickAwayListener, Fab } from "@material-ui/core";
+import { Grid, Drawer, Paper, List, ListItem, ListItemIcon, Fab } from "@material-ui/core";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Account from "@material-ui/icons/AccountCircleSharp";
-import Date from "@material-ui/icons/DateRangeSharp";
-import AccBalance from "@material-ui/icons/AccountBalanceSharp";
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
-import Assessment from "@material-ui/icons/Assessment";
+import ScatterPlot from "@material-ui/icons/ScatterPlotSharp";
+import BarChart from "@material-ui/icons/BarChartSharp";
+import Categories from "@material-ui/icons/CategorySharp";
 import Add from "@material-ui/icons/Add";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
@@ -56,40 +56,31 @@ const useStyles = makeStyles((theme) =>
             '&:hover': {
                 backgroundColor: theme.palette.secondary.dark,
             },
+        },
+        link: {
+            textDecoration: "none"
         }
     })
 );
 
 type LayoutProps = {
     classes: any,
-    anchorEl: any,
     itemList: Array<any>,
     selected?: string,
-    handleClick(event: React.MouseEvent<HTMLElement, MouseEvent>): void | undefined,
-    handleClose: any
     selectionHandler: any
 }
 
 const iconList = [
-    { name: "Account", icon: <Account fontSize="large" /> },
-    { name: "Date", icon: <Date fontSize="large" /> },
-    { name: "Bank Balance", icon: <AccBalance fontSize="large" /> },
-    { name: "Wallet Balance", icon: <AccBalanceWallet fontSize="large" /> },
-    { name: "Assessment", icon: <Assessment fontSize="large" /> }
+    { name: "Account", to: "/profile", icon: <Account fontSize="large" /> },
+    { name: "Categories", to: "/exps-avg-by-category", icon: <Categories fontSize="large" /> },
+    { name: "Wallet Balance", to: "/expenses", icon: <AccBalanceWallet fontSize="large" /> },
+    { name: "ScatterPlot", to: "/scatter-graph-chart", icon: <ScatterPlot fontSize="large" /> },
+    { name: "BarChart", to: "/bar-graph-chart", icon: <BarChart fontSize="large" /> }
 ]
 
 function Layout() {
     const classes = useStyles();
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [selected, setSelected] = React.useState<string>("");
-
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     return (
         <Router>
@@ -104,13 +95,8 @@ function Layout() {
                             itemList={iconList}
                             selected={selected}
                             classes={classes}
-                            handleClick={handleClick}
                             selectionHandler={setSelected}
                         />
-                        <UserMenu
-                            classes={classes}
-                            anchorEl={anchorEl}
-                            handleClose={handleClose} />
                         <AddButton classes={classes} />
                     </Drawer>
                 </Grid>
@@ -124,51 +110,29 @@ function Layout() {
     );
 }
 
-function RenderList({ itemList, classes, selected, handleClick, selectionHandler }: Partial<LayoutProps>) {
+function RenderList({ itemList, classes, selected, selectionHandler }: Partial<LayoutProps>) {
     return (
         <List className={classes.drawerList}>
             {
                 itemList && itemList.map((icon) => {
                     return (
-                        <ListItem
-                            className={classes.listItem}
-                            button
-                            key={icon.name}
-                            selected={selected === icon.name}
-                            autoFocus={icon.name === "Account"}
-                            onClick={icon.name === "Account" ? handleClick : () => selectionHandler(icon.name)}
-                        >
-                            <ListItemIcon>
-                                {icon.icon}
-                            </ListItemIcon>
-                        </ListItem>
+                        <Link key={icon.name} to={icon.to}>
+                            <ListItem
+                                className={classes.listItem}
+                                button
+                                key={icon.name}
+                                selected={selected === icon.name}
+                                onClick={() => selectionHandler(icon.name)}
+                            >
+                                <ListItemIcon>
+                                    {icon.icon}
+                                </ListItemIcon>
+                            </ListItem>
+                        </Link>
                     )
                 })
             }
         </List>
-    )
-}
-
-function UserMenu({ classes, anchorEl, handleClose }: Partial<LayoutProps>) {
-    return (
-        <Popper
-            className={classes.menu}
-            open={Boolean(anchorEl)}
-            anchorEl={anchorEl}
-            placement="right"
-            role={undefined}
-            transition
-        >
-            {({ TransitionProps }) => (
-                <Grow {...TransitionProps}>
-                    <ClickAwayListener onClickAway={handleClose}>
-                        <MenuItem selected onClick={handleClose}>
-                            Sign Out
-              </MenuItem>
-                    </ClickAwayListener>
-                </Grow>
-            )}
-        </Popper>
     )
 }
 
