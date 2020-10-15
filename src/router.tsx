@@ -10,6 +10,7 @@ import Profile from "./components/profile/Profile";
 import EditExpense from './components/expenses/EditExpense';
 import ExpAvgByCategory from './components/expenses/summaries/ExpAvgByCategory';
 import MonthlyExpScatterPlot from './components/expenses/charts/ScatterPlot';
+import AnnualTotalExpByMonth from './components/expenses/charts/BarGraph';
 
 function AppRouter() {
     return (
@@ -23,7 +24,8 @@ function AppRouter() {
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/edit-expense" component={EditExpense} />
                 <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
-                <Route exact path="/scatter-graph-report" component={MonthlyExpScatterPlot} />
+                <Route exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
+                <Route exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />
             </Switch>
         </>
     )

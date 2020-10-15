@@ -25,11 +25,12 @@ const useStyles = makeStyles(() =>
 );
 
 type SingleDateRangeProps = {
+    views: any[],
     selectedDate: Date,
     selectDate(date: any, value?: any): void
 }
 
-function DateRange({ selectedDate, selectDate }: SingleDateRangeProps) {
+function DateRange({ views, selectedDate, selectDate }: SingleDateRangeProps) {
     const classes = useStyles();
 
     return (
@@ -39,7 +40,7 @@ function DateRange({ selectedDate, selectDate }: SingleDateRangeProps) {
                     align="center"
                     className={classes.text}
                 >
-                    Expenditure graph over the month of
+                    Expenditure graph for the period of
                 </Typography>
             </div>
 
@@ -48,7 +49,7 @@ function DateRange({ selectedDate, selectDate }: SingleDateRangeProps) {
                     disableFuture
                     autoFocus
                     autoOk
-                    views={["month", "year"]}
+                    views={views}
                     inputVariant="standard"
                     variant="inline"
                     value={selectedDate}

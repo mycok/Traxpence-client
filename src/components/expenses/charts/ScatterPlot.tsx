@@ -31,9 +31,6 @@ const useStyles = makeStyles(() =>
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-evenly"
-        },
-        paper: {
-            backgroundColor: "#fff"
         }
     })
 )
@@ -46,10 +43,11 @@ function MonthlyExpScatterPlot() {
     return (
         <div className={classes.root}>
             <DateRange
+                views={["month", "year"]}
                 selectedDate={selectedDate}
                 selectDate={selectDate}
             />
-            <Paper elevation={5} className={classes.paper}>
+            <Paper elevation={0}>
             <VictoryChart
                     theme={VictoryTheme.grayscale}
                     height={300}
@@ -59,8 +57,8 @@ function MonthlyExpScatterPlot() {
                 >
                     <VictoryScatter
                         style={{
-                            data: { fill: "orange", stroke: "#c43a31", strokeWidth: 1 },
-                            labels: { fill: "#01579b", fontSize: 10, padding: 2 }
+                            data: { fill: "#ffa500", stroke: "#c43a31", strokeWidth: 1 },
+                            labels: { fill: "#66bb6a", fontSize: 10, padding: 2 }
                         }}
                         bubbleProperty="y"
                         maxBubbleSize={7}
