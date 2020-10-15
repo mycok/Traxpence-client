@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) =>
             margin: 20,
             width: "100%"
         },
-        addButton: {
+        searchButton: {
             color: theme.palette.common.black,
             backgroundColor: theme.palette.secondary.main,
             '&:hover': {
@@ -55,7 +55,7 @@ function DateRangeSearch() {
             <div>
                 <Fab
                     aria-label="add new expense"
-                    className={classes.addButton}
+                    className={classes.searchButton}
                     size="small"
                     onClick={() => null}
                 >

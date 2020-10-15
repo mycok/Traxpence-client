@@ -9,6 +9,7 @@ import Expenses from './components/expenses';
 import Profile from "./components/profile/Profile";
 import EditExpense from './components/expenses/EditExpense';
 import ExpAvgByCategory from './components/expenses/summaries/ExpAvgByCategory';
+import Charts from './components/expenses/charts'
 
 function AppRouter() {
     return (
@@ -22,6 +23,7 @@ function AppRouter() {
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/edit-expense" component={EditExpense} />
                 <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
+                <Route exact path="/reports" component={Charts} />
             </Switch>
         </>
     )
