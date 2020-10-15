@@ -7,7 +7,7 @@ import Account from "@material-ui/icons/AccountCircleSharp";
 import Date from "@material-ui/icons/DateRangeSharp";
 import AccBalance from "@material-ui/icons/AccountBalanceSharp";
 import AccBalanceWallet from "@material-ui/icons/AccountBalanceWalletSharp";
-import Assessment from "@material-ui/icons/Assessment";
+import ScatterPlot from "@material-ui/icons/ScatterPlotSharp";
 import Add from "@material-ui/icons/Add";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
@@ -75,7 +75,7 @@ const iconList = [
     { name: "Date", icon: <Date fontSize="large" /> },
     { name: "Bank Balance", icon: <AccBalance fontSize="large" /> },
     { name: "Wallet Balance", icon: <AccBalanceWallet fontSize="large" /> },
-    { name: "Assessment", icon: <Assessment fontSize="large" /> }
+    { name: "ScatterPlot", icon: <ScatterPlot fontSize="large" /> }
 ]
 
 function Layout() {
