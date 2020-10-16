@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Card, CardHeader, CardContent, Avatar, Typography, IconButton, TextField, MenuItem } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Avatar, Typography, IconButton, TextField, MenuItem, Button } from '@material-ui/core';
 import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
@@ -11,22 +11,22 @@ import CustomTooltip from '../../shared/CustomTooltip';
 const useStyles = makeStyles(() =>
     createStyles({
         root: {
-            width: 600,
             margin: 5,
-            height: 500
+            width: 700
         },
         container: {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "center"
         },
         editButton: {
             marginTop: 12
         },
         cardContent: {
-            marginLeft: 50,
-            marginRight: 50
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center"
         },
         titleContainer: {
             display: "flex",
@@ -153,6 +153,15 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileC
                 currency={currency}
                 handleChange={handleChange}
             />
+            <CardContent className={classes.cardContent}>
+                <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() => null}
+                >
+                    Sign Out
+                </Button>
+            </CardContent>
         </Card>
     )
 }

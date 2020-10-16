@@ -76,7 +76,7 @@ type LayoutProps = {
 }
 
 const iconList = [
-    { name: "Profile", to: "/profile", icon: <Account fontSize="large" /> },
+    { name: "Profile / Sign Out", to: "/profile", icon: <Account fontSize="large" /> },
     { name: "Categories", to: "/exps-avg-by-category", icon: <Categories fontSize="large" /> },
     { name: "Expenses", to: "/expenses", icon: <AccBalanceWallet fontSize="large" /> },
     { name: "ScatterPlot", to: "/scatter-graph-chart", icon: <ScatterPlot fontSize="large" /> },
