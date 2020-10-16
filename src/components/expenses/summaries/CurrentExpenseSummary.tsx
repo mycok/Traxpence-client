@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from "@material-ui/core/styles";
+import { grey } from "@material-ui/core/colors";
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -17,7 +18,7 @@ const useStyles = makeStyles(() =>
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            border: `5px solid orange`,
+            border: `5px solid #ffa500`,
             borderRadius: "50%",
             boxShadow: "2px 2px 2px 2px rgba(0,0,0,0.6)",
             margin: 20,
@@ -36,11 +37,11 @@ const useStyles = makeStyles(() =>
         summaryTotalText: {
             marginTop: 10,
             fontWeight: 900,
-            color: "gray",
+            color: grey[600],
             fontStyle: "italic"
         },
         textBox: {
-            border: `2px solid gray`,
+            border: `2px solid ${grey[500]}`,
             borderRadius: "8%",
             width: 150
         },
@@ -52,6 +53,12 @@ const useStyles = makeStyles(() =>
             color: "gray",
             fontStyle: "italic"
         },
+        text2: {
+            fontFamily: "Raleway",
+            fontSize: 30,
+            fontWeight: 900,
+            letterSpacing: 0.6
+        },
     })
 )
 
@@ -61,7 +68,14 @@ function CurrentExpenseSummary() {
     return (
         <div className={classes.root}>
             <div>
-                <Typography variant="h6" color="textPrimary" align="center"> You've spent </Typography>
+                <Typography
+                    variant="h6"
+                    color="textPrimary"
+                    align="center"
+                    className={classes.text2}
+                >
+                    You spent
+                  </Typography>
             </div>
             <div className={classes.summaryContainer}>
                 <div className={classes.leftSummary}>

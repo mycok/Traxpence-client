@@ -12,6 +12,10 @@ const useStyles = makeStyles(() =>
     })
 )
 
+type signupProps = {
+    elevation?: number,
+}
+
 type SignupState = {
     username: string,
     email: string,
@@ -29,7 +33,7 @@ const initialState = {
     password: ""
 }
 
-function Signup() {
+function Signup({ elevation }: signupProps) {
     const classes = useStyles();
     const [state, dispatch] = React.useReducer((state: SignupState, action: Action) => {
         return state;
@@ -44,6 +48,7 @@ function Signup() {
     return (
         <div className={classes.root}>
             <Form
+                elevation={elevation}
                 fields={3}
                 username={state?.username}
                 email={state?.email}

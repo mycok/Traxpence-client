@@ -14,7 +14,6 @@ function ConfirmDialog({ open, handleClose, handleDelete }: ConfirmDialogProps) 
             disableBackdropClick
             disableEscapeKeyDown
             maxWidth="sm"
-            fullWidth
             aria-labelledby="confirm-delete-dialog"
             open={open}
         >

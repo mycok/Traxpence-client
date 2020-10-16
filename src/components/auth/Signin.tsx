@@ -12,6 +12,10 @@ const useStyles = makeStyles(() =>
     })
 )
 
+type signinProps = {
+    elevation?: number,
+}
+
 type SigninState = {
     email: string,
     password: string
@@ -27,7 +31,7 @@ const initialState = {
     password: ""
 };
 
-function Signin() {
+function Signin({ elevation }: signinProps) {
     const classes = useStyles();
     const [state, dispatch] = React.useReducer((state: SigninState, action: Action) => {
         return state;
@@ -42,6 +46,7 @@ function Signin() {
     return (
         <div className={classes.root}>
             <Form
+                elevation={elevation}
                 fields={2}
                 email={state?.email}
                 password={state?.password}

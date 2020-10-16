@@ -40,7 +40,11 @@ const useStyles = makeStyles(() =>
         expenseTotals: {
             marginLeft: 10,
             fontWeight: 800
-        }
+        },
+        signoutButton: {
+            width: 180,
+            margin: 10
+        },
     })
 )
 
@@ -155,9 +159,11 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileC
             />
             <CardContent className={classes.cardContent}>
                 <Button
+                    className={classes.signoutButton}
                     variant="outlined"
                     color="secondary"
-                    onClick={() => null}
+                    component={Link}
+                    to="/"
                 >
                     Sign Out
                 </Button>

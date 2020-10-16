@@ -59,7 +59,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
                                 </Typography>
                                 <Chip
                                     variant="outlined"
-                                    color="primary"
+                                    color="secondary"
                                     size="small"
                                     label={expense?.category?.title}
                                 />

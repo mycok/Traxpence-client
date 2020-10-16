@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) =>
 )
 
 type FormComponentProps = {
+    elevation?: number,
     fields: number,
     username?: string,
     email: string,
@@ -48,7 +49,7 @@ type FormComponentProps = {
     handler(event: React.FormEvent<HTMLFormElement>): void | undefined,
 }
 
-function Form({ fields, username, email, password, handler }: FormComponentProps) {
+function Form({ elevation, fields, username, email, password, handler }: FormComponentProps) {
     const classes = useStyles();
 
     return (
@@ -57,7 +58,7 @@ function Form({ fields, username, email, password, handler }: FormComponentProps
             noValidate autoComplete="off"
             onSubmit={handler}
         >
-            <Paper elevation={5} className={classes.textFieldsPaper}>
+            <Paper elevation={elevation ?? 0} className={classes.textFieldsPaper}>
                 {
                     fields === 3 && (
                         <TextField

@@ -1,75 +1,99 @@
 import React from "react";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { Typography, Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Typography, Button, Divider } from "@material-ui/core";
+import { grey } from "@material-ui/core/colors";
 
 import { ReactComponent as Wallet } from "../images/wallet.svg";
+import Signin from './auth/Signin';
+import Signup from './user/Signup';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
         container: {
             display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        innerContainer: {
+            display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            alignContent: "center",
+            // border: "1px solid teal"
+        },
+        orContainer: {
+            margin: 25
+        },
+        divider: {
+            height: 500
         },
         child: {
             margin: 20
         },
-        mainButton: {
-            width: 500,
-            fontSize: 18,
-            textTransform: "capitalize"
+        button: {
+            width: 180,
+            margin: 10
+        },
+        headerText: {
+            fontFamily: "Raleway",
+            fontSize: 30,
+            fontWeight: 900,
+            letterSpacing: 0.6
         },
         text: {
             fontFamily: "Raleway",
-            fontSize: 40,
-            fontWeight: 900,
+            fontSize: 20,
+            fontWeight: 700,
             letterSpacing: 0.6,
-            textTransform: "capitalize"
+            color: grey[300],
+            fontStyle: "italic"
         }
     })
 );
 
 function Home() {
     const classes = useStyles();
+    const [isSignin, setSignin] = React.useState(true);
+
     return (
         <div className={classes.container}>
-            <div>
-                <Wallet />
-            </div>
-            <div className={classes.child}>
-                <Typography className={classes.text} variant="subtitle2" align="center">
-                    Thank you choosing Traxpense
+            <div className={classes.innerContainer}>
+                <div className={classes.child}>
+                    <Typography className={classes.headerText} variant="subtitle2" align="center">
+                        Traxpense
                 </Typography>
+                </div>
+                <div>
+                    <Wallet />
+                </div>
+                <div className={classes.child}>
+                    <Typography className={classes.text} variant="caption" align="center">
+                        Expenditure tracking at your finger tips
+                    </Typography>
+                </div>
             </div>
-            <div className={classes.child}>
+            <Divider orientation="vertical" variant="middle" className={classes.divider} />
+            <div className={classes.innerContainer}>
+                <div>
+                    {
+                        isSignin ? (
+                            <Signin />
+                        ) : (
+                            <Signup />
+                        )
+                    }
+                </div>
+                <div className={classes.orContainer}>
+                    <Typography>OR</Typography>
+                </div>
                 <Button
-                    className={classes.mainButton}
-                    variant="contained"
-                    fullWidth
+                    className={classes.button}
+                    variant="outlined"
                     color="secondary"
-                    component={Link}
-                    to="/signin"
+                    onClick={() => setSignin(!isSignin)}
                 >
-                    Sign In
+                    {isSignin ? "Sign Up" : "Sign In"}
                 </Button>
-            </div>
-            <div>
-                <Typography>OR</Typography>
-            </div>
-            <div>
-            <Button
-                    className={classes.mainButton}
-                    variant="text"
-                    fullWidth
-                    color="secondary"
-                    component={Link}
-                    to="/signup"
-                >
-                    Sign Up
-                </Button> 
             </div>
         </div>
     )
