@@ -10,8 +10,7 @@ const useStyles = makeStyles((theme) =>
             display: "flex",
             flexDirection: "column",
             width: 800,
-            height: 160,
-            margin: 10
+            margin: "60px 10px 10px"
         },
         categoryHeaderContainer: {
             display: "flex",

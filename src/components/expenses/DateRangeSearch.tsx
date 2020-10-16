@@ -5,12 +5,14 @@ import { Fab } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { SearchSharp } from "@material-ui/icons";
 
+import CustomTooltip from '../../shared/CustomTooltip';
+
 const useStyles = makeStyles((theme) =>
     createStyles({
         root: {
             display: "flex",
             justifyContent: "space-between",
-            margin: 20,
+            margin: "90px 20px 20px",
             width: "100%"
         },
         searchButton: {
@@ -53,14 +55,16 @@ function DateRangeSearch() {
                 />
             </MuiPickersUtilsProvider>
             <div>
-                <Fab
-                    aria-label="add new expense"
-                    className={classes.searchButton}
-                    size="small"
-                    onClick={() => null}
-                >
-                    <SearchSharp fontSize="small" />
-                </Fab>
+                <CustomTooltip title="Search" placement="bottom">
+                    <Fab
+                        aria-label="add new expense"
+                        className={classes.searchButton}
+                        size="small"
+                        onClick={() => null}
+                    >
+                        <SearchSharp fontSize="small" />
+                    </Fab>
+                </CustomTooltip>
             </div>
         </div>
     )

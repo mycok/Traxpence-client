@@ -6,6 +6,7 @@ import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
+import CustomTooltip from '../../shared/CustomTooltip';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -119,14 +120,18 @@ function ProfileCard({ classes, user, currency, handleChange }: Partial<ProfileC
                 }
                 action={
                     <>
-                        <IconButton aria-label="edit" className={classes.editButton}>
-                            <EditSharp />
-                        </IconButton>
+                        <CustomTooltip title="Edit" placement="bottom">
+                            <IconButton aria-label="edit" className={classes.editButton}>
+                                <EditSharp />
+                            </IconButton>
+                        </CustomTooltip>
+
                         <Link to="/expenses">
                             <IconButton aria-label="close" className={classes.editButton}>
                                 <CloseRounded />
                             </IconButton>
                         </Link>
+
                     </>
                 }
                 title={
@@ -170,7 +175,7 @@ function SettingsCard({ classes, currency, handleChange }: Partial<ProfileCompon
                             <MenuItem
                                 key={curr?.label}
                                 value={curr?.label}
-                                >
+                            >
                                 {curr?.label}
                             </MenuItem>
                         ))
