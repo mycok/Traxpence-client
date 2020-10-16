@@ -17,15 +17,15 @@ function AppRouter() {
         <>
             <Switch>
                 <Route exact path="/" component={Home} />
-                <Route exact path="/signup" component={Signup} />
-                <Route exact path="/signin" component={Signin} />
+                <Route exact path="/signup" render={(props) => <Signup elevation={5} {...props} />} />
+                <Route exact path="/signin" render={(props) => <Signin elevation={5} {...props} />} />
                 <Route exact path="/new-expense" component={NewExpense}/>
                 <Route exact path="/expenses" component={Expenses}/>
                 <Route exact path="/profile" component={Profile} />
                 <Route exact path="/edit-expense" component={EditExpense} />
                 <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
                 <Route exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
-                <Route exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />
+                <Route exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />2
             </Switch>
         </>
     )

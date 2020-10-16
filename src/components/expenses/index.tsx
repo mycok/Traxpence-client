@@ -20,13 +20,13 @@ export interface IExpense {
 const expenseList: IExpense[] = [
     {
         _id: "54605",
-        title: "Lunch with olive",
+        title: "Lunch with john doe",
         amount: 50000,
         category: {
             _id: "53638",
             title: "Meals",
         },
-        notes: "This was un planned for and expensive lunch and if it wasn't the fact that she is somewhat special, i wouldn't have spent that much.",
+        notes: "This was un planned for and expensive lunch and if it wasn't the fact that i had the money, i wouldn't have spent that much.",
         incurredOn: new Date().toDateString()
     },
     {
