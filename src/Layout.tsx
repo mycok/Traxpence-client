@@ -12,6 +12,7 @@ import Add from "@material-ui/icons/Add";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
 
 import AppRouter from './router';
+import CustomTooltip from './shared/CustomTooltip';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme) =>
             zIndex: 20
         },
         drawerList: {
+            display: "flex",
+            flexDirection: "column",
             marginTop: 50,
             backgroundColor: theme.palette.background.paper,
         },
@@ -63,17 +66,19 @@ const useStyles = makeStyles((theme) =>
     })
 );
 
+
+
 type LayoutProps = {
     classes: any,
-    itemList: Array<any>,
+    iconList: Array<any>,
     selected?: string,
     selectionHandler: any
 }
 
 const iconList = [
-    { name: "Account", to: "/profile", icon: <Account fontSize="large" /> },
+    { name: "Profile", to: "/profile", icon: <Account fontSize="large" /> },
     { name: "Categories", to: "/exps-avg-by-category", icon: <Categories fontSize="large" /> },
-    { name: "Wallet Balance", to: "/expenses", icon: <AccBalanceWallet fontSize="large" /> },
+    { name: "Expenses", to: "/expenses", icon: <AccBalanceWallet fontSize="large" /> },
     { name: "ScatterPlot", to: "/scatter-graph-chart", icon: <ScatterPlot fontSize="large" /> },
     { name: "BarChart", to: "/bar-graph-chart", icon: <BarChart fontSize="large" /> }
 ]
@@ -92,7 +97,7 @@ function Layout() {
                         className={classes.drawer}
                         classes={{ paper: classes.drawerPaper }}>
                         <RenderList
-                            itemList={iconList}
+                            iconList={iconList}
                             selected={selected}
                             classes={classes}
                             selectionHandler={setSelected}
@@ -110,25 +115,31 @@ function Layout() {
     );
 }
 
-function RenderList({ itemList, classes, selected, selectionHandler }: Partial<LayoutProps>) {
+function RenderList({ iconList, classes, selected, selectionHandler }: Partial<LayoutProps>) {
     return (
         <List className={classes.drawerList}>
             {
-                itemList && itemList.map((icon) => {
+                iconList && iconList.map(({ name, to, icon }) => {
                     return (
-                        <Link key={icon.name} to={icon.to}>
-                            <ListItem
-                                className={classes.listItem}
-                                button
-                                key={icon.name}
-                                selected={selected === icon.name}
-                                onClick={() => selectionHandler(icon.name)}
-                            >
-                                <ListItemIcon>
-                                    {icon.icon}
-                                </ListItemIcon>
-                            </ListItem>
-                        </Link>
+                        <CustomTooltip
+                            key={name}
+                            title={name}
+                            placement="right"
+                        >
+                            <Link key={name} to={to} className={classes.link}>
+                                <ListItem
+                                    className={classes.listItem}
+                                    button
+                                    key={name}
+                                    selected={selected === icon.name}
+                                    onClick={() => selectionHandler(name)}
+                                >
+                                    <ListItemIcon>
+                                        {icon}
+                                    </ListItemIcon>
+                                </ListItem>
+                            </Link>
+                        </CustomTooltip>
                     )
                 })
             }

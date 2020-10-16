@@ -8,18 +8,12 @@ const useStyles = makeStyles(() =>
     createStyles({
         root: {
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "space-evenly",
             alignItems: "center",
-            margin: 20,
             width: "100%"
         },
-        text: {
-            fontWeight: 700,
-            fontSize: 18
-        },
         textField: {
-            margin: 10,
-            width: 400
+            width: 300
         },
     })
 );
@@ -35,22 +29,14 @@ function DateRange({ views, selectedDate, selectDate }: SingleDateRangeProps) {
 
     return (
         <div className={classes.root}>
-            <div>
-                <Typography
-                    align="center"
-                    className={classes.text}
-                >
-                    Expenditure graph for the period of
-                </Typography>
-            </div>
-
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                     disableFuture
                     autoFocus
                     autoOk
                     views={views}
-                    inputVariant="standard"
+                    inputVariant="outlined"
+                    label="Select Date"
                     variant="inline"
                     value={selectedDate}
                     onChange={selectDate}

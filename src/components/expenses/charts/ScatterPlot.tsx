@@ -30,7 +30,7 @@ const useStyles = makeStyles(() =>
         root: {
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly"
+            justifyContent: "space-evenly",
         }
     })
 )
@@ -53,7 +53,7 @@ function MonthlyExpScatterPlot() {
                     height={300}
                     width={350}
                     domainPadding={30}
-                    style={{ parent: { width: 650, height: 650 }}}
+                    style={{ parent: { width: 650 }}}
                 >
                     <VictoryScatter
                         style={{

@@ -86,7 +86,7 @@ function AnnualTotalExpByMonth() {
                     height={600}
                     width={850}
                     domainPadding={10}
-                    style={{ parent: { height: 650 } }}
+                    style={{ parent: { width: 850 } }}
                 >
                     <VictoryAxis />
                     <VictoryBar
