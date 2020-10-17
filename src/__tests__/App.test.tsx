@@ -5,13 +5,8 @@ import App from '../App';
 
 describe("App component", () => {
   it('renders a drawer element', () => {
-    const RouteProps = {
-      location: {},
-      match: {},
-      history: {}
-    };
-    const { getBy } = render(<App { ...RouteProps }/>);
-    const linkElement = getByText(/learn react/i);
-    expect(linkElement).toBeInTheDocument();
+    const component = render(<App />);
+    const drawer = component;
+    expect(drawer).toBeInTheDocument;
   });
 });
