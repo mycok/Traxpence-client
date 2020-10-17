@@ -93,6 +93,7 @@ function Layout() {
                 <CssBaseline />
                 <Grid item xs={1}>
                     <Drawer
+                        id="persistent-drawer"
                         variant="permanent"
                         className={classes.drawer}
                         classes={{ paper: classes.drawerPaper }}>
