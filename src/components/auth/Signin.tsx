@@ -1,22 +1,20 @@
-import React from "react";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import Form from "./AuthForm";
+import Form from './AuthForm';
 
-const useStyles = makeStyles(() =>
-    createStyles({
-        root: {
-            display: "flex",
-            alignItems: "center"
-        }
-    })
-)
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 
-type signinProps = {
+type SigninProps = {
     elevation?: number,
 }
 
-type SigninState = {
+type SigninData = {
     email: string,
     password: string
 }
@@ -26,34 +24,34 @@ type Action = {
     payload: any
 }
 
-const initialState = {
-    email: "",
-    password: ""
+const initialState: SigninData = {
+  email: '',
+  password: '',
 };
 
-function Signin({ elevation }: signinProps) {
-    const classes = useStyles();
-    const [state, dispatch] = React.useReducer((state: SigninState, action: Action) => {
-        return state;
-    }, initialState);
+function Signin({ elevation }: SigninProps) {
+  const classes = useStyles();
+  const [signinState, dispatch] = React.useReducer(
+    (state: SigninData, action: Action) => state, initialState,
+  );
 
-    function handleSignin(e: React.FormEvent) {
-        e.preventDefault();
+  function handleSignin(e: React.FormEvent) {
+    e.preventDefault();
 
-        dispatch({ type: "SET_EMAIL", payload: state.email })
-    };
+    dispatch({ type: 'SET_EMAIL', payload: signinState.email });
+  }
 
-    return (
-        <div className={classes.root}>
-            <Form
-                elevation={elevation}
-                fields={2}
-                email={state?.email}
-                password={state?.password}
-                handler={handleSignin}
-            />
-        </div>
-    )
+  return (
+    <div className={classes.root}>
+      <Form
+        elevation={elevation}
+        fields={2}
+        email={signinState?.email}
+        password={signinState?.password}
+        handler={handleSignin}
+      />
+    </div>
+  );
 }
 
 export default Signin;

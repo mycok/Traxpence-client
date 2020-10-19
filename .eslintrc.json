@@ -1,0 +1,58 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 11,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "@typescript-eslint"
+    ],
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "extensions": [".js", ".ts", ".tsx"]
+          }
+        },
+        "import/parsers": {
+          "@typescript-eslint/parser": [".tsx", ".ts", ".js"]
+        }
+      },
+      "overrides": [
+        {
+          "files": ["./src/__test__/**/*", "**/?(*.)+(spec|test).[jt]s?(x)"],
+          "env": {
+            "jest": true
+          },
+          "rules": {
+            "func-names": "off",
+            "prefer-arrow-callback": "off"
+          }
+        }
+      ],
+    "rules": {
+        "import/extensions": "off",
+        "import/prefer-default-export": "off",
+        "react/jsx-filename-extension": "off",
+        "no-use-before-define": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/require-default-props": "off",
+        "no-unused-vars": "off",
+        "no-underscore-dangle": "off"
+    }
+}

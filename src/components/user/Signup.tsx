@@ -1,22 +1,20 @@
-import React from "react";
-import { createStyles, makeStyles } from "@material-ui/core/styles";
+import React from 'react';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-import Form from "../auth/AuthForm";
+import Form from '../auth/AuthForm';
 
-const useStyles = makeStyles(() => 
-    createStyles({
-        root: {
-            display: "flex",
-            alignItems: "center"
-        }
-    })
-)
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    display: 'flex',
+    alignItems: 'center',
+  },
+}));
 
-type signupProps = {
+type SignupProps = {
     elevation?: number,
 }
 
-type SignupState = {
+type SignupData = {
     username: string,
     email: string,
     password: string
@@ -27,36 +25,36 @@ type Action = {
     payload: any
 }
 
-const initialState = {
-    username: "",
-    email: "",
-    password: ""
-}
+const initialState: SignupData = {
+  username: '',
+  email: '',
+  password: '',
+};
 
-function Signup({ elevation }: signupProps) {
-    const classes = useStyles();
-    const [state, dispatch] = React.useReducer((state: SignupState, action: Action) => {
-        return state;
-    }, initialState);
+function Signup({ elevation }: SignupProps) {
+  const classes = useStyles();
+  const [signupState, dispatch] = React.useReducer(
+    (state: SignupData, action: Action) => state, initialState,
+  );
 
-    function handleSignup(e: React.FormEvent) {
-        e.preventDefault();
+  function handleSignup(e: React.FormEvent) {
+    e.preventDefault();
 
-        dispatch({ type: "SET_USERNAME", payload: state.username });
-    };
+    dispatch({ type: 'SET_USERNAME', payload: signupState.username });
+  }
 
-    return (
-        <div className={classes.root}>
-            <Form
-                elevation={elevation}
-                fields={3}
-                username={state?.username}
-                email={state?.email}
-                password={state?.password}
-                handler={handleSignup}
-            />
-        </div>
-    )
+  return (
+    <div className={classes.root}>
+      <Form
+        elevation={elevation}
+        fields={3}
+        username={signupState?.username}
+        email={signupState?.email}
+        password={signupState?.password}
+        handler={handleSignup}
+      />
+    </div>
+  );
 }
 
 export default Signup;

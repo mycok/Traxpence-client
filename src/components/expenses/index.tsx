@@ -1,92 +1,89 @@
-import React from "react";
+import React from 'react';
 
 import ExpenseList from './ExpenseList';
-import DateRangeSearch from './DateRangeSearch';
-import NoExpenses from "./NoExpenses";
+import DateRangeSearch from './shared/DateRangeSearch';
+import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
-
-export interface IExpense {
-    _id?: string;
-    title: string;
-    amount: number;
-    category: {
-        _id: string,
-        title: string,
-    };
-    notes?: string;
-    incurredOn: any
-}
+import { IExpense } from './IExpense';
 
 const expenseList: IExpense[] = [
-    {
-        _id: "54605",
-        title: "Lunch with john doe",
-        amount: 50000,
-        category: {
-            _id: "53638",
-            title: "Meals",
-        },
-        notes: "This was un planned for and expensive lunch and if it wasn't the fact that i had the money, i wouldn't have spent that much.",
-        incurredOn: new Date().toDateString()
+  {
+    _id: '54605',
+    title: 'Lunch with john doe',
+    amount: 50000,
+    category: {
+      _id: '53638',
+      title: 'Meals',
     },
-    {
-        _id: "54604",
-        title: "Yaka",
-        amount: 30000,
-        category: {
-            _id: "42351",
-            title: "Utilities",
-        },
-        notes: "",
-        incurredOn: new Date().toDateString()
+    notes: "This was un planned for and expensive lunch and if it wasn't the fact that i had the money, i wouldn't have spent that much.",
+    incurredOn: new Date().toDateString(),
+  },
+  {
+    _id: '54604',
+    title: 'Yaka',
+    amount: 30000,
+    category: {
+      _id: '42351',
+      title: 'Utilities',
     },
-    {
-        _id: "67518",
-        title: "Hair Cut",
-        amount: 5000,
-        category: {
-            _id: "09877",
-            title: "Personal Care",
-        },
-        notes: "",
-        incurredOn: new Date().toDateString()
-    }
-]
+    notes: '',
+    incurredOn: new Date().toDateString(),
+  },
+  {
+    _id: '67518',
+    title: 'Hair Cut',
+    amount: 5000,
+    category: {
+      _id: '09877',
+      title: 'Personal Care',
+    },
+    notes: '',
+    incurredOn: new Date().toDateString(),
+  },
+];
 
 export default function () {
-    const [expenses] = React.useState(expenseList);
-    const [open, setOpen] = React.useState(false);
+  const [expenses] = React.useState(expenseList);
+  const [open, setOpen] = React.useState(false);
+  const [fromDate, selectFromDate] = React.useState(new Date());
+  const [toDate, selectToDate] = React.useState(new Date());
 
-    function handleOpen() {
-        setOpen(true);
-    }
+  function handleOpen() {
+    setOpen(true);
+  }
 
-    function handleClose() {
-        setOpen(false);
-    }
-    
-    function handleDelete () {
+  function handleClose() {
+    setOpen(false);
+  }
 
-    }
+  function handleDelete() {
 
-    if (expenses.length === 0) {
-        return (
-            <NoExpenses />
-        )
-    }
+  }
 
+  if (expenses.length === 0) {
     return (
-        <div>
-            <ConfirmDialog
-                open={open}
-                handleClose={handleClose}
-                handleDelete={handleDelete}
-            />
-            <DateRangeSearch />
-            <ExpenseList
-                expenses={expenses}
-                handleOpen={handleOpen}
-              />
-        </div>
-    )
+      <NoExpenses />
+    );
+  }
+
+  return (
+    <div>
+      <ConfirmDialog
+        open={open}
+        handleClose={handleClose}
+        handleDelete={handleDelete}
+      />
+      <DateRangeSearch
+        views={['month']}
+        fromDate={fromDate}
+        toDate={toDate}
+        selectFromDate={selectFromDate}
+        selectToDate={selectToDate}
+      />
+      <ExpenseList
+        expenses={expenses}
+        handleOpen={handleOpen}
+      />
+    </div>
+  );
 }

@@ -1,12 +1,11 @@
-import React from "react";
-import { render } from "@testing-library/react";
-// import ReactTestUtils from "react-dom/test-utils";
+import React from 'react';
+import { render } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
+// import ReactTestUtils from 'react-dom/test-utils';
 import App from '../App';
 
-describe("App component", () => {
+describe('App component', () => {
   it('renders a drawer element', () => {
-    const component = render(<App />);
-    const drawer = component;
-    expect(drawer).toBeInTheDocument;
+    const result = render(<App />);
   });
 });
