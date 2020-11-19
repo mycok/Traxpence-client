@@ -3,7 +3,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from '../auth/AuthForm';
 import { authReducer } from '../../utils/authReducer';
-import { signup, authenticate } from '../../api/auth';
+import { signup, authenticate, isAuthenticated } from '../../api/auth';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
 
 const useStyles = makeStyles(() => createStyles({
@@ -54,12 +54,13 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
+    const { username, email, password } = signupState;
 
-    await signup(signupState)
+    await signup({ username, email, password })
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
-            setShowUserIcon(true);
+            setShowUserIcon(isAuthenticated);
             history.push('/profile');
           });
         } else {

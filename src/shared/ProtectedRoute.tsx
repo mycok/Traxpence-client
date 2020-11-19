@@ -5,15 +5,23 @@ import { isAuthenticated } from '../api/auth';
 type ProtectedRouteProps = {
   component: any,
   exact: boolean,
-  path: string
+  path: string,
+  setShowUserIcon: any
+
 }
 
-function ProtectedRoute({ component: Component, ...otherProps }: ProtectedRouteProps) {
+function ProtectedRoute({
+  component: Component,
+  exact,
+  path,
+  ...otherCompProps
+}: ProtectedRouteProps) {
   return (
     <Route
-      {...otherProps}
+      exact
+      path={path}
       render={(props: RouteProps) => (isAuthenticated() ? (
-        <Component {...props} />
+        <Component {...props} {...otherCompProps} />
       ) : (
         <Redirect
           to={{

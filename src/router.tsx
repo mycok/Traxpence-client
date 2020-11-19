@@ -31,7 +31,7 @@ function AppRouter({ setShowUserIcon }: AppRouterProps) {
         <Route exact path="/signin" render={(props) => <Signin elevation={5} {...props} />} />
         <Route exact path="/new-expense" component={NewExpense} />
         <Route exact path="/expenses" component={Expenses} />
-        <ProtectedRoute exact path="/profile" component={Profile} />
+        <ProtectedRoute exact path="/profile" setShowUserIcon={setShowUserIcon} component={Profile} />
         <Route exact path="/edit-expense" component={EditExpense} />
         <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
         <Route exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
