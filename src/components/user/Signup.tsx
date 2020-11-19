@@ -2,6 +2,8 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from '../auth/AuthForm';
+import { authReducer } from '../../utils/authReducer';
+import { signup, authenticate } from '../../api/auth';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -12,35 +14,43 @@ const useStyles = makeStyles(() => createStyles({
 
 type SignupProps = {
     elevation?: number,
+    history: any,
+    setShowUserIcon: any
 }
 
-type SignupData = {
-    username: string,
-    email: string,
-    password: string
-}
-
-type Action = {
-    type: string,
-    payload: any
-}
-
-const initialState: SignupData = {
+const initialState = {
   username: '',
   email: '',
   password: '',
 };
 
-function Signup({ elevation }: SignupProps) {
+function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
   const classes = useStyles();
-  const [signupState, dispatch] = React.useReducer(
-    (state: SignupData, action: Action) => state, initialState,
-  );
+  const [signupState, dispatch] = React.useReducer(authReducer, initialState);
 
-  function handleSignup(e: React.FormEvent) {
+  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { target: { id, value } } = event;
+
+    dispatch({ type: 'ON_CHANGE', payload: { id, value } });
+  }
+
+  async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
 
-    dispatch({ type: 'SET_USERNAME', payload: signupState.username });
+    await signup(signupState)
+      .then((resp) => {
+        if (resp.success) {
+          authenticate(resp, () => {
+            setShowUserIcon(true);
+            history.push('/profile');
+          });
+        } else {
+          // set server-error state error and display it as helper text
+          console.log('db-error', resp);
+        }
+      })
+      // set server-error state error and display it as helper text
+      .catch((err) => console.log('errrrrrrrr', err));
   }
 
   return (
@@ -51,7 +61,8 @@ function Signup({ elevation }: SignupProps) {
         username={signupState?.username}
         email={signupState?.email}
         password={signupState?.password}
-        handler={handleSignup}
+        handleOnChange={handleOnChange}
+        handleOnSubmit={handleSignup}
       />
     </div>
   );

@@ -4,8 +4,6 @@ import { Typography, Button, Divider } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
 import { ReactComponent as Wallet } from '../images/wallet.svg';
-import Signin from './auth/Signin';
-import Signup from './user/Signup';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -29,7 +27,7 @@ const useStyles = makeStyles(() => createStyles({
     margin: 20,
   },
   button: {
-    width: 180,
+    width: 300,
     margin: 10,
   },
   headerText: {
@@ -48,9 +46,20 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-function Home() {
+type HomeProps = {
+  history: any,
+}
+
+function Home({ history }: HomeProps) {
   const classes = useStyles();
-  const [isSignin, setSignin] = React.useState(true);
+
+  function pushToSignup() {
+    history.push('/signup');
+  }
+
+  function pushToSignin() {
+    history.push('/signin');
+  }
 
   return (
     <div className={classes.container}>
@@ -71,15 +80,14 @@ function Home() {
       </div>
       <Divider orientation="vertical" variant="middle" className={classes.divider} />
       <div className={classes.innerContainer}>
-        <div>
-          {
-                        isSignin ? (
-                          <Signin />
-                        ) : (
-                          <Signup />
-                        )
-                    }
-        </div>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="secondary"
+          onClick={pushToSignup}
+        >
+          Sign Up
+        </Button>
         <div className={classes.orContainer}>
           <Typography>OR</Typography>
         </div>
@@ -87,9 +95,9 @@ function Home() {
           className={classes.button}
           variant="outlined"
           color="secondary"
-          onClick={() => setSignin(!isSignin)}
+          onClick={pushToSignin}
         >
-          {isSignin ? 'Sign Up' : 'Sign In'}
+          Sign In
         </Button>
       </div>
     </div>

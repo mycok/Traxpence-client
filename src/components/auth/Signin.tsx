@@ -2,6 +2,8 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from './AuthForm';
+import { signin, authenticate } from '../../api/auth';
+import { authReducer } from '../../utils/authReducer';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -12,11 +14,7 @@ const useStyles = makeStyles(() => createStyles({
 
 type SigninProps = {
     elevation?: number,
-}
-
-type SigninData = {
-    email: string,
-    password: string
+    history: any
 }
 
 type Action = {
@@ -24,21 +22,31 @@ type Action = {
     payload: any
 }
 
-const initialState: SigninData = {
+const initialState = {
   email: '',
   password: '',
 };
 
-function Signin({ elevation }: SigninProps) {
+function Signin({ elevation, history }: SigninProps) {
   const classes = useStyles();
-  const [signinState, dispatch] = React.useReducer(
-    (state: SigninData, action: Action) => state, initialState,
-  );
+  const [signinState, dispatch] = React.useReducer(authReducer, initialState);
 
-  function handleSignin(e: React.FormEvent) {
+  function handleOnChange(e: React.FormEvent) {
+    e.persist();
+
+    dispatch({ type: 'ON_CHANGE', payload: e });
+  }
+
+  async function handleSignin(e: React.FormEvent) {
     e.preventDefault();
 
-    dispatch({ type: 'SET_EMAIL', payload: signinState.email });
+    await signin(signinState)
+      .then((resp) => {
+        authenticate(resp, () => {
+          history.push('/expenses');
+        });
+      })
+      .catch((err) => console.log('errrrrrrrr', err));
   }
 
   return (
@@ -48,7 +56,8 @@ function Signin({ elevation }: SigninProps) {
         fields={2}
         email={signinState?.email}
         password={signinState?.password}
-        handler={handleSignin}
+        handleOnChange={handleOnChange}
+        handleOnSubmit={handleSignin}
       />
     </div>
   );

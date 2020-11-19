@@ -78,17 +78,11 @@ const currencies = [
   },
 ];
 
-const userData = {
-  _id: '453637',
-  username: 'test-user1',
-  email: 'test-user@gmail.com',
-  createdAt: Date.now().toString(),
-};
-
 function Profile() {
   const classes = useStyles();
 
   const [currency, setCurrency] = React.useState<string | null>(localStorage.getItem('currency'));
+  const [userData] = React.useState(JSON.parse(localStorage.getItem('authData') as string));
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCurrency(event.target.value);
@@ -106,7 +100,7 @@ function Profile() {
     <div className={classes.container}>
       <ProfileCard
         classes={classes}
-        user={userData}
+        user={userData.user}
         currency={currency}
         handleChange={handleChange}
       />
