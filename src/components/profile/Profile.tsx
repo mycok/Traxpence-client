@@ -9,6 +9,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
+import { isAuthenticated } from '../../api/auth';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -52,7 +53,9 @@ type ProfileComponentProps = {
     user: Partial<IUser>,
     classes: any,
     currency: string | null,
-    handleChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
+    setShowUserIcon: any,
+    handleSignout(): void,
+    handleCurrencyChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 }
 // TODO: consider using a currency component library
 const currencies = [
@@ -78,15 +81,20 @@ const currencies = [
   },
 ];
 
-function Profile() {
+function Profile({ setShowUserIcon }: Partial<ProfileComponentProps>) {
   const classes = useStyles();
 
   const [currency, setCurrency] = React.useState<string | null>(localStorage.getItem('currency'));
   const [userData] = React.useState(JSON.parse(localStorage.getItem('authData') as string));
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleCurrencyChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCurrency(event.target.value);
     localStorage.setItem('currency', event.target.value);
+  }
+
+  function handleSignout() {
+    localStorage.removeItem('authData');
+    setShowUserIcon(isAuthenticated);
   }
 
   React.useEffect(() => {
@@ -102,14 +110,15 @@ function Profile() {
         classes={classes}
         user={userData.user}
         currency={currency}
-        handleChange={handleChange}
+        handleCurrencyChange={handleCurrencyChange}
+        handleSignout={handleSignout}
       />
     </div>
   );
 }
 
 function ProfileCard({
-  classes, user, currency, handleChange,
+  classes, user, currency, handleCurrencyChange, handleSignout,
 }: Partial<ProfileComponentProps>) {
   return (
     <Card className={classes.root} elevation={5}>
@@ -150,7 +159,7 @@ function ProfileCard({
       <SettingsCard
         classes={classes}
         currency={currency}
-        handleChange={handleChange}
+        handleCurrencyChange={handleCurrencyChange}
       />
       <CardContent className={classes.cardContent}>
         <Button
@@ -159,6 +168,7 @@ function ProfileCard({
           color="secondary"
           component={Link}
           to="/"
+          onClick={handleSignout}
         >
           Sign Out
         </Button>
@@ -167,7 +177,7 @@ function ProfileCard({
   );
 }
 
-function SettingsCard({ classes, currency, handleChange }: Partial<ProfileComponentProps>) {
+function SettingsCard({ classes, currency, handleCurrencyChange }: Partial<ProfileComponentProps>) {
   return (
     <CardContent className={classes.cardContent}>
       <>
@@ -178,7 +188,7 @@ function SettingsCard({ classes, currency, handleChange }: Partial<ProfileCompon
           className={classes.textField}
           value={currency ?? ''}
           select
-          onChange={handleChange}
+          onChange={handleCurrencyChange}
         >
           {
                         currencies.map((curr) => (
