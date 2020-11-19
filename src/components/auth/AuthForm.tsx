@@ -39,16 +39,17 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 type FormComponentProps = {
-    elevation?: number,
-    fields: number,
-    username?: string,
-    email: string,
-    password: string,
-    handler(event: React.FormEvent<HTMLFormElement>): void | undefined,
+  elevation?: number,
+  fields: number,
+  username?: string,
+  email: string,
+  password: string,
+  handleOnChange(event: any): void,
+  handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
 }
 
 function Form({
-  elevation, fields, username, email, password, handler,
+  elevation, fields, username, email, password, handleOnChange, handleOnSubmit,
 }: FormComponentProps) {
   const classes = useStyles();
 
@@ -57,21 +58,22 @@ function Form({
       className={classes.root}
       noValidate
       autoComplete="off"
-      onSubmit={handler}
+      onSubmit={handleOnSubmit}
     >
       <Paper elevation={elevation ?? 0} className={classes.textFieldsPaper}>
         {
-                    fields === 3 && (
-                    <TextField
-                      id="username"
-                      required
-                      className={classes.textField}
-                      variant="outlined"
-                      label="Username"
-                      value={username}
-                    />
-                    )
-                }
+          fields === 3 && (
+            <TextField
+              id="username"
+              required
+              className={classes.textField}
+              variant="outlined"
+              label="Username"
+              value={username}
+              onChange={handleOnChange}
+            />
+          )
+        }
 
         <TextField
           id="email"
@@ -80,6 +82,7 @@ function Form({
           className={classes.textField}
           label="Email"
           value={email}
+          onChange={handleOnChange}
         />
         <TextField
           id="password"
@@ -89,6 +92,7 @@ function Form({
           className={classes.textField}
           label="Password"
           value={password}
+          onChange={handleOnChange}
         />
         <Button
           variant="contained"

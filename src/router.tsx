@@ -12,17 +12,26 @@ import ExpAvgByCategory from './components/expenses/summaries/ExpAvgByCategory';
 import MonthlyExpScatterPlot from './components/expenses/charts/ScatterPlot';
 import AnnualTotalExpByMonth from './components/expenses/charts/BarGraph';
 import AvgExpByCategory from './components/expenses/charts/PieGraph';
+import ProtectedRoute from './shared/ProtectedRoute';
 
-function AppRouter() {
+type AppRouterProps = {
+  setShowUserIcon: any
+}
+
+function AppRouter({ setShowUserIcon }: AppRouterProps) {
   return (
     <>
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/signup" render={(props) => <Signup elevation={5} {...props} />} />
+        <Route
+          exact
+          path="/signup"
+          render={(props) => <Signup elevation={5} setShowUserIcon={setShowUserIcon} {...props} />}
+        />
         <Route exact path="/signin" render={(props) => <Signin elevation={5} {...props} />} />
         <Route exact path="/new-expense" component={NewExpense} />
         <Route exact path="/expenses" component={Expenses} />
-        <Route exact path="/profile" component={Profile} />
+        <ProtectedRoute exact path="/profile" component={Profile} />
         <Route exact path="/edit-expense" component={EditExpense} />
         <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
         <Route exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />

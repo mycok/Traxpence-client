@@ -16,6 +16,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import AppRouter from './router';
 import CustomTooltip from './shared/CustomTooltip';
+import { isAuthenticated } from './api/auth';
 
 const useStyles = makeStyles((theme) => createStyles({
   paper: {
@@ -67,15 +68,19 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-type LayoutProps = {
-    classes: any,
-    itemList: Array<any>,
-    selected?: string,
-    selectionHandler: any
+type RenderListProps = {
+  classes: any,
+  itemList: Array<any>,
+  selected?: string,
+  showUserIcon: boolean,
+  selectionHandler: any
+}
+
+type AddButtonProps = {
+  classes: any
 }
 
 const iconList = [
-  { name: 'Profile / Sign Out', to: '/profile', icon: <Account fontSize="large" /> },
   { name: 'Categories', to: '/exps-avg-by-category', icon: <Categories fontSize="large" /> },
   { name: 'Expenses', to: '/expenses', icon: <AccBalanceWallet fontSize="large" /> },
   { name: 'ScatterPlot', to: '/scatter-graph-chart', icon: <ScatterPlot fontSize="large" /> },
@@ -84,38 +89,59 @@ const iconList = [
 ];
 
 function RenderList({
-  itemList, classes, selected, selectionHandler,
-}: LayoutProps) {
+  itemList, classes, selected, selectionHandler, showUserIcon,
+}: RenderListProps) {
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
       {
-                  itemList && itemList.map(({ name, to, icon }) => (
-                    <CustomTooltip
-                      key={name}
-                      title={name}
-                      placement="right"
-                    >
-                      <Link key={name} to={to} className={classes.link}>
-                        <ListItem
-                          className={classes.listItem}
-                          button
-                          key={name}
-                          selected={selected === icon.name}
-                          onClick={() => selectionHandler(name)}
-                        >
-                          <ListItemIcon>
-                            {icon}
-                          </ListItemIcon>
-                        </ListItem>
-                      </Link>
-                    </CustomTooltip>
-                  ))
-              }
+        showUserIcon && (
+          <CustomTooltip
+            title="Profile"
+            placement="right"
+          >
+            <Link to="/profile" className={classes.link}>
+              <ListItem
+                className={classes.listItem}
+                button
+                selected={selected === 'Profile'}
+                onClick={() => selectionHandler('Profile')}
+              >
+                <ListItemIcon>
+                  <Account fontSize="large" />
+                </ListItemIcon>
+              </ListItem>
+            </Link>
+          </CustomTooltip>
+        )
+      }
+      {
+        itemList && itemList.map(({ name, to, icon }) => (
+          <CustomTooltip
+            key={name}
+            title={name}
+            placement="right"
+          >
+            <Link key={name} to={to} className={classes.link}>
+              <ListItem
+                className={classes.listItem}
+                button
+                key={name}
+                selected={selected === icon.name}
+                onClick={() => selectionHandler(name)}
+              >
+                <ListItemIcon>
+                  {icon}
+                </ListItemIcon>
+              </ListItem>
+            </Link>
+          </CustomTooltip>
+        ))
+      }
     </List>
   );
 }
 
-function AddButton({ classes }: Partial<LayoutProps>) {
+function AddButton({ classes }: AddButtonProps) {
   return (
     <div className={classes.addButtonContainer}>
       <Link to="/new-expense">
@@ -130,6 +156,7 @@ function AddButton({ classes }: Partial<LayoutProps>) {
 function Layout() {
   const classes = useStyles();
   const [selected, setSelected] = React.useState<string>('');
+  const [showUserIcon, setShowUserIcon] = React.useState<boolean>(isAuthenticated);
 
   return (
     <Router>
@@ -146,14 +173,19 @@ function Layout() {
               itemList={iconList}
               selected={selected}
               classes={classes}
+              showUserIcon={showUserIcon}
               selectionHandler={setSelected}
             />
-            <AddButton classes={classes} />
+            {
+              showUserIcon && (
+                <AddButton classes={classes} />
+              )
+            }
           </Drawer>
         </Grid>
         <Grid item xs={11}>
           <Paper className={classes.paper}>
-            <AppRouter />
+            <AppRouter setShowUserIcon={setShowUserIcon} />
           </Paper>
         </Grid>
       </Grid>
