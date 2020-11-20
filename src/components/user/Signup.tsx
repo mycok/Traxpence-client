@@ -4,6 +4,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import Form from '../auth/AuthForm';
 import { authReducer } from '../../utils/authReducer';
 import { signup, authenticate } from '../../api/auth';
+import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -22,6 +23,8 @@ const initialState = {
   username: '',
   email: '',
   password: '',
+  inputError: {},
+  serverError: null,
 };
 
 function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
@@ -30,8 +33,23 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
+    const inputErr:{[s: string]: any} = {};
 
-    dispatch({ type: 'ON_CHANGE', payload: { id, value } });
+    switch (id) {
+      case 'username':
+        inputErr.username = usernameLength(value);
+        break;
+      case 'email':
+        inputErr.email = emailRegex(value);
+        break;
+      case 'password':
+        inputErr.password = passwordRegex(value);
+        break;
+      default:
+        break;
+    }
+
+    dispatch({ type: 'ON_CHANGE', payload: { id, value, inputErr } });
   }
 
   async function handleSignup(e: React.FormEvent) {
@@ -45,12 +63,12 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
             history.push('/profile');
           });
         } else {
-          // set server-error state error and display it as helper text
-          console.log('db-error', resp);
+          // dispatch server-error state error and display it as helper text
+          dispatch({ type: 'SET_SERVER_ERROR', payload: resp });
         }
       })
-      // set server-error state error and display it as helper text
-      .catch((err) => console.log('errrrrrrrr', err));
+      // dispatch server-error state error and display it as helper text
+      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err }));
   }
 
   return (
@@ -61,6 +79,7 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
         username={signupState?.username}
         email={signupState?.email}
         password={signupState?.password}
+        inputError={signupState.inputError}
         handleOnChange={handleOnChange}
         handleOnSubmit={handleSignup}
       />
