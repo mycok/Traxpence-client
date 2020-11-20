@@ -6,22 +6,14 @@ type Action = {
 export function authReducer(initialState: any, action: Action) {
   switch (action.type) {
     case 'ON_CHANGE': {
-      const { id, value } = action.payload;
+      const { id, value, inputErr } = action.payload;
 
-      return { ...initialState, [id]: value };
+      return { ...initialState, [id]: value, inputError: inputErr };
     }
-    case 'TOGGLE_PASSWORD_VISIBILITY':
-      return {
-        ...initialState,
-        isPasswordVisible: action.payload,
-      };
-    case 'CHECK_INPUT_VALUES':
-      return {
-        ...initialState,
-        areValuesProvided: action.payload,
-      };
     case 'SET_INPUT_ERRORS':
       return { ...initialState, inputErrors: action.payload };
+    case 'SET_SERVER_ERROR':
+      return { ...initialState, serverError: action.payload };
     default:
       return initialState;
   }

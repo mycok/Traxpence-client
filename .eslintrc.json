@@ -53,6 +53,7 @@
         "react/jsx-props-no-spreading": "off",
         "react/require-default-props": "off",
         "no-unused-vars": "off",
-        "no-underscore-dangle": "off"
+        "no-underscore-dangle": "off",
+        "no-useless-escape": "off"
     }
 }

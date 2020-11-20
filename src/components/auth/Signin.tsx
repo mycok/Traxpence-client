@@ -17,14 +17,11 @@ type SigninProps = {
     history: any
 }
 
-type Action = {
-    type: string,
-    payload: any
-}
-
 const initialState = {
   email: '',
   password: '',
+  inputError: {},
+  serverError: null,
 };
 
 function Signin({ elevation, history }: SigninProps) {
@@ -46,7 +43,7 @@ function Signin({ elevation, history }: SigninProps) {
           history.push('/expenses');
         });
       })
-      .catch((err) => console.log('errrrrrrrr', err));
+      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err }));
   }
 
   return (
@@ -56,6 +53,7 @@ function Signin({ elevation, history }: SigninProps) {
         fields={2}
         email={signinState?.email}
         password={signinState?.password}
+        inputError={signinState.inputError}
         handleOnChange={handleOnChange}
         handleOnSubmit={handleSignin}
       />

@@ -1,14 +1,17 @@
 import React from 'react';
-import { TextField, Paper, Button } from '@material-ui/core';
+import {
+  TextField, Paper, Button, InputAdornment, IconButton,
+} from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { grey } from '@material-ui/core/colors';
+import {
+  VisibilityOff, Visibility, CheckCircle,
+} from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
     '& label.Mui-focused': {
-      color: theme.palette.primary.main,
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: theme.palette.primary.main,
+      color: grey[200],
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
@@ -29,7 +32,7 @@ const useStyles = makeStyles((theme) => createStyles({
     alignItems: 'center',
   },
   textField: {
-    margin: 10,
+    margin: theme.spacing(1),
     width: 400,
   },
   submitButton: {
@@ -44,14 +47,20 @@ type FormComponentProps = {
   username?: string,
   email: string,
   password: string,
+  inputError: {[field: string]: boolean},
   handleOnChange(event: any): void,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
 }
 
 function Form({
-  elevation, fields, username, email, password, handleOnChange, handleOnSubmit,
+  elevation, fields, username, email, password, inputError, handleOnChange, handleOnSubmit,
 }: FormComponentProps) {
   const classes = useStyles();
+  const [visible, setVisibility] = React.useState(false);
+
+  function toggleVisibility() {
+    setVisibility(!visible);
+  }
 
   return (
     <form
@@ -69,7 +78,15 @@ function Form({
               className={classes.textField}
               variant="outlined"
               label="Username"
+              placeholder="user1"
               value={username}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    { inputError?.username && <CheckCircle color="primary" fontSize="small" />}
+                  </InputAdornment>
+                ),
+              }}
               onChange={handleOnChange}
             />
           )
@@ -81,17 +98,43 @@ function Form({
           variant="outlined"
           className={classes.textField}
           label="Email"
+          placeholder="user1@somemailprovider.com"
+          autoComplete="username"
           value={email}
+          InputProps={{
+            name: 'username',
+            endAdornment: (
+              <InputAdornment position="end">
+                { inputError?.email && <CheckCircle color="primary" fontSize="small" />}
+              </InputAdornment>
+            ),
+          }}
           onChange={handleOnChange}
         />
         <TextField
           id="password"
           required
-          type="password"
+          type={visible ? 'text' : 'password'}
           variant="outlined"
           className={classes.textField}
           label="Password"
+          placeholder="passwOrd#99"
+          autoComplete="current-password"
           value={password}
+          InputProps={{
+            endAdornment: (
+              <>
+                <InputAdornment position="end">
+                  <IconButton onClick={toggleVisibility}>
+                    {visible ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                  </IconButton>
+                </InputAdornment>
+                <InputAdornment position="end">
+                  { inputError?.password && <CheckCircle color="primary" fontSize="small" />}
+                </InputAdornment>
+              </>
+            ),
+          }}
           onChange={handleOnChange}
         />
         <Button
