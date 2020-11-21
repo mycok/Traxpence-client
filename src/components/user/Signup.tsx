@@ -2,6 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from '../auth/AuthForm';
+import ServerMessage from '../../shared/ServerMessage';
 import { authReducer } from '../../utils/authReducer';
 import { signup, authenticate, isAuthenticated } from '../../api/auth';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
@@ -64,27 +65,36 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
             history.push('/profile');
           });
         } else {
-          // dispatch server-error state error and display it as helper text
-          dispatch({ type: 'SET_SERVER_ERROR', payload: resp });
+          dispatch({ type: 'SET_SERVER_ERROR', payload: 'username or email already exists' });
         }
       })
-      // dispatch server-error state error and display it as helper text
-      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err }));
+      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err.message }));
+  }
+
+  function hideServerMessage() {
+    dispatch({ type: 'SET_SERVER_ERROR', payload: null });
   }
 
   return (
-    <div className={classes.root}>
-      <Form
-        elevation={elevation}
-        fields={3}
-        username={signupState?.username}
-        email={signupState?.email}
-        password={signupState?.password}
-        inputError={signupState.inputError}
-        handleOnChange={handleOnChange}
-        handleOnSubmit={handleSignup}
+    <>
+      <ServerMessage
+        open={!!signupState.serverError}
+        message={signupState.serverError}
+        onClose={hideServerMessage}
       />
-    </div>
+      <div className={classes.root}>
+        <Form
+          elevation={elevation}
+          fields={3}
+          username={signupState?.username}
+          email={signupState?.email}
+          password={signupState?.password}
+          inputError={signupState.inputError}
+          handleOnChange={handleOnChange}
+          handleOnSubmit={handleSignup}
+        />
+      </div>
+    </>
   );
 }
 

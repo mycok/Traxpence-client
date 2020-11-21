@@ -82,9 +82,11 @@ function Form({
               value={username}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">
-                    { inputError?.username && <CheckCircle color="primary" fontSize="small" />}
-                  </InputAdornment>
+                  inputError?.username && (
+                    <InputAdornment position="end">
+                      <CheckCircle color="primary" fontSize="small" />
+                    </InputAdornment>
+                  )
                 ),
               }}
               onChange={handleOnChange}
@@ -104,9 +106,11 @@ function Form({
           InputProps={{
             name: 'username',
             endAdornment: (
-              <InputAdornment position="end">
-                { inputError?.email && <CheckCircle color="primary" fontSize="small" />}
-              </InputAdornment>
+              inputError?.email && (
+                <InputAdornment position="end">
+                  <CheckCircle color="primary" fontSize="small" />
+                </InputAdornment>
+              )
             ),
           }}
           onChange={handleOnChange}
@@ -129,9 +133,13 @@ function Form({
                     {visible ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
                   </IconButton>
                 </InputAdornment>
-                <InputAdornment position="end">
-                  { inputError?.password && <CheckCircle color="primary" fontSize="small" />}
-                </InputAdornment>
+                {
+                  inputError?.password && (
+                    <InputAdornment position="end">
+                      <CheckCircle color="primary" fontSize="small" />
+                    </InputAdornment>
+                    )
+                }
               </>
             ),
           }}
