@@ -167,7 +167,7 @@ function ProfileCard({
           variant="outlined"
           color="secondary"
           component={Link}
-          to="/"
+          to="/signin"
           onClick={handleSignout}
         >
           Sign Out

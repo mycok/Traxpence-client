@@ -3,10 +3,10 @@ import { Tooltip } from '@material-ui/core';
 
 const CustomTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: theme.palette.common.white,
-    color: 'rgba(0, 0, 0, 0.87)',
+    color: 'white',
     boxShadow: theme.shadows[1],
     fontSize: 12,
+    fontWeight: 700,
   },
 }))(Tooltip);
 

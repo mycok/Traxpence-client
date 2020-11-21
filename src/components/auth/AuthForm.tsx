@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  TextField, Paper, Button, InputAdornment, IconButton,
+  TextField, Paper, Button, InputAdornment, IconButton, Typography,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
@@ -80,6 +80,12 @@ function Form({
               label="Username"
               placeholder="user1"
               value={username}
+              helperText={
+                typeof inputError.username !== 'undefined' && !inputError.username
+                && (
+                <ErrorText text="username must contain atleast 3 characters" />
+                )
+              }
               InputProps={{
                 endAdornment: (
                   inputError?.username && (
@@ -103,6 +109,12 @@ function Form({
           placeholder="user1@somemailprovider.com"
           autoComplete="username"
           value={email}
+          helperText={
+            typeof inputError.email !== 'undefined' && !inputError.email
+            && (
+            <ErrorText text="please provide a valid email" />
+            )
+          }
           InputProps={{
             name: 'username',
             endAdornment: (
@@ -125,6 +137,12 @@ function Form({
           placeholder="passwOrd#99"
           autoComplete="current-password"
           value={password}
+          helperText={
+            typeof inputError.password !== 'undefined' && !inputError.password
+            && (
+            <ErrorText text="password must contain an uppercase, lowercase, number and a special character" />
+            )
+          }
           InputProps={{
             endAdornment: (
               <>
@@ -156,6 +174,14 @@ function Form({
         </Button>
       </Paper>
     </form>
+  );
+}
+
+function ErrorText({ text }: { text: string }) {
+  return (
+    <Typography align="center" variant="caption" color="error">
+      {text}
+    </Typography>
   );
 }
 

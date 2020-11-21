@@ -8,6 +8,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 
 import { IExpense } from './IExpense';
+import CustomTooltip from '../../shared/CustomTooltip';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -36,8 +37,8 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 type ExpenseComponentProps = {
-    expense: IExpense,
-    handleOpen(): void
+  expense: IExpense,
+  handleOpen(): void
 }
 
 function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
@@ -50,7 +51,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
         <CardHeader
           avatar={
             <AccBalanceWallet fontSize="large" />
-                    }
+          }
           title={(
             <div className={classes.titleContainer}>
               <>
@@ -65,13 +66,13 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
                 />
               </>
             </div>
-                      )}
+          )}
           subheader={(
             <>
               <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
               <Typography variant="caption">{expense?.incurredOn}</Typography>
             </>
-                      )}
+          )}
           action={(
             <>
               <Link to={{
@@ -79,27 +80,31 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
                 state: expense,
               }}
               >
-                <IconButton aria-label="edit" className={classes.editButton}>
-                  <EditSharp />
-                </IconButton>
+                <CustomTooltip title="Edit" placement="bottom">
+                  <IconButton aria-label="edit" className={classes.editButton}>
+                    <EditSharp />
+                  </IconButton>
+                </CustomTooltip>
               </Link>
-              <IconButton
-                aria-label="delete"
-                className={classes.deleteButton}
-                onClick={handleOpen}
-              >
-                <DeleteSharp />
-              </IconButton>
+              <CustomTooltip title="Delete" placement="bottom">
+                <IconButton
+                  aria-label="delete"
+                  className={classes.deleteButton}
+                  onClick={handleOpen}
+                >
+                  <DeleteSharp />
+                </IconButton>
+              </CustomTooltip>
             </>
-                      )}
+          )}
         />
         {
-                    expense?.notes && (
-                    <CardContent className={classes.cardContent}>
-                      <Typography>{expense?.notes}</Typography>
-                    </CardContent>
-                    )
-                }
+          expense?.notes && (
+            <CardContent className={classes.cardContent}>
+              <Typography>{expense?.notes}</Typography>
+            </CardContent>
+          )
+        }
       </Card>
     </>
   );

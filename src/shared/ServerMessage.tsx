@@ -33,7 +33,7 @@ function ServerMessage({ open, message, onClose }: SnackbarProps) {
       }}
       anchorOrigin={{
         vertical: 'top',
-        horizontal: 'center',
+        horizontal: 'right',
       }}
     />
   );

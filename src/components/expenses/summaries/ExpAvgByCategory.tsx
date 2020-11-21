@@ -9,7 +9,7 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     flexDirection: 'column',
     width: 600,
-    margin: '60px 10px 10px',
+    margin: '70px 10px 10px',
   },
   categoryHeaderContainer: {
     display: 'flex',
@@ -49,11 +49,11 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 type ExpSummByCategory = {
-    classes: any,
-    category: {
-        _id: string,
-        title: string
-    }
+  classes: any,
+  category: {
+    _id: string,
+    title: string
+  }
 }
 
 const categories = [
@@ -69,14 +69,14 @@ function ExpAvgByCategory() {
   return (
     <div className={classes.root}>
       {
-                categories.map((cat) => (
-                  <Category
-                    key={cat._id}
-                    classes={classes}
-                    category={cat}
-                  />
-                ))
-            }
+        categories.map((cat) => (
+          <Category
+            key={cat._id}
+            classes={classes}
+            category={cat}
+          />
+        ))
+      }
     </div>
   );
 }

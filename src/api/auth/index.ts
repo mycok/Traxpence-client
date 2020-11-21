@@ -1,5 +1,5 @@
 async function signin(data: any): Promise<any> {
-  const resp = await fetch('/api/v1/auth/signin', {
+  const resp = await fetch('http://localhost:8081/api/v1/auth/sign-in', {
     method: 'POST',
     headers: {
       Accept: 'application/json',

@@ -28,7 +28,11 @@ function AppRouter({ setShowUserIcon }: AppRouterProps) {
           path="/signup"
           render={(props) => <Signup elevation={5} setShowUserIcon={setShowUserIcon} {...props} />}
         />
-        <Route exact path="/signin" render={(props) => <Signin elevation={5} {...props} />} />
+        <Route
+          exact
+          path="/signin"
+          render={(props) => <Signin elevation={5} setShowUserIcon={setShowUserIcon} {...props} />}
+        />
         <Route exact path="/new-expense" component={NewExpense} />
         <Route exact path="/expenses" component={Expenses} />
         <ProtectedRoute exact path="/profile" setShowUserIcon={setShowUserIcon} component={Profile} />

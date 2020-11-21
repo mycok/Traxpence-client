@@ -9,7 +9,6 @@ const useStyles = makeStyles(() => createStyles({
     display: 'flex',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    marginTop: 90,
     width: '100%',
   },
 }));
