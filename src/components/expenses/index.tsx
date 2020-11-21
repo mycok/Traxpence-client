@@ -1,10 +1,17 @@
 import React from 'react';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import ExpenseList from './ExpenseList';
 import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import { IExpense } from './IExpense';
+
+const useStyles = makeStyles(() => createStyles({
+  root: {
+    marginTop: 70,
+  },
+}));
 
 const expenseList: IExpense[] = [
   {
@@ -43,6 +50,7 @@ const expenseList: IExpense[] = [
 ];
 
 export default function () {
+  const classes = useStyles();
   const [expenses] = React.useState(expenseList);
   const [open, setOpen] = React.useState(false);
   const [fromDate, selectFromDate] = React.useState(new Date());
@@ -67,7 +75,7 @@ export default function () {
   }
 
   return (
-    <div>
+    <div className={classes.root}>
       <ConfirmDialog
         open={open}
         handleClose={handleClose}

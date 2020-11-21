@@ -96,7 +96,7 @@ function RenderList({
       {
         showUserIcon && (
           <CustomTooltip
-            title="Profile"
+            title="Profile / signout"
             placement="right"
           >
             <Link to="/profile" className={classes.link}>
@@ -144,11 +144,13 @@ function RenderList({
 function AddButton({ classes }: AddButtonProps) {
   return (
     <div className={classes.addButtonContainer}>
-      <Link to="/new-expense">
-        <Fab aria-label="add new expense" className={classes.addButton}>
-          <Add fontSize="large" />
-        </Fab>
-      </Link>
+      <CustomTooltip title="New Expense" placement="right">
+        <Link to="/new-expense">
+          <Fab aria-label="add new expense" className={classes.addButton}>
+            <Add fontSize="large" />
+          </Fab>
+        </Link>
+      </CustomTooltip>
     </div>
   );
 }
