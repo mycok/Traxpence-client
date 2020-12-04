@@ -69,7 +69,6 @@ const useStyles = makeStyles(() => createStyles({
 
 function AnnualTotalExpByMonth() {
   const classes = useStyles();
-  const [data] = React.useState(yData);
   const [selectedDate, selectDate] = React.useState(new Date());
 
   return (
@@ -92,7 +91,6 @@ function AnnualTotalExpByMonth() {
             categories={{ x: months }}
             style={{ data: { fill: '#66bb6a', width: 50 }, labels: { fill: '#ffa500' } }}
             data={yData}
-            // x={yData.x}
             domain={{ x: [0, 13] }}
             labels={({ datum }) => `$ ${datum.y}`}
           />
