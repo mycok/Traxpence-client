@@ -1,9 +1,15 @@
 import React from 'react';
 import {
-  TextField, Paper, Button, InputAdornment, IconButton, Typography,
+  TextField,
+  Paper,
+  Button,
+  InputAdornment,
+  IconButton,
+  Typography,
+  CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
+import { grey, green } from '@material-ui/core/colors';
 import {
   VisibilityOff, Visibility, CheckCircle,
 } from '@material-ui/icons';
@@ -39,6 +45,18 @@ const useStyles = makeStyles((theme) => createStyles({
     width: 180,
     margin: 10,
   },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
+  },
+  wrapper: {
+    margin: theme.spacing(1),
+    position: 'relative',
+  },
 }));
 
 type FormComponentProps = {
@@ -47,13 +65,22 @@ type FormComponentProps = {
   username?: string,
   email: string,
   password: string,
+  isLoading: boolean,
   inputError: {[field: string]: boolean},
   handleOnChange(event: any): void,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
 }
 
 function Form({
-  elevation, fields, username, email, password, inputError, handleOnChange, handleOnSubmit,
+  elevation,
+  fields,
+  username,
+  email,
+  password,
+  isLoading,
+  inputError,
+  handleOnChange,
+  handleOnSubmit,
 }: FormComponentProps) {
   const classes = useStyles();
   const [visible, setVisibility] = React.useState(false);
@@ -163,15 +190,19 @@ function Form({
           }}
           onChange={handleOnChange}
         />
-        <Button
-          variant="contained"
-          fullWidth
-          color="secondary"
-          type="submit"
-          className={classes.submitButton}
-        >
-          {fields === 3 ? 'Sign Up' : 'Sign In'}
-        </Button>
+        <div className={classes.wrapper}>
+          <Button
+            variant="contained"
+            fullWidth
+            color="secondary"
+            type="submit"
+            disabled={isLoading}
+            className={classes.submitButton}
+          >
+            {fields === 3 ? 'Sign Up' : 'Sign In'}
+          </Button>
+          {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+        </div>
       </Paper>
     </form>
   );
