@@ -1,11 +1,13 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from './AuthForm';
 import { signin, authenticate, isAuthenticated } from '../../api/auth';
-import { authReducer } from '../../utils/authReducer';
 import { emailRegex, passwordRegex } from '../../utils/authValidation';
 import ServerMessage from '../../shared/ServerMessage';
+
+import { useAppDispatch, RootState } from '../../redux/store';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -20,16 +22,10 @@ type SigninProps = {
     setShowUserIcon: any
 }
 
-const initialState = {
-  email: '',
-  password: '',
-  inputError: {},
-  serverError: null,
-};
-
 function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
   const classes = useStyles();
-  const [signinState, dispatch] = React.useReducer(authReducer, initialState);
+  const dispatch = useAppDispatch();
+  const signinState = useSelector((state: RootState) => state.signin);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
@@ -53,18 +49,26 @@ function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
     e.preventDefault();
     const { email, password } = signinState;
 
+    dispatch({ type: 'SET_LOADING', payload: true });
+
     await signin({ email, password })
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
+            dispatch({ type: 'SET_LOADING', payload: false });
+            dispatch({ type: 'RESET' });
             setShowUserIcon(isAuthenticated());
             history.push('/expenses');
           });
         } else {
+          dispatch({ type: 'SET_LOADING', payload: false });
           dispatch({ type: 'SET_SERVER_ERROR', payload: resp.message });
         }
       })
-      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err.message }));
+      .catch((err) => {
+        dispatch({ type: 'SET_LOADING', payload: false });
+        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
+      });
   }
 
   function hideServerMessage() {
@@ -82,8 +86,9 @@ function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
         <Form
           elevation={elevation}
           fields={2}
-          email={signinState?.email}
-          password={signinState?.password}
+          email={signinState.email}
+          password={signinState.password}
+          isLoading={signinState.isLoading}
           inputError={signinState.inputError}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignin}

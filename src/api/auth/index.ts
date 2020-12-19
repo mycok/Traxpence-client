@@ -1,5 +1,9 @@
+import { config } from '../../config';
+
+const { baseUrl } = config;
+
 async function signin(data: any): Promise<any> {
-  const resp = await fetch('http://localhost:8081/api/v1/auth/sign-in', {
+  const resp = await fetch(`${baseUrl}/auth/sign-in`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -12,7 +16,7 @@ async function signin(data: any): Promise<any> {
 }
 
 async function signup(data: any): Promise<any> {
-  const resp = await fetch('http://localhost:8081/api/v1/users', {
+  const resp = await fetch(`${baseUrl}/users`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',

@@ -1,11 +1,12 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 import Form from '../auth/AuthForm';
 import ServerMessage from '../../shared/ServerMessage';
-import { authReducer } from '../../utils/authReducer';
 import { signup, authenticate, isAuthenticated } from '../../api/auth';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
+import { useAppDispatch, RootState } from '../../redux/store';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -20,17 +21,10 @@ type SignupProps = {
     setShowUserIcon: any
 }
 
-const initialState = {
-  username: '',
-  email: '',
-  password: '',
-  inputError: {},
-  serverError: null,
-};
-
 function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
   const classes = useStyles();
-  const [signupState, dispatch] = React.useReducer(authReducer, initialState);
+  const dispatch = useAppDispatch();
+  const signupState = useSelector((state: RootState) => state.signup);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
@@ -57,18 +51,26 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
     e.preventDefault();
     const { username, email, password } = signupState;
 
+    dispatch({ type: 'SET_LOADING', payload: true });
+
     await signup({ username, email, password })
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
+            dispatch({ type: 'SET_LOADING', payload: false });
+            dispatch({ type: 'RESET' });
             setShowUserIcon(isAuthenticated);
             history.push('/profile');
           });
         } else {
+          dispatch({ type: 'SET_LOADING', payload: false });
           dispatch({ type: 'SET_SERVER_ERROR', payload: 'username or email already exists' });
         }
       })
-      .catch((err) => dispatch({ type: 'SET_SERVER_ERROR', payload: err.message }));
+      .catch((err) => {
+        dispatch({ type: 'SET_LOADING', payload: false });
+        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
+      });
   }
 
   function hideServerMessage() {
@@ -86,9 +88,10 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
         <Form
           elevation={elevation}
           fields={3}
-          username={signupState?.username}
-          email={signupState?.email}
-          password={signupState?.password}
+          username={signupState.username}
+          email={signupState.email}
+          password={signupState.password}
+          isLoading={signupState.isLoading}
           inputError={signupState.inputError}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignup}
