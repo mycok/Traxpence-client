@@ -9,7 +9,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
-import { isAuthenticated } from '../../api/auth';
+import { useAppDispatch } from '../../redux/store';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -53,7 +53,6 @@ type ProfileComponentProps = {
     user: Partial<IUser>,
     classes: any,
     currency: string | null,
-    setShowUserIcon: any,
     handleSignout(): void,
     handleCurrencyChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
 }
@@ -81,11 +80,12 @@ const currencies = [
   },
 ];
 
-function Profile({ setShowUserIcon }: Partial<ProfileComponentProps>) {
+function Profile() {
   const classes = useStyles();
 
   const [currency, setCurrency] = React.useState<string | null>(localStorage.getItem('currency'));
   const [userData] = React.useState(JSON.parse(localStorage.getItem('authData') as string));
+  const dispatch = useAppDispatch();
 
   function handleCurrencyChange(event: React.ChangeEvent<HTMLInputElement>) {
     setCurrency(event.target.value);
@@ -94,7 +94,7 @@ function Profile({ setShowUserIcon }: Partial<ProfileComponentProps>) {
 
   function handleSignout() {
     localStorage.removeItem('authData');
-    setShowUserIcon(isAuthenticated);
+    dispatch({ type: 'SIGNIN_SUCCESSFUL', payload: false });
   }
 
   React.useEffect(() => {

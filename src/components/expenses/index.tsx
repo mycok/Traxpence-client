@@ -10,6 +10,9 @@ import { IExpense } from './IExpense';
 const useStyles = makeStyles(() => createStyles({
   root: {
     marginTop: 70,
+    display: 'flex',
+    flexDirection: 'column',
+    width: 650,
   },
 }));
 

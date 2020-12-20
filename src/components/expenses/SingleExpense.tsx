@@ -12,7 +12,7 @@ import CustomTooltip from '../../shared/CustomTooltip';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
-    width: 600,
+    width: 650,
     margin: 5,
   },
   editButton: {
@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  incurredOn: {
+    fontWeight: 'bold',
   },
 }));
 
@@ -70,7 +73,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
           subheader={(
             <>
               <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
-              <Typography variant="caption">{expense?.incurredOn}</Typography>
+              <Typography className={classes.incurredOn} variant="caption">{expense?.incurredOn}</Typography>
             </>
           )}
           action={(

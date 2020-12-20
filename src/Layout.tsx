@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import {
   Grid, Drawer, Paper, List, ListItem, ListItemIcon, Fab,
@@ -17,6 +18,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import AppRouter from './router';
 import CustomTooltip from './shared/CustomTooltip';
 import { isAuthenticated } from './api/auth';
+import { RootState } from './redux/reducers/rootReducer';
 
 const useStyles = makeStyles((theme) => createStyles({
   paper: {
@@ -72,7 +74,6 @@ type RenderListProps = {
   classes: any,
   itemList: Array<any>,
   selected?: string,
-  showUserIcon: boolean,
   selectionHandler: any
 }
 
@@ -89,12 +90,12 @@ const iconList = [
 ];
 
 function RenderList({
-  itemList, classes, selected, selectionHandler, showUserIcon,
+  itemList, classes, selected, selectionHandler,
 }: RenderListProps) {
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
       {
-        showUserIcon && (
+        isAuthenticated() && (
           <CustomTooltip
             title="Profile / signout"
             placement="right"
@@ -158,36 +159,42 @@ function AddButton({ classes }: AddButtonProps) {
 function Layout() {
   const classes = useStyles();
   const [selected, setSelected] = React.useState<string>('');
-  const [showUserIcon, setShowUserIcon] = React.useState<boolean>(isAuthenticated);
+  const { signupSuccessful } = useSelector((state: RootState) => state.signup);
+  const { signinSuccessful } = useSelector((state: RootState) => state.signin);
+
+  React.useEffect(() => {}, [signupSuccessful, signinSuccessful]);
 
   return (
     <Router>
       <Grid container>
         <CssBaseline />
-        <Grid item xs={1}>
-          <Drawer
-            id="persistent-drawer"
-            variant="permanent"
-            className={classes.drawer}
-            classes={{ paper: classes.drawerPaper }}
-          >
-            <RenderList
-              itemList={iconList}
-              selected={selected}
-              classes={classes}
-              showUserIcon={showUserIcon}
-              selectionHandler={setSelected}
-            />
-            {
-              showUserIcon && (
-                <AddButton classes={classes} />
-              )
-            }
-          </Drawer>
-        </Grid>
-        <Grid item xs={11}>
+        {
+          isAuthenticated() && (
+            <Grid item xs={1}>
+              <Drawer
+                id="persistent-drawer"
+                variant="permanent"
+                className={classes.drawer}
+                classes={{ paper: classes.drawerPaper }}
+              >
+                <RenderList
+                  itemList={iconList}
+                  selected={selected}
+                  classes={classes}
+                  selectionHandler={setSelected}
+                />
+                {
+                isAuthenticated && (
+                  <AddButton classes={classes} />
+                )
+              }
+              </Drawer>
+            </Grid>
+          )
+        }
+        <Grid item xs={isAuthenticated() ? 11 : 12}>
           <Paper className={classes.paper}>
-            <AppRouter setShowUserIcon={setShowUserIcon} />
+            <AppRouter />
           </Paper>
         </Grid>
       </Grid>
