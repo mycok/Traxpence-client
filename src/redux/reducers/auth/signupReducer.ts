@@ -1,4 +1,4 @@
-import { createReducer, AnyAction } from '@reduxjs/toolkit';
+import { createReducer, PayloadAction } from '@reduxjs/toolkit';
 
 import {
   onChange,
@@ -7,24 +7,27 @@ import {
   setServerError,
   reset,
   SignupState,
+  OnChangePayload,
+  signupSuccess,
+  signupInitialState,
 } from '../../actions/auth';
 
-const initialState: SignupState = {
-  username: '',
-  email: '',
-  password: '',
-  isLoading: false,
-  inputError: {},
-  serverError: '',
-};
-
-export const signup = createReducer(initialState, {
-  [setLoading.type]: (state, action: AnyAction) => ({ ...state, isLoading: action.payload }),
-  [onChange.type]: (state, action: AnyAction) => {
+export const signup = createReducer(signupInitialState, {
+  [setLoading.type]: (state, action: PayloadAction<boolean>) => (
+    { ...state, isLoading: action.payload }
+  ),
+  [onChange.type]: (state, action: PayloadAction<OnChangePayload>) => {
     const { id, value, inputErr } = action.payload;
     return { ...state, [id]: value, inputError: inputErr };
   },
-  [reset.type]: (state, action: AnyAction) => state,
-  [setInputError.type]: (state, action: AnyAction) => ({ ...state, inputError: action.payload }),
-  [setServerError.type]: (state, action: AnyAction) => ({ ...state, serverError: action.payload }),
+  [signupSuccess.type]: (state, action: PayloadAction<boolean>) => (
+    { ...state, signupSuccessful: action.payload }
+  ),
+  [reset.type]: (state, action: PayloadAction<SignupState>) => action.payload,
+  [setInputError.type]: (state, action: PayloadAction<{[k: string]: boolean}>) => (
+    { ...state, inputError: action.payload }
+  ),
+  [setServerError.type]: (state, action: PayloadAction<string>) => (
+    { ...state, serverError: action.payload }
+  ),
 });

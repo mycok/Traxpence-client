@@ -24,7 +24,7 @@ function ServerMessage({ open, message, onClose }: SnackbarProps) {
       open={open}
       message={message}
       onClose={onClose}
-      autoHideDuration={3000}
+      autoHideDuration={5000}
       ContentProps={{
         classes: {
           root: classes.error,

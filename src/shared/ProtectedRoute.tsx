@@ -5,8 +5,7 @@ import { isAuthenticated } from '../api/auth';
 type ProtectedRouteProps = {
   component: any,
   exact: boolean,
-  path: string,
-  setShowUserIcon: any
+  path: string
 
 }
 

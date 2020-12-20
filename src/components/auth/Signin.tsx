@@ -1,31 +1,61 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import Form from './AuthForm';
-import { signin, authenticate, isAuthenticated } from '../../api/auth';
 import { emailRegex, passwordRegex } from '../../utils/authValidation';
 import ServerMessage from '../../shared/ServerMessage';
+import { useAppDispatch } from '../../redux/store';
+import { RootState } from '../../redux/reducers/rootReducer';
+import { signinAction } from '../../redux/actions/auth';
 
-import { useAppDispatch, RootState } from '../../redux/store';
-
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  switchTextDiv: {
+    display: 'flex',
+    marginTop: 10,
+    fontSize: 14,
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  },
+  textSpan: {
+    color: theme.palette.primary.main,
+    fontWeight: 'bolder',
+  },
+  typographyText: {
+    color: '#fff',
+  },
+  link: {
+    textDecoration: 'none',
   },
 }));
 
 type SigninProps = {
     elevation?: number,
-    history: any,
-    setShowUserIcon: any
+    history: any
 }
 
-function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
+function Signin({ elevation, history }: SigninProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const signinState = useSelector((state: RootState) => state.signin);
+  const {
+    email, password, isLoading, inputError, serverError, signinSuccessful,
+  } = useSelector(
+    (state: RootState) => state.signin,
+  );
+
+  useEffect(() => {
+    if (signinSuccessful) {
+      history.push('/expenses');
+    }
+  }, [signinSuccessful, history]);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
@@ -47,28 +77,8 @@ function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
 
   async function handleSignin(e: React.FormEvent) {
     e.preventDefault();
-    const { email, password } = signinState;
 
-    dispatch({ type: 'SET_LOADING', payload: true });
-
-    await signin({ email, password })
-      .then((resp) => {
-        if (resp.success) {
-          authenticate(resp, () => {
-            dispatch({ type: 'SET_LOADING', payload: false });
-            dispatch({ type: 'RESET' });
-            setShowUserIcon(isAuthenticated());
-            history.push('/expenses');
-          });
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false });
-          dispatch({ type: 'SET_SERVER_ERROR', payload: resp.message });
-        }
-      })
-      .catch((err) => {
-        dispatch({ type: 'SET_LOADING', payload: false });
-        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
-      });
+    dispatch(signinAction({ email, password }));
   }
 
   function hideServerMessage() {
@@ -78,21 +88,32 @@ function Signin({ elevation, history, setShowUserIcon }: SigninProps) {
   return (
     <>
       <ServerMessage
-        open={!!signinState.serverError}
-        message={signinState.serverError}
+        open={!!serverError}
+        message={serverError}
         onClose={hideServerMessage}
       />
       <div className={classes.root}>
         <Form
           elevation={elevation}
           fields={2}
-          email={signinState.email}
-          password={signinState.password}
-          isLoading={signinState.isLoading}
-          inputError={signinState.inputError}
+          email={email}
+          password={password}
+          isLoading={isLoading}
+          inputError={inputError}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignin}
         />
+        <div className={classes.switchTextDiv}>
+          <Link to="/signup" className={classes.link}>
+            <Typography variant="subtitle2" className={classes.typographyText}>
+              Don't have an account?
+              {' '}
+              <span className={classes.textSpan}>
+                Sign Up
+              </span>
+            </Typography>
+          </Link>
+        </div>
       </div>
     </>
   );

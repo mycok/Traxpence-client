@@ -1,30 +1,61 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
 
 import Form from '../auth/AuthForm';
 import ServerMessage from '../../shared/ServerMessage';
-import { signup, authenticate, isAuthenticated } from '../../api/auth';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
-import { useAppDispatch, RootState } from '../../redux/store';
+import { useAppDispatch } from '../../redux/store';
+import { RootState } from '../../redux/reducers/rootReducer';
+import { signupAction } from '../../redux/actions/auth';
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  switchTextDiv: {
+    display: 'flex',
+    marginTop: 10,
+    fontSize: 14,
+    fontWeight: 'bold',
+    cursor: 'pointer',
+  },
+  textSpan: {
+    color: theme.palette.primary.main,
+    fontWeight: 'bolder',
+  },
+  typographyText: {
+    color: '#fff',
+  },
+  link: {
+    textDecoration: 'none',
   },
 }));
 
 type SignupProps = {
     elevation?: number,
-    history: any,
-    setShowUserIcon: any
+    history: any
 }
 
-function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
+function Signup({ elevation, history }: SignupProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const signupState = useSelector((state: RootState) => state.signup);
+  const {
+    username, email, password, isLoading, inputError, serverError, signupSuccessful,
+  } = useSelector(
+    (state: RootState) => state.signup,
+  );
+
+  useEffect(() => {
+    if (signupSuccessful) {
+      history.push('/profile');
+    }
+  }, [signupSuccessful, history]);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
@@ -49,28 +80,8 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault();
-    const { username, email, password } = signupState;
 
-    dispatch({ type: 'SET_LOADING', payload: true });
-
-    await signup({ username, email, password })
-      .then((resp) => {
-        if (resp.success) {
-          authenticate(resp, () => {
-            dispatch({ type: 'SET_LOADING', payload: false });
-            dispatch({ type: 'RESET' });
-            setShowUserIcon(isAuthenticated);
-            history.push('/profile');
-          });
-        } else {
-          dispatch({ type: 'SET_LOADING', payload: false });
-          dispatch({ type: 'SET_SERVER_ERROR', payload: 'username or email already exists' });
-        }
-      })
-      .catch((err) => {
-        dispatch({ type: 'SET_LOADING', payload: false });
-        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
-      });
+    dispatch(signupAction({ username, email, password }));
   }
 
   function hideServerMessage() {
@@ -80,22 +91,33 @@ function Signup({ elevation, history, setShowUserIcon }: SignupProps) {
   return (
     <>
       <ServerMessage
-        open={!!signupState.serverError}
-        message={signupState.serverError}
+        open={!!serverError}
+        message={serverError}
         onClose={hideServerMessage}
       />
       <div className={classes.root}>
         <Form
           elevation={elevation}
           fields={3}
-          username={signupState.username}
-          email={signupState.email}
-          password={signupState.password}
-          isLoading={signupState.isLoading}
-          inputError={signupState.inputError}
+          username={username}
+          email={email}
+          password={password}
+          isLoading={isLoading}
+          inputError={inputError}
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignup}
         />
+        <div className={classes.switchTextDiv}>
+          <Link to="/signin" className={classes.link}>
+            <Typography className={classes.typographyText} variant="subtitle2">
+              Already have an account?
+              {' '}
+              <span className={classes.textSpan}>
+                Sign In
+              </span>
+            </Typography>
+          </Link>
+        </div>
       </div>
     </>
   );
