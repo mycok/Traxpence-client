@@ -1,9 +1,7 @@
-import { createAction, ThunkAction, Action } from '@reduxjs/toolkit';
+import { createAction } from '@reduxjs/toolkit';
 
 import { signup, signin, authenticate } from '../../../api/auth';
-// import { RootState } from '../../reducers/rootReducer';
-
-export type AppThunk = ThunkAction<void, any, unknown, Action<string>>;
+import { AppThunk } from '../../reducers/rootReducer';
 
 type OnchangePayloadType ={
     id: string,
