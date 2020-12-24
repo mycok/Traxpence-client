@@ -3,7 +3,11 @@ import { createAction } from '@reduxjs/toolkit';
 import { signup, signin, authenticate } from '../../../api/auth';
 import { AppThunk } from '../../reducers/rootReducer';
 
-type OnchangePayloadType ={
+export type InputError = {
+  inputError: {[k: string]: boolean}
+}
+
+export type OnchangePayloadType = {
     id: string,
     value: string,
     inputErr: {[k: string]: boolean}
@@ -15,24 +19,16 @@ export type SignupState = {
     password: string,
     isLoading: boolean,
     signupSuccessful: boolean,
-    inputError: {[k: string]: boolean},
     serverError: string,
-}
+} & InputError
 
 export type SigninState = {
     email: string,
     password: string,
     isLoading: boolean,
     signinSuccessful: boolean,
-    inputError: {[k: string]: boolean},
     serverError: string,
-}
-
-export type OnChangePayload = {
-    id: string,
-    value: string,
-    inputErr: {[k: string]: boolean}
-}
+} & InputError
 
 type SignupRequestData = {
     username: string,

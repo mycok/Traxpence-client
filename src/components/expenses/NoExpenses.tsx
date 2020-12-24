@@ -4,7 +4,7 @@ import { Typography } from '@material-ui/core';
 
 import { ReactComponent as Wallet } from '../../images/wallet.svg';
 
-const useStyles = makeStyles((theme) => createStyles({
+const useStyles = makeStyles(() => createStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -17,8 +17,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   text: {
     fontFamily: 'Raleway',
-    fontSize: 25,
-    fontWeight: 900,
+    fontSize: 20,
     letterSpacing: 0.6,
   },
 }));
@@ -31,14 +30,14 @@ function NoExpenses() {
         <Wallet />
       </div>
       <div className={classes.child}>
-        <Typography className={classes.text} variant="h5" align="center">
+        <Typography className={classes.text} variant="h4" align="center">
           You currently have no expenses recorded!
         </Typography>
-        <Typography className={classes.text} variant="h5" align="center">
+        <Typography className={classes.text} variant="h4" align="center">
           Use the
           {' '}
           {' '}
-          <Typography className={classes.text} variant="h5" align="center" color="secondary" component="span">
+          <Typography className={classes.text} variant="h4" align="center" color="secondary" component="span">
             + / add
             {' '}
             {' '}
