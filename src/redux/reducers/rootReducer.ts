@@ -1,7 +1,5 @@
-import { combineReducers } from '@reduxjs/toolkit';
-
-import { signup } from './auth/signupReducer';
-import { signin } from './auth/signinReducer';
+import { combineReducers, ThunkAction, Action } from '@reduxjs/toolkit';
+import { signup, signin } from './auth';
 
 const rootReducer = combineReducers({
   signup,
@@ -9,4 +7,6 @@ const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+export type AppThunk = ThunkAction<void, RootState, unknown, Action<string>>;
+
 export default rootReducer;
