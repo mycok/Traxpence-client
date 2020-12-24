@@ -59,7 +59,7 @@ function Signup({ elevation, history }: SignupProps) {
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;
-    const inputErr:{[s: string]: any} = {};
+    const inputErr:{[k: string]: boolean} = {};
 
     switch (id) {
       case 'username':

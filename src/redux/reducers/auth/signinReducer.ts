@@ -7,7 +7,7 @@ import {
   setServerError,
   reset,
   SigninState,
-  OnChangePayload,
+  OnchangePayloadType,
   signinSuccess,
   signinInitialState,
 } from '../../actions/auth';
@@ -16,7 +16,7 @@ export const signin = createReducer(signinInitialState, {
   [setLoading.type]: (state, action: PayloadAction<boolean>) => (
     { ...state, isLoading: action.payload }
   ),
-  [onChange.type]: (state, action: PayloadAction<OnChangePayload>) => {
+  [onChange.type]: (state, action: PayloadAction<OnchangePayloadType>) => {
     const { id, value, inputErr } = action.payload;
     return { ...state, [id]: value, inputError: inputErr };
   },

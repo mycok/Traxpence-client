@@ -52,9 +52,10 @@
         "no-use-before-define": "off",
         "react/jsx-props-no-spreading": "off",
         "react/require-default-props": "off",
-        "no-unused-vars": "off",
+        "no-unused-vars": "warn",
         "no-underscore-dangle": "off",
         "react/no-unescaped-entities": "off",
-        "import/no-cycle": "off"
+        "import/no-cycle": "off",
+        "no-param-reassign": "off"
     }
 }

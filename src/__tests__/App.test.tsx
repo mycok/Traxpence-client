@@ -6,6 +6,6 @@ import App from '../App';
 
 describe('App component', () => {
   it('renders a drawer element', () => {
-    const result = render(<App />);
+    render(<App />);
   });
 });
