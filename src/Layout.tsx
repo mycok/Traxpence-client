@@ -44,10 +44,23 @@ const useStyles = makeStyles((theme) => createStyles({
     marginTop: 50,
     backgroundColor: theme.palette.background.paper,
   },
-  listItem: {
+  root: {
     margin: 20,
     width: 70,
+    '&$selected': {
+      backgroundColor: 'transparent',
+      color: theme.palette.primary.main,
+    },
+    '&$selected:hover': {
+      backgroundColor: 'transparent',
+      color: 'white',
+    },
+    '&:hover': {
+      backgroundColor: 'transparent',
+      color: 'white',
+    },
   },
+  selected: {},
   menu: {
     zIndex: 30,
     margin: 10,
@@ -102,12 +115,15 @@ function RenderList({
           >
             <Link to="/profile" className={classes.link}>
               <ListItem
-                className={classes.listItem}
+                classes={{
+                  root: classes.root,
+                  selected: classes.selected,
+                }}
                 button
-                selected={selected === 'Profile'}
+                selected={selected === 'Profile' }
                 onClick={() => selectionHandler('Profile')}
               >
-                <ListItemIcon>
+                <ListItemIcon style={{ color: selected === 'Profile' ? 'orange' : 'white' }}>
                   <Account fontSize="large" />
                 </ListItemIcon>
               </ListItem>
@@ -124,13 +140,16 @@ function RenderList({
           >
             <Link key={name} to={to} className={classes.link}>
               <ListItem
-                className={classes.listItem}
+                classes={{
+                  root: classes.root,
+                  selected: classes.selected,
+                }}
                 button
                 key={name}
-                selected={selected === icon.name}
+                selected={selected === name}
                 onClick={() => selectionHandler(name)}
               >
-                <ListItemIcon>
+                <ListItemIcon style={{ color: selected === name ? 'orange' : 'white' }}>
                   {icon}
                 </ListItemIcon>
               </ListItem>
@@ -158,7 +177,7 @@ function AddButton({ classes }: AddButtonProps) {
 
 function Layout() {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<string>('');
+  const [selected, setSelected] = React.useState<string>('Expenses');
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
 
