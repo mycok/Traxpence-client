@@ -13,12 +13,17 @@ import MonthlyExpScatterPlot from './components/expenses/charts/ScatterPlot';
 import AnnualTotalExpByMonth from './components/expenses/charts/BarGraph';
 import AvgExpByCategory from './components/expenses/charts/PieGraph';
 import ProtectedRoute from './shared/ProtectedRoute';
+import { isAuthenticated } from './api/auth';
 
 function AppRouter() {
   return (
     <>
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/"
+          render={(props) => (isAuthenticated() ? <Expenses /> : <Home {...props} />)}
+        />
         <Route
           exact
           path="/signup"
@@ -29,14 +34,14 @@ function AppRouter() {
           path="/signin"
           render={(props) => <Signin elevation={5} {...props} />}
         />
-        <Route exact path="/new-expense" component={NewExpense} />
-        <Route exact path="/expenses" component={Expenses} />
+        <ProtectedRoute exact path="/new-expense" component={NewExpense} />
+        <ProtectedRoute exact path="/expenses" component={Expenses} />
         <ProtectedRoute exact path="/profile" component={Profile} />
-        <Route exact path="/edit-expense" component={EditExpense} />
-        <Route exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
-        <Route exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
-        <Route exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />
-        <Route exact path="/pie-graph-chart" component={AvgExpByCategory} />
+        <ProtectedRoute exact path="/edit-expense" component={EditExpense} />
+        <ProtectedRoute exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
+        <ProtectedRoute exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
+        <ProtectedRoute exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />
+        <ProtectedRoute exact path="/pie-graph-chart" component={AvgExpByCategory} />
       </Switch>
     </>
   );
