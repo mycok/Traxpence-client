@@ -7,8 +7,7 @@ import { Typography } from '@material-ui/core';
 import Form from '../auth/AuthForm';
 import ServerMessage from '../../shared/ServerMessage';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
-import { useAppDispatch } from '../../redux/store';
-import { RootState } from '../../redux/reducers/rootReducer';
+import { useAppDispatch, RootState } from '../../redux/store';
 import { signupAction } from '../../redux/actions/auth';
 
 const useStyles = makeStyles((theme) => createStyles({

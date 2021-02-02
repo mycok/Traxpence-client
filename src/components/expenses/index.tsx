@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -6,8 +6,7 @@ import ExpenseList from './ExpenseList';
 import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
-import { RootState } from '../../redux/reducers/rootReducer';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchExpenses } from '../../redux/reducers/expenses/fetchExpenses';
 import { ExpensesLoader } from '../../shared/ContentLoader';
 
@@ -27,11 +26,11 @@ export default function () {
     (state: RootState) => state.fetchExpenses,
   );
 
-  const [open, setOpen] = React.useState(false);
-  const [fromDate, selectFromDate] = React.useState(new Date());
-  const [toDate, selectToDate] = React.useState(new Date());
+  const [open, setOpen] = useState(false);
+  const [fromDate, selectFromDate] = useState(new Date());
+  const [toDate, selectToDate] = useState(new Date());
 
-  React.useEffect(() => {
+  useEffect(() => {
     dispatch(fetchExpenses());
   }, [dispatch]);
 

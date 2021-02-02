@@ -2,8 +2,8 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IExpense } from '../../../components/expenses/IExpense';
 import { list } from '../../../api';
-import { AppThunk } from '../rootReducer';
 import { isAuthenticated } from '../../../api/auth';
+import { AppThunk } from '../../store';
 
 type ExpensesState = {
     expenses: IExpense[],

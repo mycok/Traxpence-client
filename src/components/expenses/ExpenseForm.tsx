@@ -63,35 +63,42 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
+export type Category = {
+  _id: string,
+  title: string
+}
+
 type ExpenseFormComponentProps = {
-    state: IExpense,
-    prefCurrency: string | null,
-    selectedCategory: string,
-    handleSubmit(event: React.FormEvent<HTMLFormElement>): void | undefined,
-    handleChange(event: React.ChangeEvent<HTMLInputElement>): void,
-    handleDateChange(date: any, value: any): void
+  state: IExpense,
+  prefCurrency: string | null,
+  selectedCategory: Category,
+  categories: Category[],
+  handleSubmit(event: React.FormEvent<HTMLFormElement>): void | undefined,
+  handleChange(event: React.ChangeEvent<HTMLInputElement>): void,
+  handleDateChange(date: any, value: any): void
 }
 
 type NumberFormatComponentProps = {
-    inputRef: (instance: NumberFormat | null) => void,
-    onChange: (event: { target: { name: string; value: string } }) => void,
-    name: string
+  inputRef: (instance: NumberFormat | null) => void,
+  onChange: (event: { target: { name: string; value: string } }) => void,
+  name: string
 }
 
-const categoryList = [
-  { _id: 1, title: 'Entertainment' },
-  { _id: 2, title: 'Food' },
-  { _id: 3, title: 'Utilities' },
-  { _id: 4, title: 'Car' },
-  { _id: 5, title: 'Meals' },
-  { _id: 6, title: 'Personal Care' },
-];
+// const categoryList = [
+//   { _id: 1, title: 'Entertainment' },
+//   { _id: 2, title: 'Food' },
+//   { _id: 3, title: 'Utilities' },
+//   { _id: 4, title: 'Car' },
+//   { _id: 5, title: 'Meals' },
+//   { _id: 6, title: 'Personal Care' },
+// ];
 
 // TODO: add a useEffect mutation to fetch all categories
 function ExpenseForm({
   state,
   prefCurrency,
   selectedCategory,
+  categories,
   handleSubmit,
   handleChange,
   handleDateChange,
@@ -132,21 +139,21 @@ function ExpenseForm({
           variant="outlined"
           className={classes.textField}
           label="Category"
-          value={selectedCategory}
+          value={selectedCategory.title}
           required
           select
           onChange={handleChange}
         >
           {
-                        categoryList.map((cat) => (
-                          <MenuItem
-                            key={cat?._id}
-                            value={cat?.title}
-                          >
-                            {cat?.title}
-                          </MenuItem>
-                        ))
-                    }
+            categories.map((cat) => (
+              <MenuItem
+                key={cat?._id}
+                value={cat?.title}
+              >
+                {cat?.title}
+              </MenuItem>
+            ))
+          }
         </TextField>
 
         <TextField

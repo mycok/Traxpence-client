@@ -18,7 +18,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import AppRouter from './router';
 import CustomTooltip from './shared/CustomTooltip';
 import { isAuthenticated } from './api/auth';
-import { RootState } from './redux/reducers/rootReducer';
+import { RootState } from './redux/store';
 
 const useStyles = makeStyles((theme) => createStyles({
   paper: {
