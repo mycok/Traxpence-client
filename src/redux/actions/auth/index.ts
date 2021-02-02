@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 
 import { signup, signin, authenticate } from '../../../api/auth';
-import { AppThunk } from '../../reducers/rootReducer';
+import { AppThunk } from '../../store';
 
 export type InputError = {
   inputError: {[k: string]: boolean}
