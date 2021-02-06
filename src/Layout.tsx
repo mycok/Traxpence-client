@@ -120,7 +120,7 @@ function RenderList({
                   selected: classes.selected,
                 }}
                 button
-                selected={selected === 'Profile' }
+                selected={selected === 'Profile'}
                 onClick={() => selectionHandler('Profile')}
               >
                 <ListItemIcon style={{ color: selected === 'Profile' ? 'orange' : 'white' }}>
@@ -180,8 +180,9 @@ function Layout() {
   const [selected, setSelected] = React.useState<string>('Expenses');
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
+  const { didSignout } = useSelector((state: RootState) => state.signout);
 
-  React.useEffect(() => {}, [signupSuccessful, signinSuccessful]);
+  React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout]);
 
   return (
     <Router>
@@ -200,6 +201,7 @@ function Layout() {
                   itemList={iconList}
                   selected={selected}
                   classes={classes}
+                  // path={matchedPath}
                   selectionHandler={setSelected}
                 />
                 {

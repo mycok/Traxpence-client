@@ -60,6 +60,10 @@ export const signupInitialState: SignupState = {
   serverError: '',
 };
 
+export const signoutInitialSate = {
+  didSignout: false,
+};
+
 export const onChange = createAction<OnchangePayloadType>('ON_CHANGE');
 export const setInputError = createAction<{[k: string]: boolean}>('SET_INPUT_ERROR');
 export const setServerError = createAction<string>('SET_SERVER_ERROR');
@@ -67,6 +71,7 @@ export const setLoading = createAction<boolean>('SET_LOADING');
 export const reset = createAction<SignupState | SigninState>('RESET');
 export const signinSuccess = createAction<SigninState>('SIGNIN_SUCCESSFUL');
 export const signupSuccess = createAction<SignupState>('SIGNUP_SUCCESSFUL');
+export const signOut = createAction<boolean>('SIGN_OUT');
 
 export function signupAction(signupData: SignupRequestData): AppThunk {
   return async (dispatch) => {

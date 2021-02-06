@@ -30,7 +30,7 @@ async function signup(data: any): Promise<any> {
 
 function signout(cb: () => void): void {
   if (window !== undefined) {
-    localStorage.removeItem('auth');
+    localStorage.removeItem('authData');
     cb();
   }
 }

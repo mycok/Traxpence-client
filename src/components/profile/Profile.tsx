@@ -10,6 +10,7 @@ import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
 import { useAppDispatch } from '../../redux/store';
+import { signout } from '../../api/auth';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -93,8 +94,7 @@ function Profile() {
   }
 
   function handleSignout() {
-    localStorage.removeItem('authData');
-    dispatch({ type: 'SIGNIN_SUCCESSFUL', payload: false });
+    signout(() => dispatch({ type: 'SIGN_OUT', payload: true }));
   }
 
   React.useEffect(() => {
