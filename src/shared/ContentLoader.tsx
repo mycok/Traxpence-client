@@ -8,7 +8,7 @@ export function ExpenseLoader(props: any) {
       width={400}
       height={260}
       viewBox="0 0 400 260"
-      backgroundColor="#f3f3f3"
+      backgroundColor="#817e7e"
       foregroundColor="#4c4848"
       {...props}
     >
