@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import {
-  TextField, Paper, Button, MenuItem, InputAdornment,
+  TextField, Paper, Button,
+  MenuItem, InputAdornment, CircularProgress,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { red } from '@material-ui/core/colors';
-import { KeyboardDateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import { green } from '@material-ui/core/colors';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+
 import DateFnsUtils from '@date-io/date-fns';
 import NumberFormat from 'react-number-format';
 
@@ -33,11 +37,6 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
   },
-  container: {
-    border: '1px solid #fff',
-    margin: 0,
-    width: 500,
-  },
   textFieldsPaper: {
     display: 'flex',
     flexDirection: 'column',
@@ -49,17 +48,26 @@ const useStyles = makeStyles((theme) => createStyles({
     width: 400,
   },
   submitButton: {
+    position: 'relative',
     width: 180,
     margin: 20,
   },
-  deleteButton: {
+  cancelButton: {
     width: 180,
     margin: 20,
-    color: '#fff',
-    backgroundColor: red[900],
   },
   link: {
     textDecoration: 'none',
+  },
+  buttonProgress: {
+    color: green[500],
+    position: 'absolute',
+    marginLeft: 100,
+  },
+  buttonContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 }));
 
@@ -70,18 +78,19 @@ export type Category = {
 
 type ExpenseFormComponentProps = {
   state: IExpense,
+  isLoading: boolean,
   prefCurrency: string | null,
-  selectedCategory: Category,
   categories: Category[],
-  handleSubmit(event: React.FormEvent<HTMLFormElement>): void | undefined,
-  handleChange(event: React.ChangeEvent<HTMLInputElement>): void,
-  handleDateChange(date: any, value: any): void
+  selectedDate: Date,
+  handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
+  handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
+  handleDateSelection(date: any, value: any): void
 }
 
-type NumberFormatComponentProps = {
+type NumberFormatInputProps = {
   inputRef: (instance: NumberFormat | null) => void,
   onChange: (event: { target: { name: string; value: string } }) => void,
-  name: string
+  name: string,
 }
 
 // const categoryList = [
@@ -96,33 +105,38 @@ type NumberFormatComponentProps = {
 // TODO: add a useEffect mutation to fetch all categories
 function ExpenseForm({
   state,
+  isLoading,
   prefCurrency,
-  selectedCategory,
   categories,
-  handleSubmit,
-  handleChange,
-  handleDateChange,
+  selectedDate,
+  handleOnSubmit,
+  handleOnChange,
+  handleDateSelection,
 }: ExpenseFormComponentProps) {
   const classes = useStyles();
+
   return (
     <form
       className={classes.root}
       noValidate
       autoComplete="off"
-      onSubmit={handleSubmit}
+      onSubmit={handleOnSubmit}
     >
       <Paper elevation={0} className={classes.textFieldsPaper}>
         <TextField
           id="title"
+          name="title"
           className={classes.textField}
           variant="outlined"
           label="Title"
           value={state?.title}
           required
+          onChange={handleOnChange}
         />
 
         <TextField
           id="amount"
+          name="amount"
           variant="outlined"
           className={classes.textField}
           label="Amount"
@@ -130,23 +144,27 @@ function ExpenseForm({
           required
           InputProps={{
             inputComponent: NumberFormatterInput as any,
-            startAdornment: <InputAdornment position="start">{prefCurrency}</InputAdornment>,
+            startAdornment: <InputAdornment position="start">{prefCurrency ?? '$'}</InputAdornment>,
 
           }}
+          onChange={handleOnChange}
         />
+
         <TextField
           id="category"
+          name="category"
           variant="outlined"
           className={classes.textField}
           label="Category"
-          value={selectedCategory.title}
+          value={state.category.title}
           required
           select
-          onChange={handleChange}
+          onChange={handleOnChange}
         >
           {
             categories.map((cat) => (
               <MenuItem
+                id="category"
                 key={cat?._id}
                 value={cat?.title}
               >
@@ -158,24 +176,29 @@ function ExpenseForm({
 
         <TextField
           id="notes"
+          name="notes"
           variant="outlined"
           className={classes.textField}
           label="Add a note"
           value={state?.notes}
           multiline
           rowsMax={4}
+          onChange={handleOnChange}
         />
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDateTimePicker
+          <KeyboardDatePicker
+            id="date-picker"
+            name="date-picker"
             className={classes.textField}
             label="Incurred On"
-            views={['year', 'month', 'date']}
-            value={new Date()}
-            onChange={handleDateChange}
+            value={selectedDate}
+            onChange={handleDateSelection}
             variant="inline"
             inputVariant="outlined"
-            format="yyyy/MM/dd hh:mm a"
+            format="dd/MM/yyyy"
+            autoOk
+            disableFuture
             PopoverProps={{
               anchorReference: 'anchorPosition',
               anchorPosition: {
@@ -194,22 +217,28 @@ function ExpenseForm({
             }}
           />
         </MuiPickersUtilsProvider>
-        <div>
-          <Button
-            variant="contained"
-            fullWidth
-            color="secondary"
-            type="submit"
-            className={classes.submitButton}
-          >
-            Save
-          </Button>
+        <div className={classes.buttonContainer}>
+          <>
+            <Button
+              id="save-button"
+              variant="contained"
+              fullWidth
+              color="secondary"
+              type="submit"
+              disabled={isLoading}
+              className={classes.submitButton}
+            >
+              Save
+            </Button>
+            {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+          </>
           <Link to="/expenses" className={classes.link}>
             <Button
+              id="cancel-button"
               variant="outlined"
               fullWidth
               color="primary"
-              className={classes.submitButton}
+              className={classes.cancelButton}
             >
               Cancel
             </Button>
@@ -220,7 +249,7 @@ function ExpenseForm({
   );
 }
 
-function NumberFormatterInput(props: NumberFormatComponentProps) {
+function NumberFormatterInput(props: NumberFormatInputProps) {
   const { inputRef, onChange, ...other } = props;
 
   return (

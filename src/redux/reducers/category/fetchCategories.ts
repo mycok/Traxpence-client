@@ -4,19 +4,17 @@ import { list } from '../../../api';
 import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
 
-type Category = {
+export type Category = {
     _id: string,
     title: string,
 }
 
 type CategoriesState = {
-    selectedCategory: Category,
     categories: Category[],
     serverError: string | null,
 }
 
 const initialCategoriesState: CategoriesState = {
-  selectedCategory: { _id: '', title: '' },
   categories: [],
   serverError: null,
 };
@@ -46,21 +44,12 @@ const categoriesSlice = createSlice({
     fetchCategoriesSuccessful(state, action: PayloadAction<Category[]>) {
       state.categories = action.payload;
     },
-    setSelectedCategory(state, action: PayloadAction<string>) {
-      const matchedCategory = state.categories.find(
-        (cat: Category) => cat.title === action.payload,
-      );
-      if (matchedCategory) {
-        state.selectedCategory = matchedCategory;
-      }
-    },
   },
 });
 
 export const {
   setServerError,
   fetchCategoriesSuccessful,
-  setSelectedCategory,
 } = categoriesSlice.actions;
 
 export const fetchCategoriesReducer = categoriesSlice.reducer;

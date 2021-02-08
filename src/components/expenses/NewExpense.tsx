@@ -1,13 +1,14 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
-import { IExpense } from './IExpense';
+// import { IExpense } from './IExpense';
 import ExpenseForm from './ExpenseForm';
 import { useAppDispatch, RootState } from '../../redux/store/index';
-import { setSelectedCategory, fetchCategories } from '../../redux/reducers/category/fetchCategories';
+import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
+import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -18,70 +19,78 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type Action = {
-    type: string;
-    payload: any;
+type RouteProps = {
+  history: any,
 };
 
-const initialExpenseState: IExpense = {
-  title: '',
-  amount: 0,
-  category: {
-    _id: '',
-    title: '',
-  },
-  notes: '',
-  incurredOn: Date.now(),
-};
-
-function NewExpense() {
+function NewExpense({ history }: RouteProps) {
   const classes = useStyles();
-
-  const [newExpenseState, dispatch] = useReducer(
-    (state: IExpense, action: Action) => {
-      switch (action.type) {
-        case 'SET_TITTLE':
-          break;
-
-        default:
-          break;
-      }
-      return state;
-    },
-    initialExpenseState,
-  );
-
+  const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
-  const storeDispatch = useAppDispatch();
-  const { selectedCategory, categories } = useSelector(
+  const dispatch = useAppDispatch();
+  const {
+    title,
+    amount,
+    category,
+    notes,
+    incurredOn,
+    isLoading,
+  } = useSelector(
+    (state: RootState) => state.createExpense,
+  );
+  const { categories } = useSelector(
     (state: RootState) => state.categories,
   );
 
+  const expenseFormState = {
+    title,
+    amount,
+    category,
+    notes,
+    incurredOn,
+  };
+
   useEffect(() => {
-    storeDispatch(fetchCategories());
-  }, [storeDispatch]);
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-  function handleDateChange(date: Date | null) {
-    return dispatch({ type: 'SET_DATE', payload: date });
+  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { target: { name, value } } = event;
+
+    if (name === 'category') {
+      const selectedCategory = categories.find((cat: Category) => cat.title === value);
+      dispatch(onValueChange({ name, value: selectedCategory }));
+    } else {
+      dispatch(onValueChange({ name, value }));
+    }
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    storeDispatch(setSelectedCategory(event.target.value));
+  function handleDateSelection(date: Date) {
+    selectDate(date);
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) { }
+  function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
+    // TODO: add field validation
+    event.preventDefault();
+
+    const newExpense = { ...expenseFormState, amount: Number(amount), incurredOn: selectedDate };
+    dispatch(createExpense(newExpense, () => history.push('/expenses')));
+  }
+
+  // TODO: add functionality to display toast with server error
 
   return (
     <div className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
-          state={newExpenseState}
+          state={expenseFormState}
+          isLoading={isLoading}
           prefCurrency={prefCurrency}
           categories={categories}
-          selectedCategory={selectedCategory}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          handleDateChange={handleDateChange}
+          selectedDate={selectedDate}
+          handleOnSubmit={handleOnSubmit}
+          handleOnChange={handleOnChange}
+          handleDateSelection={handleDateSelection}
         />
       </Paper>
     </div>
