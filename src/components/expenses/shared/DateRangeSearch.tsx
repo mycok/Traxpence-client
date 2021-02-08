@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -10,11 +11,12 @@ const useStyles = makeStyles(() => createStyles({
     justifyContent: 'space-evenly',
     alignItems: 'center',
     width: '100%',
+    paddingTop: 5,
+    paddingBottom: 5,
   },
 }));
 
 type DateRangeSearchProps = {
-    views: any[],
     fromDate: Date,
     toDate: Date,
     selectFromDate(date: any, value?: any): void,
@@ -22,7 +24,6 @@ type DateRangeSearchProps = {
 }
 
 function DateRangeSearch({
-  views,
   fromDate,
   toDate,
   selectFromDate,
@@ -33,7 +34,6 @@ function DateRangeSearch({
   return (
     <div className={classes.root}>
       <MultipleDateRange
-        views={views}
         fromDate={fromDate}
         toDate={toDate}
         selectFromDate={selectFromDate}

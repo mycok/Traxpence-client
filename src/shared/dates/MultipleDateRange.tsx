@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
@@ -16,7 +17,6 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 type MultipleDateRangeProps = {
-    views: any[],
     fromDate: Date,
     toDate: Date,
     selectFromDate(date: any, value?: any): void,
@@ -24,7 +24,6 @@ type MultipleDateRangeProps = {
 }
 // TODO: - add date limits to ensure that fromDate is always greater than the toDate
 function MultipleDateRange({
-  views,
   fromDate,
   toDate,
   selectFromDate,
@@ -39,22 +38,22 @@ function MultipleDateRange({
           disableFuture
           autoFocus
           autoOk
-          views={views}
           inputVariant="outlined"
           label="From"
           variant="inline"
           value={fromDate}
+          format="dd/MM/yyyy"
           onChange={selectFromDate}
         />
         <KeyboardDatePicker
           disableFuture
           autoFocus
           autoOk
-          views={views}
           inputVariant="outlined"
           label="To"
           variant="inline"
           value={toDate}
+          format="dd/MM/yyyy"
           onChange={selectToDate}
         />
       </MuiPickersUtilsProvider>

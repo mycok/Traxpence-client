@@ -12,10 +12,19 @@ import { ExpensesLoader } from '../../shared/ContentLoader';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
-    marginTop: 70,
+    paddingTop: 20,
     display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     flexDirection: 'column',
-    width: 650,
+    width: 700,
+    height: '90vh',
+  },
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    height: '100vh',
   },
 }));
 
@@ -60,23 +69,24 @@ export default function () {
   }
 
   return (
-    <div className={classes.root}>
-      <ConfirmDialog
-        open={open}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-      />
+    <div className={classes.container}>
       <DateRangeSearch
-        views={['month']}
         fromDate={fromDate}
         toDate={toDate}
         selectFromDate={selectFromDate}
         selectToDate={selectToDate}
       />
-      <ExpenseList
-        expenses={expenses}
-        handleOpen={handleOpen}
-      />
+      <div className={classes.root}>
+        <ConfirmDialog
+          open={open}
+          handleClose={handleClose}
+          handleDelete={handleDelete}
+        />
+        <ExpenseList
+          expenses={expenses}
+          handleOpen={handleOpen}
+        />
+      </div>
     </div>
   );
 }

@@ -6,7 +6,10 @@ import SingleExpense from './SingleExpense';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
-    marginTop: 90,
+    paddingTop: 5,
+    paddingBottom: 5,
+    height: '90vh',
+    overflowY: 'auto',
   },
 }));
 
