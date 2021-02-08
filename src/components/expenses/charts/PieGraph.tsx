@@ -42,7 +42,6 @@ function AvgExpByCategory() {
   return (
     <div className={classes.root}>
       <DateRangeSearch
-        views={['month']}
         fromDate={fromDate}
         toDate={toDate}
         selectFromDate={selectFromDate}

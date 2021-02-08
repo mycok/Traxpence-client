@@ -93,16 +93,6 @@ type NumberFormatInputProps = {
   name: string,
 }
 
-// const categoryList = [
-//   { _id: 1, title: 'Entertainment' },
-//   { _id: 2, title: 'Food' },
-//   { _id: 3, title: 'Utilities' },
-//   { _id: 4, title: 'Car' },
-//   { _id: 5, title: 'Meals' },
-//   { _id: 6, title: 'Personal Care' },
-// ];
-
-// TODO: add a useEffect mutation to fetch all categories
 function ExpenseForm({
   state,
   isLoading,
