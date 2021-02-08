@@ -9,12 +9,14 @@ type ExpensesState = {
     expenses: IExpense[],
     isLoading: boolean,
     serverError: string | null,
+    authError: string | null,
 }
 
 const initialExpensesState: ExpensesState = {
   expenses: [],
   isLoading: false,
   serverError: null,
+  authError: null,
 };
 
 export function fetchExpenses(): AppThunk {
@@ -25,6 +27,7 @@ export function fetchExpenses(): AppThunk {
       dispatch(setLoading(true));
       data = await list('expenses', token);
     } catch (error) {
+      // for generic server errors
       dispatch(setLoading(false));
       dispatch(setServerError(error.toString()));
 
@@ -32,7 +35,14 @@ export function fetchExpenses(): AppThunk {
     }
 
     dispatch(setLoading(false));
-    dispatch(fetchExpensesSuccessful(data.expenses));
+
+    if (data.success) {
+      dispatch(fetchExpensesSuccessful(data.expenses));
+    } else {
+      // in case of token based errors
+      localStorage.removeItem('authData');
+      dispatch(setAuthError(data.message));
+    }
   };
 }
 
@@ -43,8 +53,11 @@ const expensesSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setServerError(state, action: PayloadAction<string>) {
+    setServerError(state, action: PayloadAction<string | null>) {
       state.serverError = action.payload;
+    },
+    setAuthError(state, action: PayloadAction<string | null>) {
+      state.authError = action.payload;
     },
     fetchExpensesSuccessful(state, action: PayloadAction<IExpense[]>) {
       state.expenses = action.payload;
@@ -55,6 +68,7 @@ const expensesSlice = createSlice({
 export const {
   setLoading,
   setServerError,
+  setAuthError,
   fetchExpensesSuccessful,
 } = expensesSlice.actions;
 

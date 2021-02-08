@@ -181,8 +181,9 @@ function Layout() {
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
+  const { authError } = useSelector((state: RootState) => state.fetchExpenses);
 
-  React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout]);
+  React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout, authError]);
 
   return (
     <Router>
@@ -201,7 +202,6 @@ function Layout() {
                   itemList={iconList}
                   selected={selected}
                   classes={classes}
-                  // path={matchedPath}
                   selectionHandler={setSelected}
                 />
                 {

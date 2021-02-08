@@ -77,7 +77,7 @@ export function signupAction(signupData: SignupRequestData): AppThunk {
   return async (dispatch) => {
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    signup(signupData)
+    await signup(signupData)
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
@@ -101,7 +101,7 @@ export function signinAction(signinData: SigninRequestData): AppThunk {
   return async (dispatch) => {
     dispatch({ type: 'SET_LOADING', payload: true });
 
-    signin(signinData)
+    await signin(signinData)
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {

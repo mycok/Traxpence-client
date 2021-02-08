@@ -6,6 +6,7 @@ import AccBalanceWallet from '@material-ui/icons/AccountBalanceWalletSharp';
 import { EditSharp, DeleteSharp } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import { IExpense } from './IExpense';
 import CustomTooltip from '../../shared/CustomTooltip';
@@ -37,11 +38,40 @@ const useStyles = makeStyles((theme) => createStyles({
   incurredOn: {
     fontWeight: 'bold',
   },
+  customFieldTypographyContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  typographyValues: {
+    marginLeft: 4,
+  },
 }));
 
 type ExpenseComponentProps = {
   expense: IExpense,
   handleOpen(): void
+}
+
+type CustomFieldTypographyProps = {
+  field: string,
+  value: string,
+  classes: any,
+}
+
+function capitalizeString(txt: string) {
+  return txt.charAt(0).toUpperCase() + txt.slice(1);
+}
+
+function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyProps) {
+  return (
+    <div className={classes.customFieldTypographyContainer}>
+      <Typography variant="subtitle1">{`${field}:`}</Typography>
+      <Typography variant="subtitle1" className={classes.typographyValues}>
+        {capitalizeString(value)}
+      </Typography>
+    </div>
+  );
 }
 
 function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
@@ -58,9 +88,11 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
           title={(
             <div className={classes.titleContainer}>
               <>
-                <Typography variant="h6">
-                  {expense?.title}
-                </Typography>
+                <CustomFieldTypography
+                  field="Title"
+                  value={expense?.title}
+                  classes={classes}
+                />
                 <Chip
                   variant="outlined"
                   color="secondary"
@@ -72,8 +104,10 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
           )}
           subheader={(
             <>
-              <Typography color="primary">{`${currency} ${expense?.amount}`}</Typography>
-              <Typography className={classes.incurredOn} variant="caption">{expense?.incurredOn}</Typography>
+              <Typography color="primary">{`${currency} ${expense?.amount.toString()}`}</Typography>
+              <Typography className={classes.incurredOn} variant="caption">
+                {format(new Date(expense.incurredOn), 'dd/mm/yyyy')}
+              </Typography>
             </>
           )}
           action={(
@@ -104,7 +138,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
         {
           expense?.notes && (
             <CardContent className={classes.cardContent}>
-              <Typography>{expense?.notes}</Typography>
+              <Typography>{capitalizeString(expense?.notes)}</Typography>
             </CardContent>
           )
         }

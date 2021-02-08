@@ -22,13 +22,14 @@ const useStyles = makeStyles(() => createStyles({
 export default function () {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const { isLoading, expenses } = useSelector(
-    (state: RootState) => state.fetchExpenses,
-  );
 
   const [open, setOpen] = useState(false);
   const [fromDate, selectFromDate] = useState(new Date());
   const [toDate, selectToDate] = useState(new Date());
+
+  const { isLoading, expenses } = useSelector(
+    (state: RootState) => state.fetchExpenses,
+  );
 
   useEffect(() => {
     dispatch(fetchExpenses());

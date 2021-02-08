@@ -7,7 +7,7 @@ import { Paper } from '@material-ui/core';
 import { IExpense } from './IExpense';
 import ExpenseForm from './ExpenseForm';
 import { useAppDispatch, RootState } from '../../redux/store/index';
-import { setSelectedCategory, fetchCategories } from '../../redux/reducers/category/fetchCategories';
+import { fetchCategories } from '../../redux/reducers/category/fetchCategories';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -30,7 +30,7 @@ type Action = {
 function EditExpense({ location }: EditExpenseProps) {
   const classes = useStyles();
 
-  const [expenseState, dispatch] = useReducer(
+  const [expenseState] = useReducer(
     (state: IExpense, action: Action) => {
       switch (action.type) {
         case 'SET_TITTLE':
@@ -44,9 +44,10 @@ function EditExpense({ location }: EditExpenseProps) {
     location?.state,
   );
 
+  const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
   const storeDispatch = useAppDispatch();
-  const { selectedCategory, categories } = useSelector(
+  const { categories } = useSelector(
     (state: RootState) => state.categories,
   );
 
@@ -54,27 +55,28 @@ function EditExpense({ location }: EditExpenseProps) {
     storeDispatch(fetchCategories());
   }, [storeDispatch]);
 
-  function handleDateChange(date: Date | null) {
-    return dispatch({ type: 'SET_DATE', payload: date });
+  function handleDateSelection(date: Date) {
+    selectDate(date);
   }
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
-    storeDispatch(setSelectedCategory(event.target.value));
+  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    // storeDispatch(setSelectedCategory(event.target.value));
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) { }
+  function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) { }
 
   return (
     <div className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
           state={expenseState}
+          isLoading={false}
           prefCurrency={prefCurrency}
           categories={categories}
-          selectedCategory={selectedCategory}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          handleDateChange={handleDateChange}
+          selectedDate={selectedDate}
+          handleOnSubmit={handleOnSubmit}
+          handleOnChange={handleOnChange}
+          handleDateSelection={handleDateSelection}
         />
       </Paper>
     </div>
