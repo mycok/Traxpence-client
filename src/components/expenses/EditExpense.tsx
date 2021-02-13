@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
-import { IExpense } from './IExpense';
 import ExpenseForm from './ExpenseForm';
-import { useAppDispatch, RootState } from '../../redux/store/index';
-import { fetchCategories } from '../../redux/reducers/category/fetchCategories';
+import { useAppDispatch, RootState } from '../../redux/store';
+import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
+import { onValueChange, editExpense } from '../../redux/reducers/expenses/editExpense';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -19,58 +19,75 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 type EditExpenseProps = {
-  location: any
+  history: any
 }
 
-type Action = {
-    type: string;
-    payload: any;
-};
-
-function EditExpense({ location }: EditExpenseProps) {
+function EditExpense({ history }: EditExpenseProps) {
   const classes = useStyles();
-
-  const [expenseState] = useReducer(
-    (state: IExpense, action: Action) => {
-      switch (action.type) {
-        case 'SET_TITTLE':
-          break;
-
-        default:
-          break;
-      }
-      return state;
-    },
-    location?.state,
-  );
-
   const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
-  const storeDispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const { categories } = useSelector(
     (state: RootState) => state.categories,
   );
+  const {
+    _id,
+    title,
+    amount,
+    category,
+    notes,
+    incurredOn,
+    isLoading,
+  } = useSelector(
+    (state: RootState) => state.editExpense,
+  );
+
+  const expenseFormState = {
+    title,
+    amount,
+    category,
+    notes,
+    incurredOn,
+  };
 
   useEffect(() => {
-    storeDispatch(fetchCategories());
-  }, [storeDispatch]);
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { target: { name, value } } = event;
+
+    if (name === 'category') {
+      const selectedCategory = categories.find((cat: Category) => cat.title === value);
+      dispatch(onValueChange({ name, value: selectedCategory }));
+    } else {
+      dispatch(onValueChange({ name, value }));
+    }
+  }
 
   function handleDateSelection(date: Date) {
     selectDate(date);
   }
 
-  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    // storeDispatch(setSelectedCategory(event.target.value));
-  }
+  function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
+    // TODO: add field validation
+    event.preventDefault();
 
-  function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) { }
+    const editedExpense = {
+      ...expenseFormState,
+      category: { _id: category?._id },
+      amount: Number(amount),
+      incurredOn: selectedDate,
+    };
+    dispatch(editExpense(_id as string, editedExpense, () => history.push('/expenses')));
+  }
 
   return (
     <div className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
-          state={expenseState}
-          isLoading={false}
+          state={expenseFormState}
+          isLoading={isLoading}
           prefCurrency={prefCurrency}
           categories={categories}
           selectedDate={selectedDate}

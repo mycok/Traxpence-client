@@ -3,6 +3,7 @@ import { signup, signin, signout } from './auth';
 import {
   fetchExpensesReducer,
   createExpenseReducer,
+  editExpenseReducer,
 } from './expenses';
 import { fetchCategoriesReducer } from './category';
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   signout,
   fetchExpenses: fetchExpensesReducer,
   createExpense: createExpenseReducer,
+  editExpense: editExpenseReducer,
   categories: fetchCategoriesReducer,
 });
 

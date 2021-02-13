@@ -4,9 +4,8 @@ import { useSelector } from 'react-redux';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
-// import { IExpense } from './IExpense';
 import ExpenseForm from './ExpenseForm';
-import { useAppDispatch, RootState } from '../../redux/store/index';
+import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
 import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
 
@@ -73,7 +72,12 @@ function NewExpense({ history }: RouteProps) {
     // TODO: add field validation
     event.preventDefault();
 
-    const newExpense = { ...expenseFormState, amount: Number(amount), incurredOn: selectedDate };
+    const newExpense = {
+      ...expenseFormState,
+      category: { _id: category?._id },
+      amount: Number(amount),
+      incurredOn: selectedDate,
+    };
     dispatch(createExpense(newExpense, () => history.push('/expenses')));
   }
 

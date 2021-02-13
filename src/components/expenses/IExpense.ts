@@ -5,7 +5,7 @@ export interface IExpense {
     category: {
         _id: string,
         title: string,
-    };
+    } | any;
     notes?: string;
     incurredOn: any
 }

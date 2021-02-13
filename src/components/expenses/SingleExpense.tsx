@@ -1,13 +1,17 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
+
 import {
   Card, CardHeader, CardContent, IconButton, Typography, Chip,
 } from '@material-ui/core';
 import AccBalanceWallet from '@material-ui/icons/AccountBalanceWalletSharp';
 import { EditSharp, DeleteSharp } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+
 import { format } from 'date-fns';
 
+import { useAppDispatch } from '../../redux/store';
+import { resetStateToSelectedExpenseValues } from '../../redux/reducers/expenses/editExpense';
 import { IExpense } from './IExpense';
 import CustomTooltip from '../../shared/CustomTooltip';
 
@@ -66,7 +70,7 @@ function capitalizeString(txt: string) {
 function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyProps) {
   return (
     <div className={classes.customFieldTypographyContainer}>
-      <Typography variant="subtitle1">{`${field}:`}</Typography>
+      {/* <Typography variant="subtitle1">{`${field}:`}</Typography> */}
       <Typography variant="subtitle1" className={classes.typographyValues}>
         {capitalizeString(value)}
       </Typography>
@@ -76,7 +80,16 @@ function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyP
 
 function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
   const classes = useStyles();
+  const history = useHistory();
+  const dispatch = useAppDispatch();
   const [currency] = React.useState(localStorage.getItem('currency') ?? '');
+
+  function handleEditButtonClick() {
+    dispatch(resetStateToSelectedExpenseValues(
+      { ...expense, isLoading: false, serverError: null },
+    ));
+    history.push('/edit-expense');
+  }
 
   return (
     <>
@@ -106,23 +119,22 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
             <>
               <Typography color="primary">{`${currency} ${expense?.amount.toString()}`}</Typography>
               <Typography className={classes.incurredOn} variant="caption">
-                {format(new Date(expense.incurredOn), 'dd/mm/yyyy')}
+                {format(new Date(expense.incurredOn), 'dd/MM/yyyy')}
               </Typography>
             </>
           )}
           action={(
             <>
-              <Link to={{
-                pathname: '/edit-expense',
-                state: expense,
-              }}
-              >
-                <CustomTooltip title="Edit" placement="bottom">
-                  <IconButton aria-label="edit" className={classes.editButton}>
-                    <EditSharp />
-                  </IconButton>
-                </CustomTooltip>
-              </Link>
+              <CustomTooltip title="Edit" placement="bottom">
+                <IconButton
+                  aria-label="edit"
+                  className={classes.editButton}
+                  onClick={handleEditButtonClick}
+                >
+                  <EditSharp />
+                </IconButton>
+              </CustomTooltip>
+
               <CustomTooltip title="Delete" placement="bottom">
                 <IconButton
                   aria-label="delete"
