@@ -7,7 +7,7 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-export async function create(endpoint: string, data: any, token?: string): Promise<any> {
+export async function create<T>(endpoint: string, data: T, token?: string): Promise<any> {
   const resp = await fetch(`${baseUrl}/${endpoint}`, {
     method: 'POST',
     headers: { ...headers, Authorization: `Bearer ${token}` },
@@ -17,10 +17,10 @@ export async function create(endpoint: string, data: any, token?: string): Promi
   return resp.json();
 }
 
-export async function update(
+export async function update<T>(
   endpoint: string,
   resourceId: string,
-  data: any,
+  data: Partial<T>,
   token: string,
 ): Promise<any> {
   const resp = await fetch(`${baseUrl}/${endpoint}/${resourceId}`, {
