@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
@@ -15,7 +16,7 @@ const useStyles = makeStyles(() => createStyles({
 
 type ExpenseListProps = {
     expenses: IExpense[],
-    handleOpen(): void,
+    handleOpen(exp: IExpense): void,
 };
 
 function ExpenseList({ expenses, handleOpen }: ExpenseListProps) {
@@ -28,7 +29,7 @@ function ExpenseList({ expenses, handleOpen }: ExpenseListProps) {
                   <SingleExpense
                     key={exp?._id}
                     expense={exp}
-                    handleOpen={handleOpen}
+                    handleOpen={() => handleOpen(exp)}
                   />
                 ))
             }

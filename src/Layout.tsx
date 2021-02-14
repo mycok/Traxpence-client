@@ -181,7 +181,7 @@ function Layout() {
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
-  const { authError } = useSelector((state: RootState) => state.fetchExpenses);
+  const { authError } = useSelector((state: RootState) => state.fetchOrDeleteExpenses);
 
   React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout, authError]);
 

@@ -1,7 +1,7 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import { signup, signin, signout } from './auth';
 import {
-  fetchExpensesReducer,
+  fetchOrDeleteExpensesReducer,
   createExpenseReducer,
   editExpenseReducer,
 } from './expenses';
@@ -11,7 +11,7 @@ const rootReducer = combineReducers({
   signup,
   signin,
   signout,
-  fetchExpenses: fetchExpensesReducer,
+  fetchOrDeleteExpenses: fetchOrDeleteExpensesReducer,
   createExpense: createExpenseReducer,
   editExpense: editExpenseReducer,
   categories: fetchCategoriesReducer,
