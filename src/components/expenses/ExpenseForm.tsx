@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import {
   TextField, Paper, Button,
-  MenuItem, InputAdornment, CircularProgress,
+  MenuItem, InputAdornment,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
@@ -14,6 +14,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import NumberFormat from 'react-number-format';
 
 import { IExpense } from './IExpense';
+import CircularLoader from '../../shared/CircularLoader';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -220,7 +221,7 @@ function ExpenseForm({
             >
               Save
             </Button>
-            {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+            {isLoading && <CircularLoader styleClass={classes.buttonProgress} />}
           </>
           <Link to="/expenses" className={classes.link}>
             <Button

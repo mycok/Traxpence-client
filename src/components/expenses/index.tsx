@@ -7,8 +7,9 @@ import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import { useAppDispatch, RootState } from '../../redux/store';
-import { fetchExpenses } from '../../redux/reducers/expenses/fetchExpenses';
+import { fetchExpenses, deleteExpense } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 import { ExpensesLoader } from '../../shared/ContentLoader';
+import { IExpense } from './IExpense';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -35,16 +36,18 @@ export default function () {
   const [open, setOpen] = useState(false);
   const [fromDate, selectFromDate] = useState(new Date());
   const [toDate, selectToDate] = useState(new Date());
+  const [expenseToDelete, setExpenseToDelete] = useState<IExpense | null>(null);
 
-  const { isLoading, expenses } = useSelector(
-    (state: RootState) => state.fetchExpenses,
+  const { isLoading, isDeleting, expenses } = useSelector(
+    (state: RootState) => state.fetchOrDeleteExpenses,
   );
 
   useEffect(() => {
     dispatch(fetchExpenses());
   }, [dispatch]);
 
-  function handleOpen() {
+  function handleOpen(expense: IExpense) {
+    setExpenseToDelete(expense);
     setOpen(true);
   }
 
@@ -53,7 +56,7 @@ export default function () {
   }
 
   function handleDelete() {
-
+    dispatch(deleteExpense(expenseToDelete?._id as string, () => handleClose()));
   }
 
   if (isLoading) {
@@ -79,6 +82,7 @@ export default function () {
       <div className={classes.root}>
         <ConfirmDialog
           open={open}
+          isDeleting={isDeleting}
           handleClose={handleClose}
           handleDelete={handleDelete}
         />
