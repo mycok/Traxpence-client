@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
-  Grid, Drawer, Paper, List, ListItem, ListItemIcon, Fab,
+  Grid, Drawer, Paper, List,
+  ListItem, ListItemIcon, Fab, Badge,
 } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Account from '@material-ui/icons/AccountCircleSharp';
@@ -19,6 +20,7 @@ import AppRouter from './router';
 import CustomTooltip from './shared/CustomTooltip';
 import { isAuthenticated } from './api/auth';
 import { RootState } from './redux/store';
+import { IExpense } from './components/expenses/IExpense';
 
 const useStyles = makeStyles((theme) => createStyles({
   paper: {
@@ -87,6 +89,7 @@ type RenderListProps = {
   classes: any,
   itemList: Array<any>,
   selected?: string,
+  expenses: IExpense[],
   selectionHandler: any
 }
 
@@ -95,15 +98,44 @@ type AddButtonProps = {
 }
 
 const iconList = [
-  { name: 'Categories', to: '/exps-avg-by-category', icon: <Categories fontSize="large" /> },
-  { name: 'Expenses', to: '/expenses', icon: <AccBalanceWallet fontSize="large" /> },
-  { name: 'ScatterPlot', to: '/scatter-graph-chart', icon: <ScatterPlot fontSize="large" /> },
-  { name: 'BarChart', to: '/bar-graph-chart', icon: <BarChart fontSize="large" /> },
-  { name: 'PieChart', to: '/pie-graph-chart', icon: <PieChart fontSize="large" /> },
+  {
+    name: 'Categories',
+    to: '/exps-avg-by-category',
+    icon: <Categories fontSize="large" />,
+  },
+  {
+    name: 'Expenses',
+    to: '/expenses',
+    icon: (expenses: IExpense[]) => (
+      <Badge
+        color="primary"
+        badgeContent={expenses.length}
+        invisible={expenses.length === 0}
+        max={99}
+      >
+        <AccBalanceWallet fontSize="large" />
+      </Badge>
+    ),
+  },
+  {
+    name: 'ScatterPlot',
+    to: '/scatter-graph-chart',
+    icon: <ScatterPlot fontSize="large" />,
+  },
+  {
+    name: 'BarChart',
+    to: '/bar-graph-chart',
+    icon: <BarChart fontSize="large" />,
+  },
+  {
+    name: 'PieChart',
+    to: '/pie-graph-chart',
+    icon: <PieChart fontSize="large" />,
+  },
 ];
 
 function RenderList({
-  itemList, classes, selected, selectionHandler,
+  itemList, classes, selected, expenses, selectionHandler,
 }: RenderListProps) {
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
@@ -150,7 +182,7 @@ function RenderList({
                 onClick={() => selectionHandler(name)}
               >
                 <ListItemIcon style={{ color: selected === name ? 'orange' : 'white' }}>
-                  {icon}
+                  {name === 'Expenses' ? icon(expenses) : icon}
                 </ListItemIcon>
               </ListItem>
             </Link>
@@ -181,7 +213,7 @@ function Layout() {
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
-  const { authError } = useSelector((state: RootState) => state.fetchOrDeleteExpenses);
+  const { authError, expenses } = useSelector((state: RootState) => state.fetchOrDeleteExpenses);
 
   React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout, authError]);
 
@@ -199,6 +231,7 @@ function Layout() {
                 classes={{ paper: classes.drawerPaper }}
               >
                 <RenderList
+                  expenses={expenses}
                   itemList={iconList}
                   selected={selected}
                   classes={classes}
