@@ -1,7 +1,16 @@
+/* eslint-disable no-unused-vars */
 import React, { ChangeEvent } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Card, CardHeader, CardContent, Avatar, Typography, IconButton, TextField, MenuItem, Button,
+  Card,
+  CardHeader,
+  CardContent,
+  Avatar,
+  Typography,
+  IconButton,
+  TextField,
+  MenuItem,
+  Button,
 } from '@material-ui/core';
 import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -11,6 +20,7 @@ import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
 import { useAppDispatch } from '../../redux/store';
 import { signout } from '../../api/auth';
+import { signOut } from '../../redux/actions/auth';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -51,12 +61,14 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 type ProfileComponentProps = {
-    user: Partial<IUser>,
-    classes: any,
-    currency: string | null,
-    handleSignout(): void,
-    handleCurrencyChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void
-}
+  user: Partial<IUser>;
+  classes: any;
+  currency: string | null;
+  handleSignout(): void;
+  handleCurrencyChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void;
+};
 // TODO: consider using a currency component library
 const currencies = [
   {
@@ -84,8 +96,12 @@ const currencies = [
 function Profile() {
   const classes = useStyles();
 
-  const [currency, setCurrency] = React.useState<string | null>(localStorage.getItem('currency'));
-  const [userData] = React.useState(JSON.parse(localStorage.getItem('authData') as string));
+  const [currency, setCurrency] = React.useState<string | null>(
+    localStorage.getItem('currency'),
+  );
+  const [userData] = React.useState(
+    JSON.parse(localStorage.getItem('authData') as string),
+  );
   const dispatch = useAppDispatch();
 
   function handleCurrencyChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -94,7 +110,7 @@ function Profile() {
   }
 
   function handleSignout() {
-    signout(() => dispatch({ type: 'SIGN_OUT', payload: true }));
+    signout(() => dispatch(signOut(true)));
   }
 
   React.useEffect(() => {
@@ -118,14 +134,16 @@ function Profile() {
 }
 
 function ProfileCard({
-  classes, user, currency, handleCurrencyChange, handleSignout,
+  classes,
+  user,
+  currency,
+  handleCurrencyChange,
+  handleSignout,
 }: Partial<ProfileComponentProps>) {
   return (
     <Card className={classes.root} elevation={5}>
       <CardHeader
-        avatar={
-          <Avatar src="" />
-                }
+        avatar={<Avatar src={user?.avatar ?? ''} />}
         action={(
           <>
             <CustomTooltip title="Edit" placement="bottom">
@@ -139,19 +157,14 @@ function ProfileCard({
                 <CloseRounded />
               </IconButton>
             </Link>
-
           </>
-                  )}
+        )}
         title={(
           <div className={classes.titleContainer}>
-            <Typography variant="h6">
-              {user?.username}
-            </Typography>
+            <Typography variant="h6">{user?.username}</Typography>
           </div>
-                  )}
-        subheader={
-          <Typography color="primary">{user?.email}</Typography>
-                }
+        )}
+        subheader={<Typography color="primary">{user?.email}</Typography>}
       />
       <CardContent className={classes.cardContent}>
         <CurrentExpenseSummary />
@@ -177,7 +190,11 @@ function ProfileCard({
   );
 }
 
-function SettingsCard({ classes, currency, handleCurrencyChange }: Partial<ProfileComponentProps>) {
+function SettingsCard({
+  classes,
+  currency,
+  handleCurrencyChange,
+}: Partial<ProfileComponentProps>) {
   return (
     <CardContent className={classes.cardContent}>
       <>
@@ -190,16 +207,11 @@ function SettingsCard({ classes, currency, handleCurrencyChange }: Partial<Profi
           select
           onChange={handleCurrencyChange}
         >
-          {
-                        currencies.map((curr) => (
-                          <MenuItem
-                            key={curr?.label}
-                            value={curr?.label}
-                          >
-                            {curr?.label}
-                          </MenuItem>
-                        ))
-                    }
+          {currencies.map((curr) => (
+            <MenuItem key={curr?.label} value={curr?.label}>
+              {curr?.label}
+            </MenuItem>
+          ))}
         </TextField>
       </>
     </CardContent>

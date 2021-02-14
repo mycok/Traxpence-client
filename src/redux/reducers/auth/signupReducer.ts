@@ -21,7 +21,7 @@ export const signup = createReducer(signupInitialState, {
     return { ...state, [id]: value, inputError: inputErr };
   },
   [signupSuccess.type]: (state, action: PayloadAction<boolean>) => (
-    { ...state, signinSuccessful: action.payload }
+    { ...state, signupSuccessful: action.payload }
   ),
   [reset.type]: (state, action: PayloadAction<SignupState>) => action.payload,
   [setInputError.type]: (state, action: PayloadAction<{[k: string]: boolean}>) => (

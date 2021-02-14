@@ -69,54 +69,54 @@ export const setInputError = createAction<{[k: string]: boolean}>('SET_INPUT_ERR
 export const setServerError = createAction<string>('SET_SERVER_ERROR');
 export const setLoading = createAction<boolean>('SET_LOADING');
 export const reset = createAction<SignupState | SigninState>('RESET');
-export const signinSuccess = createAction<SigninState>('SIGNIN_SUCCESSFUL');
-export const signupSuccess = createAction<SignupState>('SIGNUP_SUCCESSFUL');
+export const signinSuccess = createAction<boolean>('SIGNIN_SUCCESSFUL');
+export const signupSuccess = createAction<boolean>('SIGNUP_SUCCESSFUL');
 export const signOut = createAction<boolean>('SIGN_OUT');
 
 export function signupAction(signupData: SignupRequestData): AppThunk {
   return async (dispatch) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch(setLoading(true));
 
     await signup(signupData)
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
-            dispatch({ type: 'SET_LOADING', payload: false });
-            dispatch({ type: 'SIGNUP_SUCCESSFUL', payload: true });
-            dispatch({ type: 'RESET', payload: signupInitialState });
+            dispatch(setLoading(false));
+            dispatch(signupSuccess(true));
+            dispatch(reset(signupInitialState));
           });
         } else {
-          dispatch({ type: 'SET_LOADING', payload: false });
-          dispatch({ type: 'SET_SERVER_ERROR', payload: 'username or email already exists' });
+          dispatch(setLoading(false));
+          dispatch(setServerError('username or email already exists'));
         }
       })
       .catch((err) => {
-        dispatch({ type: 'SET_LOADING', payload: false });
-        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
+        dispatch(setLoading(false));
+        dispatch(setServerError(err.message));
       });
   };
 }
 
 export function signinAction(signinData: SigninRequestData): AppThunk {
   return async (dispatch) => {
-    dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch(setLoading(true));
 
     await signin(signinData)
       .then((resp) => {
         if (resp.success) {
           authenticate(resp, () => {
-            dispatch({ type: 'SET_LOADING', payload: false });
-            dispatch({ type: 'SIGNIN_SUCCESSFUL', payload: true });
-            dispatch({ type: 'RESET', payload: signinInitialState });
+            dispatch(setLoading(false));
+            dispatch(signinSuccess(true));
+            dispatch(reset(signinInitialState));
           });
         } else {
-          dispatch({ type: 'SET_LOADING', payload: false });
-          dispatch({ type: 'SET_SERVER_ERROR', payload: resp.message });
+          dispatch(setLoading(false));
+          dispatch(setServerError(resp.message));
         }
       })
       .catch((err) => {
-        dispatch({ type: 'SET_LOADING', payload: false });
-        dispatch({ type: 'SET_SERVER_ERROR', payload: err.message });
+        dispatch(setLoading(false));
+        dispatch(setServerError(err.message));
       });
   };
 }

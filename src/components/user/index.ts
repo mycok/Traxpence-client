@@ -2,6 +2,7 @@ export interface IUser {
     _id: string;
     username: string;
     email: string;
+    avatar: string;
     profile: {
         bio: string,
         summary: string,
