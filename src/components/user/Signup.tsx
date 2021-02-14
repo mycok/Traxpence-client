@@ -8,7 +8,7 @@ import Form from '../auth/AuthForm';
 import ServerMessage from '../../shared/ServerMessage';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
 import { useAppDispatch, RootState } from '../../redux/store';
-import { signupAction } from '../../redux/actions/auth';
+import { signupAction, onChange, setServerError } from '../../redux/actions/auth';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -74,7 +74,7 @@ function Signup({ elevation, history }: SignupProps) {
         break;
     }
 
-    dispatch({ type: 'ON_CHANGE', payload: { id, value, inputErr } });
+    dispatch(onChange({ id, value, inputErr }));
   }
 
   async function handleSignup(e: React.FormEvent) {
@@ -84,7 +84,7 @@ function Signup({ elevation, history }: SignupProps) {
   }
 
   function hideServerMessage() {
-    dispatch({ type: 'SET_SERVER_ERROR', payload: null });
+    dispatch(setServerError(''));
   }
 
   return (
