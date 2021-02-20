@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IExpense } from '../../../components/expenses/IExpense';
 import { list, remove } from '../../../api';
+import { fetchExpensesByDateRange } from '../../../api/expenses';
 import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
 
@@ -28,6 +29,33 @@ export function fetchExpenses(): AppThunk {
     try {
       dispatch(setLoading(true));
       data = await list('expenses', token);
+    } catch (error) {
+      // for generic server errors
+      dispatch(setLoading(false));
+      dispatch(setServerError(error.toString()));
+
+      return;
+    }
+
+    dispatch(setLoading(false));
+
+    if (data.success) {
+      dispatch(fetchExpensesSuccessful(data.expenses));
+    } else {
+      // in case of token based errors
+      localStorage.removeItem('authData');
+      dispatch(setAuthError(data.message));
+    }
+  };
+}
+
+export function fetchExpensesByDate(startDate: any, endDate: any): AppThunk {
+  return async (dispatch) => {
+    const { token } = isAuthenticated();
+    let data: any;
+    try {
+      dispatch(setLoading(true));
+      data = await fetchExpensesByDateRange(startDate, endDate, token);
     } catch (error) {
       // for generic server errors
       dispatch(setLoading(false));

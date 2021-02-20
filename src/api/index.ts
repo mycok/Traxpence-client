@@ -1,8 +1,8 @@
 import { config } from '../config';
 
-const { baseUrl } = config;
+export const { baseUrl } = config;
 
-const headers = {
+export const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
 };

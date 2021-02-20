@@ -20,7 +20,8 @@ type DateRangeSearchProps = {
     fromDate: Date,
     toDate: Date,
     selectFromDate(date: any, value?: any): void,
-    selectToDate(date: any, value?: any): void
+    selectToDate(date: any, value?: any): void,
+    dateRangeSearchHandler(): void
 }
 
 function DateRangeSearch({
@@ -28,6 +29,7 @@ function DateRangeSearch({
   toDate,
   selectFromDate,
   selectToDate,
+  dateRangeSearchHandler,
 }: DateRangeSearchProps) {
   const classes = useStyles();
 
@@ -39,7 +41,7 @@ function DateRangeSearch({
         selectFromDate={selectFromDate}
         selectToDate={selectToDate}
       />
-      <SearchButton />
+      <SearchButton dateRangeSearchHandler={dateRangeSearchHandler} />
     </div>
   );
 }
