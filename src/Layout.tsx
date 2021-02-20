@@ -3,8 +3,14 @@ import { BrowserRouter as Router, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
-  Grid, Drawer, Paper, List,
-  ListItem, ListItemIcon, Fab, Badge,
+  Grid,
+  Drawer,
+  Paper,
+  List,
+  ListItem,
+  ListItemIcon,
+  Fab,
+  Badge,
 } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Account from '@material-ui/icons/AccountCircleSharp';
@@ -86,25 +92,25 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 type RenderListProps = {
-  classes: any,
-  itemList: Array<any>,
-  selected?: string,
-  expenses: IExpense[],
-  selectionHandler: any
-}
+  classes: any;
+  itemList: Array<any>;
+  selected?: string;
+  expenses: IExpense[];
+  selectionHandler: any;
+};
 
 type AddButtonProps = {
-  classes: any
-}
+  classes: any;
+};
 
 const iconList = [
   {
-    name: 'Categories',
+    name: 'categories',
     to: '/exps-avg-by-category',
     icon: <Categories fontSize="large" />,
   },
   {
-    name: 'Expenses',
+    name: 'expenses',
     to: '/expenses',
     icon: (expenses: IExpense[]) => (
       <Badge
@@ -118,58 +124,55 @@ const iconList = [
     ),
   },
   {
-    name: 'ScatterPlot',
+    name: 'scatterPlot',
     to: '/scatter-graph-chart',
     icon: <ScatterPlot fontSize="large" />,
   },
   {
-    name: 'BarChart',
+    name: 'barChart',
     to: '/bar-graph-chart',
     icon: <BarChart fontSize="large" />,
   },
   {
-    name: 'PieChart',
+    name: 'pieChart',
     to: '/pie-graph-chart',
     icon: <PieChart fontSize="large" />,
   },
 ];
 
 function RenderList({
-  itemList, classes, selected, expenses, selectionHandler,
+  itemList,
+  classes,
+  selected,
+  expenses,
+  selectionHandler,
 }: RenderListProps) {
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
-      {
-        isAuthenticated() && (
-          <CustomTooltip
-            title="Profile / signout"
-            placement="right"
-          >
-            <Link to="/profile" className={classes.link}>
-              <ListItem
-                classes={{
-                  root: classes.root,
-                  selected: classes.selected,
-                }}
-                button
-                selected={selected === 'Profile'}
-                onClick={() => selectionHandler('Profile')}
+      {isAuthenticated() && (
+        <CustomTooltip title="profile / signout" placement="right">
+          <Link to="/profile" className={classes.link}>
+            <ListItem
+              classes={{
+                root: classes.root,
+                selected: classes.selected,
+              }}
+              button
+              selected={selected === 'profile'}
+              onClick={() => selectionHandler('profile')}
+            >
+              <ListItemIcon
+                style={{ color: selected === 'profile' ? 'orange' : 'white' }}
               >
-                <ListItemIcon style={{ color: selected === 'Profile' ? 'orange' : 'white' }}>
-                  <Account fontSize="large" />
-                </ListItemIcon>
-              </ListItem>
-            </Link>
-          </CustomTooltip>
-        )
-      }
-      {
-        itemList && itemList.map(({ name, to, icon }) => (
-          <CustomTooltip
-            key={name}
-            title={name}
-            placement="right"
-          >
+                <Account fontSize="large" />
+              </ListItemIcon>
+            </ListItem>
+          </Link>
+        </CustomTooltip>
+      )}
+      {itemList
+        && itemList.map(({ name, to, icon }) => (
+          <CustomTooltip key={name} title={name} placement="right">
             <Link key={name} to={to} className={classes.link}>
               <ListItem
                 classes={{
@@ -181,14 +184,15 @@ function RenderList({
                 selected={selected === name}
                 onClick={() => selectionHandler(name)}
               >
-                <ListItemIcon style={{ color: selected === name ? 'orange' : 'white' }}>
-                  {name === 'Expenses' ? icon(expenses) : icon}
+                <ListItemIcon
+                  style={{ color: selected === name ? 'orange' : 'white' }}
+                >
+                  {name === 'expenses' ? icon(expenses) : icon}
                 </ListItemIcon>
               </ListItem>
             </Link>
           </CustomTooltip>
-        ))
-      }
+        ))}
     </List>
   );
 }
@@ -213,39 +217,40 @@ function Layout() {
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
-  const { authError, expenses } = useSelector((state: RootState) => state.fetchOrDeleteExpenses);
+  const { authError, expenses } = useSelector(
+    (state: RootState) => state.fetchOrDeleteExpenses,
+  );
 
-  React.useEffect(() => {}, [signupSuccessful, signinSuccessful, didSignout, authError]);
+  React.useEffect(() => {}, [
+    signupSuccessful,
+    signinSuccessful,
+    didSignout,
+    authError,
+  ]);
 
   return (
     <Router>
       <Grid container>
         <CssBaseline />
-        {
-          isAuthenticated() && (
-            <Grid item xs={1}>
-              <Drawer
-                id="persistent-drawer"
-                variant="permanent"
-                className={classes.drawer}
-                classes={{ paper: classes.drawerPaper }}
-              >
-                <RenderList
-                  expenses={expenses}
-                  itemList={iconList}
-                  selected={selected}
-                  classes={classes}
-                  selectionHandler={setSelected}
-                />
-                {
-                isAuthenticated && (
-                  <AddButton classes={classes} />
-                )
-              }
-              </Drawer>
-            </Grid>
-          )
-        }
+        {isAuthenticated() && (
+          <Grid item xs={1}>
+            <Drawer
+              id="persistent-drawer"
+              variant="permanent"
+              className={classes.drawer}
+              classes={{ paper: classes.drawerPaper }}
+            >
+              <RenderList
+                expenses={expenses}
+                itemList={iconList}
+                selected={selected}
+                classes={classes}
+                selectionHandler={setSelected}
+              />
+              {isAuthenticated && <AddButton classes={classes} />}
+            </Drawer>
+          </Grid>
+        )}
         <Grid item xs={isAuthenticated() ? 11 : 12}>
           <Paper className={classes.paper}>
             <AppRouter />
