@@ -39,6 +39,10 @@ function AvgExpByCategory() {
   const [fromDate, selectFromDate] = React.useState(new Date());
   const [toDate, selectToDate] = React.useState(new Date());
 
+  function handleDateRangeSearch() {
+    console.log('date-range-search', fromDate, toDate);
+  }
+
   return (
     <div className={classes.root}>
       <DateRangeSearch
@@ -46,6 +50,7 @@ function AvgExpByCategory() {
         toDate={toDate}
         selectFromDate={selectFromDate}
         selectToDate={selectToDate}
+        dateRangeSearchHandler={handleDateRangeSearch}
       />
       <Paper elevation={0}>
         <svg viewBox="0 0 400 400">

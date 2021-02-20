@@ -16,7 +16,11 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-function SearchButton() {
+type SearchButtonProps = {
+  dateRangeSearchHandler(): void
+}
+
+function SearchButton({ dateRangeSearchHandler }: SearchButtonProps) {
   const classes = useStyles();
 
   return (
@@ -26,7 +30,7 @@ function SearchButton() {
           aria-label="search"
           className={classes.searchButton}
           size="small"
-          onClick={() => null}
+          onClick={dateRangeSearchHandler}
         >
           <SearchSharp fontSize="small" />
         </Fab>

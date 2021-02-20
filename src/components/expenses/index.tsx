@@ -7,7 +7,7 @@ import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import { useAppDispatch, RootState } from '../../redux/store';
-import { fetchExpenses, deleteExpense } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
+import { fetchExpenses, deleteExpense, fetchExpensesByDate } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 import { ExpensesLoader } from '../../shared/ContentLoader';
 import { IExpense } from './IExpense';
 
@@ -60,6 +60,10 @@ export default function () {
     dispatch(deleteExpense(expenseToDelete?._id as string, () => handleClose()));
   }
 
+  function handleDateRangeSearch() {
+    dispatch(fetchExpensesByDate(fromDate, toDate));
+  }
+
   if (isLoading) {
     return (
       <ExpensesLoader />
@@ -79,6 +83,7 @@ export default function () {
         toDate={toDate}
         selectFromDate={selectFromDate}
         selectToDate={selectToDate}
+        dateRangeSearchHandler={handleDateRangeSearch}
       />
       <div className={classes.root}>
         <ConfirmDialog
