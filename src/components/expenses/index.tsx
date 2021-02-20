@@ -26,6 +26,7 @@ const useStyles = makeStyles(() => createStyles({
     alignItems: 'center',
     flexDirection: 'column',
     height: '100vh',
+    justifyContent: 'center',
   },
 }));
 
