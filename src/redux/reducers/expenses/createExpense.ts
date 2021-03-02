@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { IExpense } from '../../../components/expenses/IExpense';
 import { create } from '../../../api';
-import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
 
 type OnchangePayloadType = {
@@ -32,11 +31,10 @@ const initialCreateExpenseState: NewExpenseState = {
 
 export function createExpense(expenseData: IExpense, cb: Function): AppThunk {
   return async (dispatch) => {
-    const { token } = isAuthenticated();
     let data: any;
     try {
       dispatch(setLoading(true));
-      data = await create('expenses', expenseData, token);
+      data = await create('expenses', expenseData);
     } catch (error) {
       dispatch(setLoading(false));
       dispatch(setServerError(error.toString()));

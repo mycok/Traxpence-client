@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { list } from '../../../api';
-import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
 
 export type Category = {
@@ -21,10 +20,9 @@ const initialCategoriesState: CategoriesState = {
 
 export function fetchCategories(): AppThunk {
   return async (dispatch) => {
-    const { token } = isAuthenticated();
     let data: any;
     try {
-      data = await list('categories', token);
+      data = await list('categories');
     } catch (error) {
       dispatch(setServerError(error.toString()));
 
