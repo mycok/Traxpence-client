@@ -7,7 +7,7 @@ import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
 import { useAppDispatch, RootState } from '../../redux/store';
-import { fetchExpenses, deleteExpense, fetchExpensesByDate } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
+import { fetchExpenses, deleteExpense } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 import { ExpensesLoader } from '../../shared/ContentLoader';
 import { IExpense } from './IExpense';
 
@@ -39,12 +39,19 @@ export default function () {
   const [toDate, selectToDate] = useState(new Date());
   const [expenseToDelete, setExpenseToDelete] = useState<IExpense | null>(null);
 
-  const { isLoading, isDeleting, expenses } = useSelector(
+  const {
+    isLoading,
+    isDeleting,
+    cursor,
+    count,
+    hasNextPage,
+    expenses,
+  } = useSelector(
     (state: RootState) => state.fetchOrDeleteExpenses,
   );
 
   useEffect(() => {
-    dispatch(fetchExpenses());
+    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
   }, [dispatch]);
 
   function handleOpen(expense: IExpense) {
@@ -61,10 +68,14 @@ export default function () {
   }
 
   function handleDateRangeSearch() {
-    dispatch(fetchExpensesByDate(fromDate, toDate));
+    dispatch(fetchExpenses({ startDate: fromDate, endDate: toDate }));
   }
 
-  if (isLoading) {
+  function handleShowMore() {
+    dispatch(fetchExpenses({ cursor }));
+  }
+
+  if (isLoading && count === 0) {
     return (
       <ExpensesLoader />
     );
@@ -93,8 +104,11 @@ export default function () {
           handleDelete={handleDelete}
         />
         <ExpenseList
+          isLoading={isLoading}
           expenses={expenses}
+          hasMore={hasNextPage}
           handleOpen={handleOpen}
+          handleShowMore={handleShowMore}
         />
       </div>
     </div>

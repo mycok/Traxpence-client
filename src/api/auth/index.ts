@@ -2,26 +2,37 @@ import { config } from '../../config';
 
 const { baseUrl } = config;
 
-async function signin(data: any): Promise<any> {
+const requestConfig = {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+};
+
+export type SignupRequestData = {
+  username: string,
+  email: string,
+  password: string,
+}
+
+export type SigninRequestData = {
+  email: string,
+  password: string,
+}
+
+async function signin(data: SigninRequestData): Promise<any> {
   const resp = await fetch(`${baseUrl}/auth/sign-in`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    ...requestConfig,
     body: JSON.stringify(data),
   });
 
   return resp.json();
 }
 
-async function signup(data: any): Promise<any> {
+async function signup(data: SignupRequestData): Promise<any> {
   const resp = await fetch(`${baseUrl}/users`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
+    ...requestConfig,
     body: JSON.stringify(data),
   });
 
@@ -50,5 +61,9 @@ function isAuthenticated() {
 }
 
 export {
-  signin, signup, signout, authenticate, isAuthenticated,
+  signin,
+  signup,
+  signout,
+  authenticate,
+  isAuthenticated,
 };

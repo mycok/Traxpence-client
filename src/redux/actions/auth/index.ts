@@ -1,6 +1,12 @@
 import { createAction } from '@reduxjs/toolkit';
 
-import { signup, signin, authenticate } from '../../../api/auth';
+import {
+  signup,
+  signin,
+  authenticate,
+  SigninRequestData,
+  SignupRequestData,
+} from '../../../api/auth';
 import { AppThunk } from '../../store';
 
 export type InputError = {
@@ -29,17 +35,6 @@ export type SigninState = {
     signinSuccessful: boolean,
     serverError: string,
 } & InputError
-
-type SignupRequestData = {
-    username: string,
-    email: string,
-    password: string,
-}
-
-type SigninRequestData = {
-    email: string,
-    password: string,
-}
 
 export const signinInitialState: SigninState = {
   email: '',
