@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, RouteChildrenProps } from 'react-router-dom';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 
@@ -38,10 +38,11 @@ const useStyles = makeStyles((theme) => createStyles({
 
 type SigninProps = {
     elevation?: number,
-    history: any
+    history: RouteChildrenProps['history']
+    location: any,
 }
 
-function Signin({ elevation, history }: SigninProps) {
+function Signin({ elevation, history, location }: SigninProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const {
@@ -52,9 +53,14 @@ function Signin({ elevation, history }: SigninProps) {
 
   useEffect(() => {
     if (signinSuccessful) {
-      history.push('/expenses');
+      if (location && location?.state) {
+        const { from } = location.state;
+        history.push(from);
+      } else {
+        history.push('/expenses');
+      }
     }
-  }, [signinSuccessful, history]);
+  }, [signinSuccessful, history, location]);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { id, value } } = event;

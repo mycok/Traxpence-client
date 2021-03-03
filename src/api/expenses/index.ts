@@ -1,8 +1,6 @@
 import { headers, baseUrl } from '..';
 import { isAuthenticated } from '../auth';
 
-const { token } = isAuthenticated();
-
 export type FetchExpensesParams = {
   startDate?: Date,
   endDate?: Date
@@ -12,6 +10,7 @@ export type FetchExpensesParams = {
 export async function listExpenses(
   { startDate, endDate, cursor }: FetchExpensesParams,
 ): Promise<any> {
+  const { token } = isAuthenticated();
   let endpoint = `${baseUrl}/expenses`;
 
   if (startDate && endDate) endpoint = `${baseUrl}/expenses?startDate=${startDate}&endDate=${endDate}`;
