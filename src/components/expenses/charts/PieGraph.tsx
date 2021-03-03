@@ -46,6 +46,7 @@ function AvgExpByCategory() {
   return (
     <div className={classes.root}>
       <DateRangeSearch
+        isBackButtonShown={false}
         isLoading={false}
         fromDate={fromDate}
         toDate={toDate}

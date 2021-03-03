@@ -19,19 +19,22 @@ const useStyles = makeStyles((theme) => createStyles({
   buttonProgress: {
     display: 'flex',
     justifyContent: 'center',
-    // position: 'absolute',
     color: green[500],
-    // marginLeft: 320,
     padding: 2,
   },
 }));
 
 type SearchButtonProps = {
   isLoading: boolean,
+  isBackButtonShown: boolean,
   dateRangeSearchHandler(): void
 }
 
-function SearchButton({ isLoading, dateRangeSearchHandler }: SearchButtonProps) {
+function SearchButton({
+  isLoading,
+  isBackButtonShown,
+  dateRangeSearchHandler,
+}: SearchButtonProps) {
   const classes = useStyles();
 
   return (
@@ -41,11 +44,11 @@ function SearchButton({ isLoading, dateRangeSearchHandler }: SearchButtonProps) 
           aria-label="search"
           className={classes.searchButton}
           size="small"
-          disabled={isLoading}
+          disabled={isLoading && isBackButtonShown}
           onClick={dateRangeSearchHandler}
         >
           {
-            isLoading ? (
+            isLoading && isBackButtonShown ? (
               <CircularLoader styleClass={classes.buttonProgress} />
             ) : (
               <SearchSharp fontSize="small" />

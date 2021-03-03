@@ -18,6 +18,7 @@ const useStyles = makeStyles(() => createStyles({
 
 type DateRangeSearchProps = {
     isLoading: boolean,
+    isBackButtonShown: boolean,
     fromDate: Date,
     toDate: Date,
     selectFromDate(date: any, value?: any): void,
@@ -27,6 +28,7 @@ type DateRangeSearchProps = {
 
 function DateRangeSearch({
   isLoading,
+  isBackButtonShown,
   fromDate,
   toDate,
   selectFromDate,
@@ -45,6 +47,7 @@ function DateRangeSearch({
       />
       <SearchButton
         isLoading={isLoading}
+        isBackButtonShown={isBackButtonShown}
         dateRangeSearchHandler={dateRangeSearchHandler}
       />
     </div>
