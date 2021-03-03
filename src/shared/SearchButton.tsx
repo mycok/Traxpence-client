@@ -3,8 +3,10 @@ import React from 'react';
 import { Fab } from '@material-ui/core';
 import SearchSharp from '@material-ui/icons/SearchSharp';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 
 import CustomTooltip from './CustomTooltip';
+import CircularLoader from './CircularLoader';
 
 const useStyles = makeStyles((theme) => createStyles({
   searchButton: {
@@ -14,13 +16,22 @@ const useStyles = makeStyles((theme) => createStyles({
       backgroundColor: theme.palette.secondary.dark,
     },
   },
+  buttonProgress: {
+    display: 'flex',
+    justifyContent: 'center',
+    // position: 'absolute',
+    color: green[500],
+    // marginLeft: 320,
+    padding: 2,
+  },
 }));
 
 type SearchButtonProps = {
+  isLoading: boolean,
   dateRangeSearchHandler(): void
 }
 
-function SearchButton({ dateRangeSearchHandler }: SearchButtonProps) {
+function SearchButton({ isLoading, dateRangeSearchHandler }: SearchButtonProps) {
   const classes = useStyles();
 
   return (
@@ -30,9 +41,16 @@ function SearchButton({ dateRangeSearchHandler }: SearchButtonProps) {
           aria-label="search"
           className={classes.searchButton}
           size="small"
+          disabled={isLoading}
           onClick={dateRangeSearchHandler}
         >
-          <SearchSharp fontSize="small" />
+          {
+            isLoading ? (
+              <CircularLoader styleClass={classes.buttonProgress} />
+            ) : (
+              <SearchSharp fontSize="small" />
+            )
+          }
         </Fab>
       </CustomTooltip>
     </div>

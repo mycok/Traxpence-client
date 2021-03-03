@@ -90,6 +90,7 @@ export default function () {
   return (
     <div className={classes.container}>
       <DateRangeSearch
+        isLoading={isLoading}
         fromDate={fromDate}
         toDate={toDate}
         selectFromDate={selectFromDate}

@@ -17,6 +17,7 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 type DateRangeSearchProps = {
+    isLoading: boolean,
     fromDate: Date,
     toDate: Date,
     selectFromDate(date: any, value?: any): void,
@@ -25,6 +26,7 @@ type DateRangeSearchProps = {
 }
 
 function DateRangeSearch({
+  isLoading,
   fromDate,
   toDate,
   selectFromDate,
@@ -41,7 +43,10 @@ function DateRangeSearch({
         selectFromDate={selectFromDate}
         selectToDate={selectToDate}
       />
-      <SearchButton dateRangeSearchHandler={dateRangeSearchHandler} />
+      <SearchButton
+        isLoading={isLoading}
+        dateRangeSearchHandler={dateRangeSearchHandler}
+      />
     </div>
   );
 }
