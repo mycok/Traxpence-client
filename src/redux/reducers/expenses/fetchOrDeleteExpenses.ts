@@ -14,6 +14,7 @@ type ExpensesState = {
     hasNextPage: boolean,
     cursor: Date | string | undefined,
     count: number,
+    isCursorActive: boolean,
 }
 
 type FetchExpensesResponse = {
@@ -33,12 +34,14 @@ const initialExpensesState: ExpensesState = {
   hasNextPage: false,
   cursor: '',
   count: 0,
+  isCursorActive: false,
 };
 
 export function fetchExpenses({ startDate, endDate, cursor }: FetchExpensesParams): AppThunk {
   return async (dispatch) => {
     let data: any;
     try {
+      if (cursor) dispatch(setIsCursorActive(true));
       dispatch(setLoading(true));
       data = await listExpenses({ startDate, endDate, cursor });
     } catch (error) {
@@ -92,6 +95,18 @@ export function deleteExpense(expenseId: string, cb: Function): AppThunk {
   };
 }
 
+function handleCursorBasedFetch(
+  state: ExpensesState,
+  action: PayloadAction<FetchExpensesResponse>,
+) {
+  if (state.isCursorActive) {
+    state.expenses = [...state.expenses, ...action.payload.expenses];
+    state.isCursorActive = false;
+  } else {
+    state.expenses = action.payload.expenses;
+  }
+}
+
 const expensesSlice = createSlice({
   name: 'fetchOrDeleteExpenses',
   initialState: initialExpensesState,
@@ -108,14 +123,17 @@ const expensesSlice = createSlice({
     setAuthError(state, action: PayloadAction<string | undefined>) {
       state.authError = action.payload;
     },
+    setIsCursorActive(state, action: PayloadAction<boolean>) {
+      state.isCursorActive = action.payload;
+    },
     fetchDateRangeExpensesSuccessful(state, action: PayloadAction<FetchExpensesResponse>) {
-      state.expenses = action.payload.expenses;
+      handleCursorBasedFetch(state, action);
       state.cursor = action.payload.cursor;
       state.hasNextPage = action.payload.hasNextPage;
       state.count = action.payload.count;
     },
     fetchExpensesSuccessful(state, action: PayloadAction<FetchExpensesResponse>) {
-      state.expenses = [...state.expenses, ...action.payload.expenses];
+      handleCursorBasedFetch(state, action);
       state.cursor = action.payload.cursor;
       state.hasNextPage = action.payload.hasNextPage;
       state.count = action.payload.count;
@@ -131,6 +149,7 @@ export const {
   setDeleting,
   setServerError,
   setAuthError,
+  setIsCursorActive,
   deleteExpenseSuccessful,
   fetchExpensesSuccessful,
   fetchDateRangeExpensesSuccessful,
