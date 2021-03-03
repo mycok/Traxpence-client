@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Fab } from '@material-ui/core';
 
 import ExpenseList from './ExpenseList';
 import DateRangeSearch from './shared/DateRangeSearch';
 import NoExpenses from './NoExpenses';
 import ConfirmDialog from '../../shared/ConfirmDialog';
+import { ExpensesLoader } from '../../shared/ContentLoader';
+import CustomTooltip from '../../shared/CustomTooltip';
+
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchExpenses, deleteExpense } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
-import { ExpensesLoader } from '../../shared/ContentLoader';
 import { IExpense } from './IExpense';
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   root: {
     paddingTop: 20,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    width: 700,
     height: '90vh',
   },
   container: {
@@ -28,6 +31,19 @@ const useStyles = makeStyles(() => createStyles({
     height: '100vh',
     justifyContent: 'center',
   },
+  dateContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    width: '100%',
+  },
+  backButton: {
+    color: theme.palette.common.black,
+    backgroundColor: theme.palette.secondary.main,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+  },
 }));
 
 export default function () {
@@ -35,6 +51,7 @@ export default function () {
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
+  const [isBackButtonShown, setShowBackButton] = useState(false);
   const [fromDate, selectFromDate] = useState(new Date());
   const [toDate, selectToDate] = useState(new Date());
   const [expenseToDelete, setExpenseToDelete] = useState<IExpense | null>(null);
@@ -68,11 +85,19 @@ export default function () {
   }
 
   function handleDateRangeSearch() {
+    setShowBackButton(true);
     dispatch(fetchExpenses({ startDate: fromDate, endDate: toDate }));
   }
 
   function handleShowMore() {
     dispatch(fetchExpenses({ cursor }));
+  }
+
+  function handleBackButton() {
+    selectFromDate(new Date());
+    selectToDate(new Date());
+    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
+    setShowBackButton(false);
   }
 
   if (isLoading && count === 0) {
@@ -89,14 +114,32 @@ export default function () {
 
   return (
     <div className={classes.container}>
-      <DateRangeSearch
-        isLoading={isLoading}
-        fromDate={fromDate}
-        toDate={toDate}
-        selectFromDate={selectFromDate}
-        selectToDate={selectToDate}
-        dateRangeSearchHandler={handleDateRangeSearch}
-      />
+      <div className={classes.dateContainer}>
+        {
+          isBackButtonShown && (
+            <CustomTooltip title="back to expenses">
+              <Fab
+                aria-label="search"
+                className={classes.backButton}
+                size="small"
+                disabled={isLoading}
+                onClick={handleBackButton}
+              >
+                <ArrowBackIcon />
+              </Fab>
+            </CustomTooltip>
+          )
+        }
+        <DateRangeSearch
+          isLoading={isLoading}
+          isBackButtonShown={isBackButtonShown}
+          fromDate={fromDate}
+          toDate={toDate}
+          selectFromDate={selectFromDate}
+          selectToDate={selectToDate}
+          dateRangeSearchHandler={handleDateRangeSearch}
+        />
+      </div>
       <div className={classes.root}>
         <ConfirmDialog
           open={open}
