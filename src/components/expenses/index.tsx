@@ -46,7 +46,11 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-export default function () {
+type ExpensesProps = {
+  location: any,
+}
+
+export default function ({ location }: ExpensesProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
@@ -68,8 +72,13 @@ export default function () {
   );
 
   useEffect(() => {
-    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
-  }, [dispatch]);
+    if (!location?.state) {
+      dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
+    }
+    if (location?.state?.isBackButtonShown) {
+      setShowBackButton(location?.state?.isBackButtonShown);
+    }
+  }, [dispatch, location]);
 
   function handleOpen(expense: IExpense) {
     setExpenseToDelete(expense);
@@ -151,6 +160,7 @@ export default function () {
           isLoading={isLoading}
           expenses={expenses}
           hasMore={hasNextPage}
+          isBackButtonShown={isBackButtonShown}
           handleOpen={handleOpen}
           handleShowMore={handleShowMore}
         />

@@ -22,7 +22,7 @@ function AppRouter() {
         <Route
           exact
           path="/"
-          render={(props) => (isAuthenticated() ? <Expenses /> : <Home {...props} />)}
+          render={(props) => (isAuthenticated() ? <Expenses {...props} /> : <Home {...props} />)}
         />
         <Route
           exact

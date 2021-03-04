@@ -83,6 +83,7 @@ type ExpenseFormComponentProps = {
   prefCurrency: string | null,
   categories: Category[],
   selectedDate: Date,
+  isBackButtonShown?: boolean,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
   handleDateSelection(date: any, value: any): void
@@ -100,6 +101,7 @@ function ExpenseForm({
   prefCurrency,
   categories,
   selectedDate,
+  isBackButtonShown,
   handleOnSubmit,
   handleOnChange,
   handleDateSelection,
@@ -223,7 +225,13 @@ function ExpenseForm({
             </Button>
             {isLoading && <CircularLoader styleClass={classes.buttonProgress} />}
           </>
-          <Link to="/expenses" className={classes.link}>
+          <Link
+            to={{
+              pathname: '/expenses',
+              state: { from: 'edit-expense', isBackButtonShown },
+            }}
+            className={classes.link}
+          >
             <Button
               id="cancel-button"
               variant="outlined"
