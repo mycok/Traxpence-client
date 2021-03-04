@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteChildrenProps } from 'react-router-dom';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
@@ -19,7 +20,7 @@ const useStyles = makeStyles(() => createStyles({
 }));
 
 type RouteProps = {
-  history: any,
+  history: RouteChildrenProps['history'],
 };
 
 function NewExpense({ history }: RouteProps) {

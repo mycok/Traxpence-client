@@ -50,6 +50,8 @@ function EditExpense({ history }: EditExpenseProps) {
     incurredOn,
   };
 
+  console.log('history-location-state', history?.location?.state?.isBackButtonShown);
+
   useEffect(() => {
     dispatch(fetchCategories());
   }, [dispatch]);
@@ -91,6 +93,7 @@ function EditExpense({ history }: EditExpenseProps) {
           prefCurrency={prefCurrency}
           categories={categories}
           selectedDate={selectedDate}
+          isBackButtonShown={history?.location?.state?.isBackButtonShown}
           handleOnSubmit={handleOnSubmit}
           handleOnChange={handleOnChange}
           handleDateSelection={handleDateSelection}

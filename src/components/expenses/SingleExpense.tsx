@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 type ExpenseComponentProps = {
   expense: IExpense,
+  isBackButtonShown: boolean,
   handleOpen(): void
 }
 
@@ -78,7 +79,7 @@ function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyP
   );
 }
 
-function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
+function SingleExpense({ expense, isBackButtonShown, handleOpen }: ExpenseComponentProps) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -88,7 +89,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
     dispatch(resetStateToSelectedExpenseValues(
       { ...expense, isLoading: false, serverError: null },
     ));
-    history.push('/edit-expense');
+    history.push('/edit-expense', { isBackButtonShown });
   }
 
   return (
