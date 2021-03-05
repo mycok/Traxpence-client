@@ -57,7 +57,7 @@ function Signin({ elevation, history, location }: SigninProps) {
         const { from } = location.state;
         history.push(from);
       } else {
-        history.push('/expenses');
+        history.push('/profile');
       }
     }
   }, [signinSuccessful, history, location]);
