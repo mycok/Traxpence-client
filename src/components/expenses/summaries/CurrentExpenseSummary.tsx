@@ -1,4 +1,5 @@
 import React from 'react';
+import NumberFormat from 'react-number-format';
 
 import { Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -60,7 +61,12 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-function CurrentExpenseSummary() {
+type CurrentExpenseSummaryProps = {
+  currency: string | null,
+  expensePreview: any
+}
+
+function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSummaryProps) {
   const classes = useStyles();
 
   return (
@@ -83,7 +89,12 @@ function CurrentExpenseSummary() {
             variant="h4"
             color="primary"
           >
-            $ 0.0
+            <NumberFormat
+              value={expensePreview?.month?.totalSpent ?? 0.0}
+              displayType="text"
+              thousandSeparator
+              prefix={`${currency} ` ?? '$ '}
+            />
             <Typography className={classes.summaryTotalText}>this month</Typography>
           </Typography>
         </div>
@@ -95,7 +106,13 @@ function CurrentExpenseSummary() {
               align="center"
               color="primary"
             >
-              $ 0.0
+              <NumberFormat
+                value={expensePreview?.today?.totalSpent ?? 0.0}
+                displayType="text"
+                thousandSeparator
+                isNumericString
+                prefix={`${currency} ` ?? '$ '}
+              />
               <Typography component="span" className={classes.text1}> today</Typography>
             </Typography>
           </div>
@@ -105,7 +122,12 @@ function CurrentExpenseSummary() {
               align="center"
               color="primary"
             >
-              $ 0.0
+              <NumberFormat
+                value={expensePreview?.yesterday?.totalSpent ?? 0.0}
+                displayType="text"
+                thousandSeparator
+                prefix={`${currency} ` ?? '$ '}
+              />
               <Typography component="span" className={classes.text1}> yesterday</Typography>
             </Typography>
           </div>

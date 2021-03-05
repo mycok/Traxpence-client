@@ -4,6 +4,7 @@ import {
   fetchOrDeleteExpensesReducer,
   createExpenseReducer,
   editExpenseReducer,
+  currentMonthExpenditurePreviewReducer,
 } from './expenses';
 import { fetchCategoriesReducer } from './category';
 
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   createExpense: createExpenseReducer,
   editExpense: editExpenseReducer,
   categories: fetchCategoriesReducer,
+  currentMonthExpPreview: currentMonthExpenditurePreviewReducer,
 });
 
 export default rootReducer;
