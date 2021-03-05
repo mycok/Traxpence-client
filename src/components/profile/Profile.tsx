@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import {
   Card,
   CardHeader,
@@ -18,9 +20,10 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, RootState } from '../../redux/store';
 import { signout } from '../../api/auth';
 import { signOut } from '../../redux/actions/auth';
+import { fetchCurrentMonthExpenditurePreview } from '../../redux/reducers/expenses/currentMonthPreview';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -60,14 +63,15 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type ProfileComponentProps = {
-  user: Partial<IUser>;
-  classes: any;
-  currency: string | null;
-  handleSignout(): void;
+type ProfileCardProps = {
+  user: Partial<IUser>,
+  classes: any,
+  currency: string | null,
+  expensePreview: any,
+  handleSignout(): void,
   handleCurrencyChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ): void;
+  ): void,
 };
 // TODO: consider using a currency component library
 const currencies = [
@@ -88,23 +92,36 @@ const currencies = [
     label: '¥',
   },
   {
-    value: 'SHS',
-    label: 'shs',
+    value: 'UGX',
+    label: 'UGX',
   },
 ];
 
 function Profile() {
   const classes = useStyles();
-
-  const [currency, setCurrency] = React.useState<string | null>(
-    localStorage.getItem('currency'),
-  );
-  const [userData] = React.useState(
-    JSON.parse(localStorage.getItem('authData') as string),
-  );
   const dispatch = useAppDispatch();
 
-  function handleCurrencyChange(event: React.ChangeEvent<HTMLInputElement>) {
+  const [currency, setCurrency] = useState<string | null>(
+    localStorage.getItem('currency'),
+  );
+  const [userData] = useState(
+    JSON.parse(localStorage.getItem('authData') as string),
+  );
+
+  const { data } = useSelector((state: RootState) => state.currentMonthExpPreview);
+
+  useEffect(() => {
+    dispatch(fetchCurrentMonthExpenditurePreview());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!currency) {
+      setCurrency(currencies[0].label);
+      localStorage.setItem('currency', currencies[0].label);
+    }
+  }, [currency]);
+
+  function handleCurrencyChange(event: ChangeEvent<HTMLInputElement>) {
     setCurrency(event.target.value);
     localStorage.setItem('currency', event.target.value);
   }
@@ -113,19 +130,13 @@ function Profile() {
     signout(() => dispatch(signOut(true)));
   }
 
-  React.useEffect(() => {
-    if (!currency) {
-      setCurrency(currencies[0].label);
-      localStorage.setItem('currency', currencies[0].label);
-    }
-  }, [currency]);
-
   return (
     <div className={classes.container}>
       <ProfileCard
         classes={classes}
         user={userData.user}
         currency={currency}
+        expensePreview={data}
         handleCurrencyChange={handleCurrencyChange}
         handleSignout={handleSignout}
       />
@@ -137,9 +148,10 @@ function ProfileCard({
   classes,
   user,
   currency,
+  expensePreview,
   handleCurrencyChange,
   handleSignout,
-}: Partial<ProfileComponentProps>) {
+}: ProfileCardProps) {
   return (
     <Card className={classes.root} elevation={5}>
       <CardHeader
@@ -167,7 +179,10 @@ function ProfileCard({
         subheader={<Typography color="primary">{user?.email}</Typography>}
       />
       <CardContent className={classes.cardContent}>
-        <CurrentExpenseSummary />
+        <CurrentExpenseSummary
+          currency={currency}
+          expensePreview={expensePreview}
+        />
       </CardContent>
       <SettingsCard
         classes={classes}
@@ -194,7 +209,7 @@ function SettingsCard({
   classes,
   currency,
   handleCurrencyChange,
-}: Partial<ProfileComponentProps>) {
+}: Partial<ProfileCardProps>) {
   return (
     <CardContent className={classes.cardContent}>
       <>
