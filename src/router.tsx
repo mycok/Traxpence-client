@@ -15,14 +15,18 @@ import AvgExpByCategory from './components/expenses/charts/PieGraph';
 import ProtectedRoute from './shared/ProtectedRoute';
 import { isAuthenticated } from './api/auth';
 
-function AppRouter() {
+type AppRouterProps = {
+  selectionHandler: React.Dispatch<React.SetStateAction<string>>
+}
+
+function AppRouter({ selectionHandler }: AppRouterProps) {
   return (
     <>
       <Switch>
         <Route
           exact
           path="/"
-          render={(props) => (isAuthenticated() ? <Profile /> : <Home {...props} />)}
+          render={(props) => (isAuthenticated() ? <Profile selectionHandler={selectionHandler} /> : <Home {...props} />)}
         />
         <Route
           exact
@@ -35,8 +39,8 @@ function AppRouter() {
           render={(props) => <Signin elevation={5} {...props} />}
         />
         <ProtectedRoute exact path="/new-expense" component={NewExpense} />
-        <ProtectedRoute exact path="/expenses" component={Expenses} />
-        <ProtectedRoute exact path="/profile" component={Profile} />
+        <ProtectedRoute exact path="/expenses" selectionHandler={selectionHandler} component={Expenses} />
+        <ProtectedRoute exact path="/profile" selectionHandler={selectionHandler} component={Profile} />
         <ProtectedRoute exact path="/edit-expense" component={EditExpense} />
         <ProtectedRoute exact path="/exps-avg-by-category" component={ExpAvgByCategory} />
         <ProtectedRoute exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />

@@ -96,7 +96,7 @@ type RenderListProps = {
   itemList: Array<any>;
   selected?: string;
   expenses: IExpense[];
-  selectionHandler: any;
+  selectionHandler: React.Dispatch<React.SetStateAction<string>>;
 };
 
 type AddButtonProps = {
@@ -247,13 +247,15 @@ function Layout() {
                 classes={classes}
                 selectionHandler={setSelected}
               />
-              {isAuthenticated && <AddButton classes={classes} />}
+              <AddButton classes={classes} />
             </Drawer>
           </Grid>
         )}
         <Grid item xs={isAuthenticated() ? 11 : 12}>
           <Paper className={classes.paper}>
-            <AppRouter />
+            <AppRouter
+              selectionHandler={setSelected}
+            />
           </Paper>
         </Grid>
       </Grid>
