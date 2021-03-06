@@ -92,6 +92,7 @@ function NewExpense({ history }: RouteProps) {
           isLoading={isLoading}
           prefCurrency={prefCurrency}
           categories={categories}
+          path="new-expense"
           selectedDate={selectedDate}
           handleOnSubmit={handleOnSubmit}
           handleOnChange={handleOnChange}

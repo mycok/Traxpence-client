@@ -54,12 +54,10 @@ const useStyles = makeStyles((theme) => createStyles({
 
 type ExpenseComponentProps = {
   expense: IExpense,
-  isBackButtonShown: boolean,
   handleOpen(): void
 }
 
 type CustomFieldTypographyProps = {
-  field: string,
   value: string,
   classes: any,
 }
@@ -68,10 +66,9 @@ function capitalizeString(txt: string) {
   return txt.charAt(0).toUpperCase() + txt.slice(1);
 }
 
-function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyProps) {
+function CustomFieldTypography({ value, classes }: CustomFieldTypographyProps) {
   return (
     <div className={classes.customFieldTypographyContainer}>
-      {/* <Typography variant="subtitle1">{`${field}:`}</Typography> */}
       <Typography variant="subtitle1" className={classes.typographyValues}>
         {capitalizeString(value)}
       </Typography>
@@ -79,7 +76,7 @@ function CustomFieldTypography({ field, value, classes }: CustomFieldTypographyP
   );
 }
 
-function SingleExpense({ expense, isBackButtonShown, handleOpen }: ExpenseComponentProps) {
+function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -89,7 +86,7 @@ function SingleExpense({ expense, isBackButtonShown, handleOpen }: ExpenseCompon
     dispatch(resetStateToSelectedExpenseValues(
       { ...expense, isLoading: false, serverError: null },
     ));
-    history.push('/edit-expense', { isBackButtonShown });
+    history.push('/edit-expense');
   }
 
   return (
@@ -103,7 +100,6 @@ function SingleExpense({ expense, isBackButtonShown, handleOpen }: ExpenseCompon
             <div className={classes.titleContainer}>
               <>
                 <CustomFieldTypography
-                  field="Title"
                   value={expense?.title}
                   classes={classes}
                 />

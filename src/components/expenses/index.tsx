@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Fab } from '@material-ui/core';
@@ -46,11 +47,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-type ExpensesProps = {
-  location: any,
-}
-
-export default function ({ location }: ExpensesProps) {
+export default function ({ location }: RouteComponentProps<'location', {}, { from: string }>) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
@@ -74,10 +71,11 @@ export default function ({ location }: ExpensesProps) {
   useEffect(() => {
     if (!location?.state) {
       dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
+    } else if (location?.state?.from) {
+      setShowBackButton(true);
     }
-    if (location?.state?.isBackButtonShown) {
-      setShowBackButton(location?.state?.isBackButtonShown);
-    }
+
+    return () => setShowBackButton(false);
   }, [dispatch, location]);
 
   function handleOpen(expense: IExpense) {
@@ -109,7 +107,7 @@ export default function ({ location }: ExpensesProps) {
     setShowBackButton(false);
   }
 
-  if (isLoading && count === 0) {
+  if ((isLoading && count === 0) || (isLoading && !isBackButtonShown && !hasNextPage)) {
     return (
       <ExpensesLoader />
     );
@@ -131,7 +129,7 @@ export default function ({ location }: ExpensesProps) {
                 aria-label="search"
                 className={classes.backButton}
                 size="small"
-                disabled={isLoading}
+                // disabled={isLoading}
                 onClick={handleBackButton}
               >
                 <ArrowBackIcon />
@@ -160,7 +158,6 @@ export default function ({ location }: ExpensesProps) {
           isLoading={isLoading}
           expenses={expenses}
           hasMore={hasNextPage}
-          isBackButtonShown={isBackButtonShown}
           handleOpen={handleOpen}
           handleShowMore={handleShowMore}
         />
