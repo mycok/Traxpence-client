@@ -23,7 +23,7 @@ import CustomTooltip from '../../shared/CustomTooltip';
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signout } from '../../api/auth';
 import { signOut } from '../../redux/actions/auth';
-import { fetchCurrentMonthExpenditurePreview } from '../../redux/reducers/expenses/currentMonthPreview';
+import { fetchCurrentMonthExpenditurePreview, ExpensePreview } from '../../redux/reducers/expenses/currentMonthPreview';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -63,16 +63,17 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type ProfileCardProps = {
-  user: Partial<IUser>,
-  classes: any,
-  currency: string | null,
-  expensePreview: any,
-  handleSignout(): void,
+interface ProfileCardProps {
+  user: Partial<IUser>
+  classes: any
+  currency: string | null
+  expensePreview: ExpensePreview,
+  selectionHandler: React.Dispatch<React.SetStateAction<string>>
+  handleSignout(): void
   handleCurrencyChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void,
-};
+}
 // TODO: consider using a currency component library
 const currencies = [
   {
@@ -97,7 +98,7 @@ const currencies = [
   },
 ];
 
-function Profile() {
+function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'>) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
@@ -109,6 +110,10 @@ function Profile() {
   );
 
   const { data } = useSelector((state: RootState) => state.currentMonthExpPreview);
+
+  useEffect(() => {
+    selectionHandler('profile');
+  }, [selectionHandler]);
 
   useEffect(() => {
     dispatch(fetchCurrentMonthExpenditurePreview());
@@ -151,7 +156,7 @@ function ProfileCard({
   expensePreview,
   handleCurrencyChange,
   handleSignout,
-}: ProfileCardProps) {
+}: Omit<ProfileCardProps, 'selectionHandler'>) {
   return (
     <Card className={classes.root} elevation={5}>
       <CardHeader

@@ -47,7 +47,11 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-export default function ({ location }: RouteComponentProps<'location', {}, { from: string }>) {
+interface ExpenseProps extends RouteComponentProps<'location', {}, { from: string }> {
+  selectionHandler: React.Dispatch<React.SetStateAction<string>>
+}
+
+export default function ({ location, selectionHandler }: ExpenseProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
@@ -64,19 +68,26 @@ export default function ({ location }: RouteComponentProps<'location', {}, { fro
     count,
     hasNextPage,
     expenses,
+    didFinishDateRangeSearch,
   } = useSelector(
     (state: RootState) => state.fetchOrDeleteExpenses,
   );
 
   useEffect(() => {
+    selectionHandler('expenses');
+  }, [selectionHandler]);
+
+  useEffect(() => {
     if (!location?.state) {
       dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
-    } else if (location?.state?.from) {
+    } else if (location?.state?.from && didFinishDateRangeSearch) {
       setShowBackButton(true);
     }
 
-    return () => setShowBackButton(false);
-  }, [dispatch, location]);
+    return () => {
+      setShowBackButton(false);
+    };
+  }, [dispatch, location, didFinishDateRangeSearch]);
 
   function handleOpen(expense: IExpense) {
     setExpenseToDelete(expense);
@@ -129,7 +140,7 @@ export default function ({ location }: RouteComponentProps<'location', {}, { fro
                 aria-label="search"
                 className={classes.backButton}
                 size="small"
-                // disabled={isLoading}
+                disabled={isLoading}
                 onClick={handleBackButton}
               >
                 <ArrowBackIcon />

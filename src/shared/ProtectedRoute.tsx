@@ -5,7 +5,9 @@ import { isAuthenticated } from '../api/auth';
 type ProtectedRouteProps = {
   component: any,
   exact: boolean,
-  path: string
+  path: string,
+  selectionHandler?: Function,
+  otherProps?: any,
 
 }
 
@@ -13,6 +15,7 @@ function ProtectedRoute({
   component: Component,
   exact,
   path,
+  selectionHandler,
   ...otherCompProps
 }: ProtectedRouteProps) {
   return (
@@ -20,7 +23,7 @@ function ProtectedRoute({
       exact
       path={path}
       render={(props: RouteProps) => (isAuthenticated() ? (
-        <Component {...props} {...otherCompProps} />
+        <Component selectionHandler={selectionHandler} {...props} {...otherCompProps} />
       ) : (
         <Redirect
           to={{

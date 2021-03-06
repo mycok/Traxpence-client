@@ -15,6 +15,7 @@ type ExpensesState = {
     cursor: Date | string | undefined,
     count: number,
     isCursorActive: boolean,
+    didFinishDateRangeSearch: boolean,
 }
 
 type FetchExpensesResponse = {
@@ -35,6 +36,7 @@ const initialExpensesState: ExpensesState = {
   cursor: '',
   count: 0,
   isCursorActive: false,
+  didFinishDateRangeSearch: false,
 };
 
 export function fetchExpenses({ startDate, endDate, cursor }: FetchExpensesParams): AppThunk {
@@ -131,12 +133,14 @@ const expensesSlice = createSlice({
       state.cursor = action.payload.cursor;
       state.hasNextPage = action.payload.hasNextPage;
       state.count = action.payload.count;
+      state.didFinishDateRangeSearch = true;
     },
     fetchExpensesSuccessful(state, action: PayloadAction<FetchExpensesResponse>) {
       handleCursorBasedFetch(state, action);
       state.cursor = action.payload.cursor;
       state.hasNextPage = action.payload.hasNextPage;
       state.count = action.payload.count;
+      state.didFinishDateRangeSearch = false;
     },
     deleteExpenseSuccessful(state, action: PayloadAction<string>) {
       state.expenses = state.expenses.filter((exp: IExpense) => exp._id !== action.payload);

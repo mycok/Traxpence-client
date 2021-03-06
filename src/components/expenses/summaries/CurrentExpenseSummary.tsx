@@ -4,6 +4,7 @@ import NumberFormat from 'react-number-format';
 import { Typography } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
+import { ExpensePreview } from '../../../redux/reducers/expenses/currentMonthPreview';
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -63,7 +64,7 @@ const useStyles = makeStyles(() => createStyles({
 
 type CurrentExpenseSummaryProps = {
   currency: string | null,
-  expensePreview: any
+  expensePreview: ExpensePreview
 }
 
 function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSummaryProps) {
