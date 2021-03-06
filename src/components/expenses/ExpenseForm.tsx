@@ -83,7 +83,7 @@ type ExpenseFormComponentProps = {
   prefCurrency: string | null,
   categories: Category[],
   selectedDate: Date,
-  isBackButtonShown?: boolean,
+  path?: string,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
   handleDateSelection(date: any, value: any): void
@@ -101,7 +101,7 @@ function ExpenseForm({
   prefCurrency,
   categories,
   selectedDate,
-  isBackButtonShown,
+  path,
   handleOnSubmit,
   handleOnChange,
   handleDateSelection,
@@ -228,7 +228,7 @@ function ExpenseForm({
           <Link
             to={{
               pathname: '/expenses',
-              state: { from: 'edit-expense', isBackButtonShown },
+              state: { from: path },
             }}
             className={classes.link}
           >

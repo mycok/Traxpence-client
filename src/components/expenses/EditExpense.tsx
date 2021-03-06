@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { RouteComponentProps } from 'react-router-dom';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
@@ -18,11 +19,7 @@ const useStyles = makeStyles(() => createStyles({
   },
 }));
 
-type EditExpenseProps = {
-  history: any
-}
-
-function EditExpense({ history }: EditExpenseProps) {
+function EditExpense({ history }: RouteComponentProps) {
   const classes = useStyles();
   const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
@@ -49,8 +46,6 @@ function EditExpense({ history }: EditExpenseProps) {
     notes,
     incurredOn,
   };
-
-  console.log('history-location-state', history?.location?.state?.isBackButtonShown);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -93,7 +88,7 @@ function EditExpense({ history }: EditExpenseProps) {
           prefCurrency={prefCurrency}
           categories={categories}
           selectedDate={selectedDate}
-          isBackButtonShown={history?.location?.state?.isBackButtonShown}
+          path="edit-expense"
           handleOnSubmit={handleOnSubmit}
           handleOnChange={handleOnChange}
           handleDateSelection={handleDateSelection}

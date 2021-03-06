@@ -32,7 +32,6 @@ type ExpenseListProps = {
   isLoading: boolean,
   expenses: IExpense[],
   hasMore: boolean,
-  isBackButtonShown: boolean,
   handleOpen(exp: IExpense): void,
   handleShowMore(): void,
 };
@@ -41,7 +40,6 @@ function ExpenseList({
   isLoading,
   expenses,
   hasMore,
-  isBackButtonShown,
   handleOpen,
   handleShowMore,
 }: ExpenseListProps) {
@@ -53,7 +51,6 @@ function ExpenseList({
         <SingleExpense
           key={exp?._id}
           expense={exp}
-          isBackButtonShown={isBackButtonShown}
           handleOpen={() => handleOpen(exp)}
         />
       ))}
