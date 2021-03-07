@@ -112,11 +112,11 @@ const iconList = [
   {
     name: 'expenses',
     to: '/expenses',
-    icon: (expenses: IExpense[]) => (
+    icon: (expenses: IExpense[], selected: string) => (
       <Badge
         color="primary"
         badgeContent={expenses.length}
-        invisible={expenses.length === 0}
+        invisible={expenses.length === 0 || selected !== 'expenses'}
         max={99}
       >
         <AccBalanceWallet fontSize="large" />
@@ -187,7 +187,7 @@ function RenderList({
                 <ListItemIcon
                   style={{ color: selected === name ? 'orange' : 'white' }}
                 >
-                  {name === 'expenses' ? icon(expenses) : icon}
+                  {name === 'expenses' ? icon(expenses, selected) : icon}
                 </ListItemIcon>
               </ListItem>
             </Link>

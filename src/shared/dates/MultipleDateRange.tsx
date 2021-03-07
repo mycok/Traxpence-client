@@ -19,8 +19,8 @@ const useStyles = makeStyles(() => createStyles({
 type MultipleDateRangeProps = {
     fromDate: Date,
     toDate: Date,
-    selectFromDate(date: any, value?: any): void,
-    selectToDate(date: any, value?: any): void
+    selectFromDate(date: any, value?: string | null): void,
+    selectToDate(date: any, value?: string | null): void
 }
 // TODO: - add date limits to ensure that fromDate is always greater than the toDate
 function MultipleDateRange({

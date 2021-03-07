@@ -78,7 +78,7 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   }, [selectionHandler]);
 
   useEffect(() => {
-    if (!location?.state) {
+    if (!location?.state && !didFinishDateRangeSearch) {
       dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
     } else if (location?.state?.from && didFinishDateRangeSearch) {
       setShowBackButton(true);

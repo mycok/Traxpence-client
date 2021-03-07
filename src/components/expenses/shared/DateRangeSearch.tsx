@@ -21,8 +21,8 @@ type DateRangeSearchProps = {
     isBackButtonShown: boolean,
     fromDate: Date,
     toDate: Date,
-    selectFromDate(date: any, value?: any): void,
-    selectToDate(date: any, value?: any): void,
+    selectFromDate(date: any, value?: string | null): void,
+    selectToDate(date: any, value?: string | null): void,
     dateRangeSearchHandler(): void
 }
 
