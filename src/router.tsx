@@ -26,12 +26,14 @@ function AppRouter({ selectionHandler }: AppRouterProps) {
         <Route
           exact
           path="/"
-          render={(props) => (isAuthenticated() ? <Profile selectionHandler={selectionHandler} /> : <Home {...props} />)}
+          render={(props) => (isAuthenticated()
+            ? <Profile selectionHandler={selectionHandler} />
+            : <Home {...props} />)}
         />
         <Route
-          exact
-          path="/signup"
-          render={(props) => <Signup elevation={5} {...props} />}
+            exact
+            path="/signup"
+            render={(props) => <Signup elevation={5} {...props} />}
         />
         <Route
           exact

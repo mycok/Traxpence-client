@@ -86,7 +86,7 @@ type ExpenseFormComponentProps = {
   path?: string,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
-  handleDateSelection(date: any, value: any): void
+  handleDateSelection(date: any, value?: string | null): void
 }
 
 type NumberFormatInputProps = {
