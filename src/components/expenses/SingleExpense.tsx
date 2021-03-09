@@ -84,7 +84,13 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
 
   function handleEditButtonClick() {
     dispatch(resetStateToSelectedExpenseValues(
-      { ...expense, isLoading: false, serverError: null },
+      {
+        expenseToEdit: { ...expense },
+        editedExpense: undefined,
+        didFinishEditingExpense: false,
+        isLoading: false,
+        serverError: undefined,
+      },
     ));
     history.push('/edit-expense');
   }
