@@ -9,6 +9,7 @@ import ExpenseForm from './ExpenseForm';
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
 import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
+import { setDidFinishDateRangeSearch } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -40,6 +41,9 @@ function NewExpense({ history }: RouteProps) {
   );
   const { categories } = useSelector(
     (state: RootState) => state.categories,
+  );
+  const { didFinishDateRangeSearch } = useSelector(
+    (state: RootState) => state.fetchOrDeleteExpenses,
   );
 
   const expenseFormState = {
@@ -79,6 +83,8 @@ function NewExpense({ history }: RouteProps) {
       amount: Number(amount),
       incurredOn: selectedDate,
     };
+
+    if (didFinishDateRangeSearch) dispatch(setDidFinishDateRangeSearch(false));
     dispatch(createExpense(newExpense, () => history.push('/expenses')));
   }
 
