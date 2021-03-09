@@ -9,6 +9,7 @@ import { emailRegex, passwordRegex } from '../../utils/authValidation';
 import ServerMessage from '../../shared/ServerMessage';
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signinAction, onChange, setServerError } from '../../redux/actions/auth';
+import { setAuthError } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -45,6 +46,7 @@ type SigninProps = {
 function Signin({ elevation, history, location }: SigninProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const { authError } = useSelector((state: RootState) => state.fetchOrDeleteExpenses);
   const {
     email, password, isLoading, inputError, serverError, signinSuccessful,
   } = useSelector(
@@ -83,6 +85,9 @@ function Signin({ elevation, history, location }: SigninProps) {
   async function handleSignin(e: React.FormEvent) {
     e.preventDefault();
 
+    if (authError) {
+      dispatch(setAuthError(undefined));
+    }
     dispatch(signinAction({ email, password }));
   }
 
