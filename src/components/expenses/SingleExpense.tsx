@@ -1,4 +1,5 @@
 import React from 'react';
+import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 
 import {
@@ -120,7 +121,16 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
           )}
           subheader={(
             <>
-              <Typography color="primary">{`${currency} ${expense?.amount.toString()}`}</Typography>
+              <Typography
+                color="primary"
+              >
+                <NumberFormat
+                  value={expense?.amount ?? 0.0}
+                  displayType="text"
+                  thousandSeparator
+                  prefix={`${currency} ` ?? '$ '}
+                />
+              </Typography>
               <Typography className={classes.incurredOn} variant="caption">
                 {format(new Date(expense.incurredOn), 'dd/MM/yyyy')}
               </Typography>
