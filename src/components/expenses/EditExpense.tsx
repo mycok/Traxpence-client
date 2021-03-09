@@ -6,9 +6,11 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import ExpenseForm from './ExpenseForm';
+import ServerMessage from '../../shared/ServerMessage';
+
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
-import { onValueChange, editExpense } from '../../redux/reducers/expenses/editExpense';
+import { onValueChange, editExpense, setServerError } from '../../redux/reducers/expenses/editExpense';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -21,31 +23,17 @@ const useStyles = makeStyles(() => createStyles({
 
 function EditExpense({ history }: RouteComponentProps) {
   const classes = useStyles();
-  const [selectedDate, selectDate] = useState<Date>(new Date());
-  const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
   const dispatch = useAppDispatch();
+
   const { categories } = useSelector(
     (state: RootState) => state.categories,
   );
-  const {
-    _id,
-    title,
-    amount,
-    category,
-    notes,
-    incurredOn,
-    isLoading,
-  } = useSelector(
+  const { expenseToEdit, isLoading, serverError } = useSelector(
     (state: RootState) => state.editExpense,
   );
 
-  const expenseFormState = {
-    title,
-    amount,
-    category,
-    notes,
-    incurredOn,
-  };
+  const [selectedDate, selectDate] = useState<Date>(expenseToEdit.incurredOn);
+  const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -66,14 +54,27 @@ function EditExpense({ history }: RouteComponentProps) {
     selectDate(date);
   }
 
+  function hideServerMessage() {
+    dispatch(setServerError(undefined));
+  }
+
   function handleOnSubmit(event: React.FormEvent<HTMLFormElement>) {
     // TODO: add field validation
     event.preventDefault();
 
+    const {
+      _id,
+      title,
+      amount,
+      category,
+      notes,
+    } = expenseToEdit;
+
     const editedExpense = {
-      ...expenseFormState,
-      category: { _id: category?._id },
+      title,
       amount: Number(amount),
+      category: { _id: category?._id },
+      notes,
       incurredOn: selectedDate,
     };
     dispatch(editExpense(_id as string, editedExpense, () => history.push('/expenses')));
@@ -83,7 +84,7 @@ function EditExpense({ history }: RouteComponentProps) {
     <div className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
-          state={expenseFormState}
+          state={expenseToEdit}
           isLoading={isLoading}
           prefCurrency={prefCurrency}
           categories={categories}
@@ -94,6 +95,11 @@ function EditExpense({ history }: RouteComponentProps) {
           handleDateSelection={handleDateSelection}
         />
       </Paper>
+      <ServerMessage
+        open={!!serverError}
+        message={serverError as string}
+        onClose={hideServerMessage}
+      />
     </div>
   );
 }

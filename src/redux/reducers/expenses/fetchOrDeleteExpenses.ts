@@ -128,6 +128,20 @@ const expensesSlice = createSlice({
     setIsCursorActive(state, action: PayloadAction<boolean>) {
       state.isCursorActive = action.payload;
     },
+    setDidFinishDateRangeSearch(state, action: PayloadAction<boolean>) {
+      state.didFinishDateRangeSearch = action.payload;
+    },
+    setEditedExpenseState(state, action: PayloadAction<IExpense>) {
+      const newExpState = [...state.expenses].map((exp: IExpense) => {
+        if (exp._id === action.payload._id) {
+          exp = { ...action.payload };
+        }
+
+        return exp;
+      });
+
+      state.expenses = newExpState as IExpense[];
+    },
     fetchDateRangeExpensesSuccessful(state, action: PayloadAction<FetchExpensesResponse>) {
       handleCursorBasedFetch(state, action);
       state.cursor = action.payload.cursor;
@@ -154,6 +168,8 @@ export const {
   setServerError,
   setAuthError,
   setIsCursorActive,
+  setEditedExpenseState,
+  setDidFinishDateRangeSearch,
   deleteExpenseSuccessful,
   fetchExpensesSuccessful,
   fetchDateRangeExpensesSuccessful,

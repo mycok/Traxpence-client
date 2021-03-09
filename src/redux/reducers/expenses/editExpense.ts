@@ -10,11 +10,20 @@ type OnchangePayloadType = {
 }
 
 type EditExpenseState = {
+    expenseToEdit: IExpense,
+    didFinishEditingExpense: boolean,
     isLoading: boolean,
-    serverError: string | null,
-} & IExpense
+    serverError: string | undefined,
+    editedExpense: IExpense | undefined,
+}
 
-const initialEditExpenseState: EditExpenseState = {
+type EditExpenseResponse = {
+  success: boolean,
+  expense: IExpense,
+  message?: string,
+}
+
+const initialExpenseState = {
   _id: '',
   title: '',
   amount: 0,
@@ -24,13 +33,19 @@ const initialEditExpenseState: EditExpenseState = {
   },
   notes: '',
   incurredOn: Date.now(),
+};
+
+const initialEditExpenseState: EditExpenseState = {
+  expenseToEdit: initialExpenseState,
+  didFinishEditingExpense: false,
   isLoading: false,
-  serverError: null,
+  serverError: undefined,
+  editedExpense: undefined,
 };
 
 export function editExpense(expenseId: string, expenseData: IExpense, cb: Function): AppThunk {
   return async (dispatch) => {
-    let data: any;
+    let data: EditExpenseResponse;
     try {
       dispatch(setLoading(true));
       data = await update('expenses', expenseId, expenseData);
@@ -43,10 +58,14 @@ export function editExpense(expenseId: string, expenseData: IExpense, cb: Functi
 
     dispatch(setLoading(false));
     if (data.success) {
-      dispatch(reset(initialEditExpenseState));
+      dispatch(editExpenseSuccessful(data.expense));
+      dispatch(reset(initialExpenseState));
       cb();
     } else {
-      // in case of bad request errors
+      /**
+       * in case of bad request errors
+       * such errors are better displayed with a toast for easy cancellation
+       * */
       dispatch(setServerError(data.message));
     }
   };
@@ -58,19 +77,26 @@ const editExpenseSlice = createSlice({
   reducers: {
     onValueChange(state, action: PayloadAction<OnchangePayloadType>) {
       const { name, value } = action.payload;
-      state[name] = value;
+      state.expenseToEdit[name] = value;
     },
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setServerError(state, action: PayloadAction<string | null>) {
+    setServerError(state, action: PayloadAction<string | undefined>) {
       state.serverError = action.payload;
+    },
+    setDidFinishEditingExpense(state, action: PayloadAction<boolean>) {
+      state.didFinishEditingExpense = action.payload;
+    },
+    editExpenseSuccessful(state, action: PayloadAction<IExpense>) {
+      state.didFinishEditingExpense = true;
+      state.editedExpense = action.payload;
     },
     resetStateToSelectedExpenseValues(state, action: PayloadAction<EditExpenseState>) {
       return action.payload;
     },
-    reset(state, action: PayloadAction<EditExpenseState>) {
-      return action.payload;
+    reset(state, action: PayloadAction<IExpense>) {
+      state.expenseToEdit = action.payload;
     },
   },
 });
@@ -79,6 +105,8 @@ export const {
   onValueChange,
   setLoading,
   setServerError,
+  setDidFinishEditingExpense,
+  editExpenseSuccessful,
   reset,
   resetStateToSelectedExpenseValues,
 } = editExpenseSlice.actions;

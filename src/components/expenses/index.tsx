@@ -13,8 +13,16 @@ import { ExpensesLoader } from '../../shared/ContentLoader';
 import CustomTooltip from '../../shared/CustomTooltip';
 
 import { useAppDispatch, RootState } from '../../redux/store';
-import { fetchExpenses, deleteExpense } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
+import {
+  fetchExpenses,
+  deleteExpense,
+  setEditedExpenseState,
+  setDidFinishDateRangeSearch,
+} from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
+import { setDidFinishEditingExpense } from '../../redux/reducers/expenses/editExpense';
+
 import { IExpense } from './IExpense';
+import { Category } from './ExpenseForm';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -62,6 +70,13 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   const [expenseToDelete, setExpenseToDelete] = useState<IExpense | null>(null);
 
   const {
+    didFinishEditingExpense,
+    editedExpense,
+  } = useSelector((state: RootState) => state.editExpense);
+
+  const { categories } = useSelector((state: RootState) => state.categories);
+
+  const {
     isLoading,
     isDeleting,
     cursor,
@@ -78,16 +93,37 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   }, [selectionHandler]);
 
   useEffect(() => {
+    /** Use cases for condition check one:
+       * when saving a newly created expense
+       * when saving an edited expense
+       * on initial render of the expenses page
+       * on router push to the expenses page from another page
+     */
+
     if (!location?.state && !didFinishDateRangeSearch) {
       dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
-    } else if (location?.state?.from && didFinishDateRangeSearch) {
+    }
+
+    if (didFinishDateRangeSearch) {
       setShowBackButton(true);
     }
 
-    return () => {
-      setShowBackButton(false);
-    };
-  }, [dispatch, location, didFinishDateRangeSearch]);
+    if (didFinishEditingExpense) {
+      const editedExpenseCategory = categories.find(
+        (cat: Category) => cat._id === editedExpense?.category,
+      );
+      dispatch(setEditedExpenseState(
+        { ...editedExpense, category: editedExpenseCategory } as IExpense,
+      ));
+    }
+  }, [
+    dispatch,
+    location,
+    didFinishDateRangeSearch,
+    didFinishEditingExpense,
+    editedExpense,
+    categories,
+  ]);
 
   function handleOpen(expense: IExpense) {
     setExpenseToDelete(expense);
@@ -114,8 +150,9 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   function handleBackButton() {
     selectFromDate(new Date());
     selectToDate(new Date());
-    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
     setShowBackButton(false);
+    dispatch(setDidFinishEditingExpense(false));
+    dispatch(setDidFinishDateRangeSearch(false));
   }
 
   if ((isLoading && count === 0) || (isLoading && !isBackButtonShown && !hasNextPage)) {
