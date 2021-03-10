@@ -1,7 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
 
-export function ExpenseLoader(props: any) {
+function ExpenseLoader(props: any) {
   return (
     <ContentLoader
       speed={2}
@@ -22,7 +22,7 @@ export function ExpenseLoader(props: any) {
   );
 }
 
-export function ExpensesLoader(props: any) {
+export function ExpensesLoader() {
   return (
     <div style={{
       display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
