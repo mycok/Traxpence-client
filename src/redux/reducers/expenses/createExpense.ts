@@ -11,7 +11,7 @@ type OnchangePayloadType = {
 
 type NewExpenseState = {
     isExpenseSuccessfullyCreated: boolean,
-    isLoading: boolean,
+    isSaving: boolean,
     serverError: string | null,
 } & IExpense
 
@@ -25,7 +25,7 @@ const initialCreateExpenseState: NewExpenseState = {
   notes: '',
   incurredOn: Date.now(),
   isExpenseSuccessfullyCreated: false,
-  isLoading: false,
+  isSaving: false,
   serverError: null,
 };
 
@@ -33,16 +33,16 @@ export function createExpense(expenseData: IExpense, cb: Function): AppThunk {
   return async (dispatch) => {
     let data: any;
     try {
-      dispatch(setLoading(true));
+      dispatch(setIsSaving(true));
       data = await create('expenses', expenseData);
     } catch (error) {
-      dispatch(setLoading(false));
+      dispatch(setIsSaving(false));
       dispatch(setServerError(error.toString()));
 
       return;
     }
 
-    dispatch(setLoading(false));
+    dispatch(setIsSaving(false));
     if (data.success) {
       dispatch(reset(initialCreateExpenseState));
       dispatch(createExpenseSuccessful(true));
@@ -62,8 +62,8 @@ const createExpenseSlice = createSlice({
       const { name, value } = action.payload;
       state[name] = value;
     },
-    setLoading(state, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
+    setIsSaving(state, action: PayloadAction<boolean>) {
+      state.isSaving = action.payload;
     },
     setServerError(state, action: PayloadAction<string | null>) {
       state.serverError = action.payload;
@@ -79,7 +79,7 @@ const createExpenseSlice = createSlice({
 
 export const {
   onValueChange,
-  setLoading,
+  setIsSaving,
   setServerError,
   createExpenseSuccessful,
   reset,

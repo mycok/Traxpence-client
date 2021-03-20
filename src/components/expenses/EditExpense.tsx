@@ -25,10 +25,10 @@ function EditExpense({ history }: RouteComponentProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
-  const { categories } = useSelector(
+  const { isLoading, categories } = useSelector(
     (state: RootState) => state.categories,
   );
-  const { expenseToEdit, isLoading, serverError } = useSelector(
+  const { expenseToEdit, isSaving, serverError } = useSelector(
     (state: RootState) => state.editExpense,
   );
 
@@ -86,6 +86,7 @@ function EditExpense({ history }: RouteComponentProps) {
         <ExpenseForm
           state={expenseToEdit}
           isLoading={isLoading}
+          isSaving={isSaving}
           prefCurrency={prefCurrency}
           categories={categories}
           selectedDate={selectedDate}

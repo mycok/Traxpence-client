@@ -12,7 +12,7 @@ type OnchangePayloadType = {
 type EditExpenseState = {
     expenseToEdit: IExpense,
     didFinishEditingExpense: boolean,
-    isLoading: boolean,
+    isSaving: boolean,
     serverError: string | undefined,
     editedExpense: IExpense | undefined,
 }
@@ -38,7 +38,7 @@ const initialExpenseState = {
 const initialEditExpenseState: EditExpenseState = {
   expenseToEdit: initialExpenseState,
   didFinishEditingExpense: false,
-  isLoading: false,
+  isSaving: false,
   serverError: undefined,
   editedExpense: undefined,
 };
@@ -47,16 +47,16 @@ export function editExpense(expenseId: string, expenseData: IExpense, cb: Functi
   return async (dispatch) => {
     let data: EditExpenseResponse;
     try {
-      dispatch(setLoading(true));
+      dispatch(setIsSaving(true));
       data = await update('expenses', expenseId, expenseData);
     } catch (error) {
-      dispatch(setLoading(false));
+      dispatch(setIsSaving(false));
       dispatch(setServerError(error.toString()));
 
       return;
     }
 
-    dispatch(setLoading(false));
+    dispatch(setIsSaving(false));
     if (data.success) {
       dispatch(editExpenseSuccessful(data.expense));
       dispatch(reset(initialExpenseState));
@@ -79,8 +79,8 @@ const editExpenseSlice = createSlice({
       const { name, value } = action.payload;
       state.expenseToEdit[name] = value;
     },
-    setLoading(state, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
+    setIsSaving(state, action: PayloadAction<boolean>) {
+      state.isSaving = action.payload;
     },
     setServerError(state, action: PayloadAction<string | undefined>) {
       state.serverError = action.payload;
@@ -103,7 +103,7 @@ const editExpenseSlice = createSlice({
 
 export const {
   onValueChange,
-  setLoading,
+  setIsSaving,
   setServerError,
   setDidFinishEditingExpense,
   editExpenseSuccessful,

@@ -2,8 +2,12 @@
 import React from 'react';
 
 import {
-  Dialog, DialogTitle, DialogContent, DialogActions,
-  Button, TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
@@ -38,24 +42,35 @@ const useStyles = makeStyles((theme) => createStyles({
   buttonProgress: {
     color: green[500],
     position: 'absolute',
-    marginRight: 115,
   },
   dialogTitle: {
     textAlign: 'center',
   },
+  circularLoaderContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    justifyItems: 'center',
+    position: 'relative',
+    height: 25,
+  },
 }));
 
 type ConfirmDialogProps = {
-    open: boolean,
-    isSaving: boolean,
-    value: string,
-    handleClose(): void,
-    handleSave(): void,
-    handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
-}
+  open: boolean;
+  isSaving: boolean;
+  value: string;
+  handleClose(): void;
+  handleSave(): void;
+  handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void;
+};
 
 function AddCategoryDialog({
-  open, isSaving, value, handleClose, handleSave, handleOnChange,
+  open,
+  isSaving,
+  value,
+  handleClose,
+  handleSave,
+  handleOnChange,
 }: ConfirmDialogProps) {
   const classes = useStyles();
 
@@ -67,10 +82,7 @@ function AddCategoryDialog({
       aria-labelledby="add-category-dialog"
       open={open}
     >
-      <DialogTitle
-        id="add-category-dialog"
-        className={classes.dialogTitle}
-      >
+      <DialogTitle id="add-category-dialog" className={classes.dialogTitle}>
         Create New Category
       </DialogTitle>
       <DialogContent>
@@ -95,9 +107,14 @@ function AddCategoryDialog({
             className={classes.saveButton}
             onClick={handleSave}
           >
-            Save
+            {isSaving ? (
+              <div className={classes.circularLoaderContainer}>
+                <CircularLoader styleClass={classes.buttonProgress} />
+              </div>
+            ) : (
+              'Save'
+            )}
           </Button>
-          { isSaving && <CircularLoader styleClass={classes.buttonProgress} />}
         </>
         <Button color="primary" variant="outlined" onClick={handleClose}>
           Cancel

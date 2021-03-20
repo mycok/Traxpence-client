@@ -89,7 +89,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
         expenseToEdit: { ...expense },
         editedExpense: undefined,
         didFinishEditingExpense: false,
-        isLoading: false,
+        isSaving: false,
         serverError: undefined,
       },
     ));
