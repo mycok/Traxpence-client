@@ -6,6 +6,8 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import ExpenseForm from './ExpenseForm';
+import AddCategoryDialog from '../categories/AddCategoryDialog';
+
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
 import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
@@ -28,6 +30,7 @@ function NewExpense({ history }: RouteProps) {
   const classes = useStyles();
   const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
+  const [open, setOpen] = useState(false);
   const dispatch = useAppDispatch();
   const {
     title,
@@ -61,11 +64,13 @@ function NewExpense({ history }: RouteProps) {
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { name, value } } = event;
 
-    if (name === 'category') {
-      const selectedCategory = categories.find((cat: Category) => cat.title === value);
-      dispatch(onValueChange({ name, value: selectedCategory }));
-    } else {
-      dispatch(onValueChange({ name, value }));
+    if (name && value) {
+      if (name === 'category') {
+        const selectedCategory = categories.find((cat: Category) => cat.title === value);
+        dispatch(onValueChange({ name, value: selectedCategory }));
+      } else {
+        dispatch(onValueChange({ name, value }));
+      }
     }
   }
 
@@ -88,6 +93,26 @@ function NewExpense({ history }: RouteProps) {
     dispatch(createExpense(newExpense, () => history.push('/expenses')));
   }
 
+  // new category functionality
+
+  function handleNewCategoryOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const { target: { value } } = event;
+
+    console.log('new-category-title', value);
+  }
+
+  function handleSaveNewCategory() {
+    console.log('saving-new-category');
+  }
+
+  function handleCloseNewCategoryDialog() {
+    setOpen(false);
+  }
+
+  function handleOpenNewCategoryDialog() {
+    setOpen(true);
+  }
+
   // TODO: add functionality to display toast with server error
 
   return (
@@ -103,8 +128,17 @@ function NewExpense({ history }: RouteProps) {
           handleOnSubmit={handleOnSubmit}
           handleOnChange={handleOnChange}
           handleDateSelection={handleDateSelection}
+          handleShowAddCategoryDialog={handleOpenNewCategoryDialog}
         />
       </Paper>
+      <AddCategoryDialog
+        open={open}
+        isSaving={false}
+        value=""
+        handleOnChange={handleNewCategoryOnChange}
+        handleSave={handleSaveNewCategory}
+        handleClose={handleCloseNewCategoryDialog}
+      />
     </div>
   );
 }
