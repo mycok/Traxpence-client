@@ -77,7 +77,7 @@ function MonthlyExpAvgByCategory() {
   const { isLoading, data } = useSelector((state: RootState) => state.expenditureAvgByCategory);
 
   useEffect(() => {
-    if (categories.length === 0) dispatch(fetchCategories());
+    // if (categories.length === 0) dispatch(fetchCategories());
     dispatch(fetchMonthlyCategoryExpenditureAggregate());
   }, [categories, dispatch]);
 

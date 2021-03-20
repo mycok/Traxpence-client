@@ -6,6 +6,8 @@ import {
   editExpenseReducer,
   currentMonthExpenditurePreviewReducer,
   monthlyCategoryExpAggregateReducer,
+  scatterPlotExpenseDataReducer,
+  annualExpenseDataReducer,
 } from './expenses';
 import { fetchCategoriesReducer } from './category';
 
@@ -19,6 +21,8 @@ const rootReducer = combineReducers({
   categories: fetchCategoriesReducer,
   currentMonthExpPreview: currentMonthExpenditurePreviewReducer,
   expenditureAvgByCategory: monthlyCategoryExpAggregateReducer,
+  expensePlotData: scatterPlotExpenseDataReducer,
+  annualExpenseData: annualExpenseDataReducer,
 });
 
 export default rootReducer;

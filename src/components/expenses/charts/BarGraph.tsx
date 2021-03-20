@@ -1,62 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import {
   VictoryChart, VictoryAxis, VictoryTheme, VictoryBar,
 } from 'victory';
+
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import SingleDateRange from '../../../shared/dates/SingleDateRange';
+import { ExpensesLoader } from '../../../shared/ContentLoader';
 
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const yData = [
-  {
-    x: 1,
-    y: 34,
-  },
-  {
-    x: 2,
-    y: 25,
-  },
-  {
-    x: 3,
-    y: 0,
-  },
-  {
-    x: 4,
-    y: 1000,
-  },
-  {
-    x: 5,
-    y: 1200,
-  },
-  {
-    x: 6,
-    y: 4000,
-  },
-  {
-    x: 7,
-    y: 678,
-  },
-  {
-    x: 8,
-    y: 7890,
-  },
-  {
-    x: 9,
-    y: 3330,
-  },
-  {
-    x: 10,
-    y: 222,
-  },
-  {
-    x: 11,
-    y: 34,
-  },
-  {
-    x: 12,
-    y: 3000,
-  },
+import { useAppDispatch, RootState } from '../../../redux/store';
+import { fetchAnnualExpenseData } from '../../../redux/reducers/expenses/annualExpData';
+
+const months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
 const useStyles = makeStyles(() => createStyles({
@@ -69,7 +29,20 @@ const useStyles = makeStyles(() => createStyles({
 
 function AnnualTotalExpByMonth() {
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+
   const [selectedDate, selectDate] = React.useState(new Date());
+  const { isLoading, annualExpData } = useSelector((state: RootState) => state.annualExpenseData);
+
+  useEffect(() => {
+    dispatch(fetchAnnualExpenseData(selectedDate.getFullYear()));
+  }, [selectedDate, dispatch]);
+
+  if (isLoading) {
+    return (
+      <ExpensesLoader />
+    );
+  }
 
   return (
     <div className={classes.root}>
@@ -90,7 +63,7 @@ function AnnualTotalExpByMonth() {
           <VictoryBar
             categories={{ x: months }}
             style={{ data: { fill: '#66bb6a', width: 50 }, labels: { fill: '#ffa500' } }}
-            data={yData}
+            data={annualExpData}
             domain={{ x: [0, 13] }}
             labels={({ datum }) => `$ ${datum.y}`}
           />

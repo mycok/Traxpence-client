@@ -56,6 +56,7 @@ export function fetchCurrentMonthExpenditurePreview(): AppThunk {
       );
     } else {
       // in case of bad request errors
+      localStorage.removeItem('authData');
       dispatch(setServerError(data.message));
     }
   };
