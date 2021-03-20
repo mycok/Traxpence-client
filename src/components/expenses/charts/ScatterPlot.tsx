@@ -1,30 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   VictoryChart, VictoryScatter, VictoryTheme, VictoryLabel, VictoryTooltip,
 } from 'victory';
+
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import SingleDateRange from '../../../shared/dates/SingleDateRange';
+import { RootState, useAppDispatch } from '../../../redux/store';
+import { fetchScatterPlotExpenseData } from '../../../redux/reducers/expenses/scatterplot';
 
-const data = [
-  {
-    x: 10,
-    y: 34,
-  },
-  {
-    x: 11,
-    y: 25,
-  },
-  {
-    x: 12,
-    y: 0,
-  },
-  {
-    x: 20,
-    y: 1000,
-  },
-];
+// const data = [
+//   {
+//     x: 10,
+//     y: 34,
+//   },
+//   {
+//     x: 11,
+//     y: 25,
+//   },
+//   {
+//     x: 12,
+//     y: 0,
+//   },
+//   {
+//     x: 20,
+//     y: 1000,
+//   },
+// ];
 
 const useStyles = makeStyles(() => createStyles({
   root: {
@@ -36,8 +40,15 @@ const useStyles = makeStyles(() => createStyles({
 
 function MonthlyExpScatterPlot() {
   const classes = useStyles();
-  const [plotData] = React.useState(data);
-  const [selectedDate, selectDate] = React.useState(new Date());
+  const dispatch = useAppDispatch();
+
+  const [selectedDate, selectDate] = useState(new Date());
+
+  const { plotData } = useSelector((state: RootState) => state.expensePlotData);
+
+  useEffect(() => {
+    dispatch(fetchScatterPlotExpenseData(selectedDate));
+  }, [dispatch, selectedDate]);
 
   return (
     <div className={classes.root}>
@@ -52,7 +63,7 @@ function MonthlyExpScatterPlot() {
           height={300}
           width={350}
           domainPadding={30}
-          style={{ parent: { width: 650 } }}
+          style={{ parent: { width: 850 } }}
         >
           <VictoryScatter
             style={{
@@ -60,8 +71,8 @@ function MonthlyExpScatterPlot() {
               labels: { fill: '#66bb6a', fontSize: 10, padding: 2 },
             }}
             bubbleProperty="y"
-            maxBubbleSize={7}
-            minBubbleSize={1}
+            maxBubbleSize={15}
+            minBubbleSize={3}
             labels={({ datum }) => `$ ${datum.y} on ${datum.x}th`}
             labelComponent={<VictoryTooltip />}
             data={plotData}
@@ -76,7 +87,7 @@ function MonthlyExpScatterPlot() {
           />
           <VictoryLabel
             textAnchor="middle"
-            style={{ fontSize: 10, fill: '#8b8b8b' }}
+            style={{ fontSize: 0, fill: '#8b8b8b' }}
             x={28}
             y={40}
             text="Amount $"

@@ -45,7 +45,9 @@ export function fetchMonthlyCategoryExpenditureAggregate(): AppThunk {
     dispatch(setLoading(false));
     if (data.success) {
       dispatch(
-        fetchMonthlyCategoryExpenditureAggregateSuccessful(data.categoryExpAggregates),
+        fetchMonthlyCategoryExpenditureAggregateSuccessful(
+          data.categoryExpAggregates as MonthlyCategoryExpAggregate[],
+        ),
       );
     } else {
       // in case of bad request errors
@@ -66,7 +68,7 @@ const monthlyCategoryExpenditureAggregateSlice = createSlice({
     },
     fetchMonthlyCategoryExpenditureAggregateSuccessful(
       state,
-      action: PayloadAction<any>,
+      action: PayloadAction<MonthlyCategoryExpAggregate[]>,
     ) {
       state.data = action.payload;
     },
