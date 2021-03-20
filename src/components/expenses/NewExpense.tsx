@@ -38,11 +38,11 @@ function NewExpense({ history }: RouteProps) {
     category,
     notes,
     incurredOn,
-    isLoading,
+    isSaving,
   } = useSelector(
     (state: RootState) => state.createExpense,
   );
-  const { categories } = useSelector(
+  const { isLoading, categories } = useSelector(
     (state: RootState) => state.categories,
   );
   const { didFinishDateRangeSearch } = useSelector(
@@ -121,6 +121,7 @@ function NewExpense({ history }: RouteProps) {
         <ExpenseForm
           state={expenseFormState}
           isLoading={isLoading}
+          isSaving={isSaving}
           prefCurrency={prefCurrency}
           categories={categories}
           path="new-expense"

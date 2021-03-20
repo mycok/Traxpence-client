@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => createStyles({
     width: 400,
   },
   submitButton: {
-    position: 'relative',
     width: 180,
     margin: 20,
   },
@@ -64,7 +63,6 @@ const useStyles = makeStyles((theme) => createStyles({
   buttonProgress: {
     color: green[500],
     position: 'absolute',
-    marginLeft: 100,
   },
   buttonContainer: {
     display: 'flex',
@@ -75,6 +73,13 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     justifyContent: 'center',
   },
+  circularLoaderContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    justifyItems: 'center',
+    position: 'relative',
+    height: 25,
+  },
 }));
 
 export type Category = {
@@ -84,6 +89,7 @@ export type Category = {
 
 type ExpenseFormComponentProps = {
   state: IExpense,
+  isSaving: boolean,
   isLoading: boolean,
   prefCurrency: string | null,
   categories: Category[],
@@ -103,6 +109,7 @@ type NumberFormatInputProps = {
 
 function ExpenseForm({
   state,
+  isSaving,
   isLoading,
   prefCurrency,
   categories,
@@ -162,22 +169,32 @@ function ExpenseForm({
           onChange={handleOnChange}
         >
           {
-            categories.map((cat) => (
+            isLoading ? (
+              <div className={classes.circularLoaderContainer}>
+                <CircularLoader styleClass={classes.buttonProgress} />
+              </div>
+            ) : (
+              categories.map((cat) => (
+                <MenuItem
+                  id="category"
+                  key={cat?._id}
+                  value={cat?.title}
+                >
+                  {cat?.title}
+                </MenuItem>
+              ))
+            )
+          }
+          {
+            !isLoading && (
               <MenuItem
-                id="category"
-                key={cat?._id}
-                value={cat?.title}
+                className={classes.addNewCategory}
+                onClick={handleShowAddCategoryDialog}
               >
-                {cat?.title}
+                <AddCircle fontSize="large" color="secondary" />
               </MenuItem>
-            ))
-            }
-          <MenuItem
-            className={classes.addNewCategory}
-            onClick={handleShowAddCategoryDialog}
-          >
-            <AddCircle fontSize="large" color="secondary" />
-          </MenuItem>
+            )
+          }
         </TextField>
 
         <TextField
@@ -231,12 +248,15 @@ function ExpenseForm({
               fullWidth
               color="secondary"
               type="submit"
-              disabled={isLoading}
+              disabled={isSaving}
               className={classes.submitButton}
             >
-              Save
+              {isSaving ? (
+                <div className={classes.circularLoaderContainer}>
+                  <CircularLoader styleClass={classes.buttonProgress} />
+                </div>
+              ) : 'Save'}
             </Button>
-            {isLoading && <CircularLoader styleClass={classes.buttonProgress} />}
           </>
           <Link
             to={{

@@ -11,8 +11,9 @@ export type Category = {
 }
 
 type CategoriesState = {
-    categories: Category[],
-    serverError: string | null,
+  isLoading: boolean,
+  categories: Category[],
+  serverError: string | null,
 }
 
 type CategoriesDataResponse = {
@@ -22,6 +23,7 @@ type CategoriesDataResponse = {
 }
 
 const initialCategoriesState: CategoriesState = {
+  isLoading: false,
   categories: [],
   serverError: null,
 };
@@ -30,12 +32,15 @@ export function fetchCategories(): AppThunk {
   return async (dispatch) => {
     let data: any;
     try {
+      setIsLoading(true);
       data = await Promise.all([list('categories'), list('categories/by/user')]);
     } catch (error) {
+      setIsLoading(false);
       dispatch(setServerError(error.toString()));
 
       return;
     }
+    setIsLoading(false);
     dispatch(fetchCategoriesSuccessful(data));
   };
 }
@@ -44,6 +49,9 @@ const categoriesSlice = createSlice({
   name: 'fetchCategories',
   initialState: initialCategoriesState,
   reducers: {
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
     setServerError(state, action: PayloadAction<string>) {
       state.serverError = action.payload;
     },
@@ -54,6 +62,7 @@ const categoriesSlice = createSlice({
 });
 
 export const {
+  setIsLoading,
   setServerError,
   fetchCategoriesSuccessful,
 } = categoriesSlice.actions;

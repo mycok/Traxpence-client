@@ -9,13 +9,16 @@ import { green } from '@material-ui/core/colors';
 import CircularLoader from './CircularLoader';
 
 const useStyles = makeStyles(() => createStyles({
-  deleteButton: {
-    position: 'relative',
-  },
   buttonProgress: {
     color: green[500],
     position: 'absolute',
-    marginRight: 115,
+  },
+  circularLoaderContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    justifyItems: 'center',
+    position: 'relative',
+    height: 25,
   },
 }));
 
@@ -51,12 +54,16 @@ function ConfirmDialog({
             variant="contained"
             color="secondary"
             disabled={isDeleting}
-            className={classes.deleteButton}
             onClick={handleDelete}
           >
-            Yes
+            {isDeleting ? (
+              <div className={classes.circularLoaderContainer}>
+                <CircularLoader styleClass={classes.buttonProgress} />
+              </div>
+            ) : (
+              'Delete'
+            )}
           </Button>
-          { isDeleting && <CircularLoader styleClass={classes.buttonProgress} />}
         </>
         <Button color="primary" variant="outlined" onClick={handleClose}>
           Cancel
