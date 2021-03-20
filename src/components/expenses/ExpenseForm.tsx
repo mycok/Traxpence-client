@@ -6,6 +6,7 @@ import {
   TextField, Paper, Button,
   MenuItem, InputAdornment,
 } from '@material-ui/core';
+import { AddCircle } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -70,6 +71,10 @@ const useStyles = makeStyles((theme) => createStyles({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  addNewCategory: {
+    display: 'flex',
+    justifyContent: 'center',
+  },
 }));
 
 export type Category = {
@@ -84,6 +89,7 @@ type ExpenseFormComponentProps = {
   categories: Category[],
   selectedDate: Date,
   path?: string,
+  handleShowAddCategoryDialog?: () => void,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
   handleDateSelection(date: any, value?: string | null): void
@@ -105,6 +111,7 @@ function ExpenseForm({
   handleOnSubmit,
   handleOnChange,
   handleDateSelection,
+  handleShowAddCategoryDialog,
 }: ExpenseFormComponentProps) {
   const classes = useStyles();
 
@@ -164,7 +171,13 @@ function ExpenseForm({
                 {cat?.title}
               </MenuItem>
             ))
-          }
+            }
+          <MenuItem
+            className={classes.addNewCategory}
+            onClick={handleShowAddCategoryDialog}
+          >
+            <AddCircle fontSize="large" color="secondary" />
+          </MenuItem>
         </TextField>
 
         <TextField
