@@ -162,8 +162,8 @@ function ExpenseForm({
           name="category"
           variant="outlined"
           className={classes.textField}
-          label="Category"
-          value={state.category.title}
+          label="Select Category"
+          value={state?.category?.title ?? ''}
           required
           select
           onChange={handleOnChange}

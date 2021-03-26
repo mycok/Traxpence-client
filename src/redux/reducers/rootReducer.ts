@@ -9,7 +9,10 @@ import {
   scatterPlotExpenseDataReducer,
   annualExpenseDataReducer,
 } from './expenses';
-import { fetchCategoriesReducer } from './category';
+import {
+  fetchCategoriesReducer,
+  createCategoryReducer,
+} from './category';
 
 const rootReducer = combineReducers({
   signup,
@@ -19,6 +22,7 @@ const rootReducer = combineReducers({
   createExpense: createExpenseReducer,
   editExpense: editExpenseReducer,
   categories: fetchCategoriesReducer,
+  createCategory: createCategoryReducer,
   currentMonthExpPreview: currentMonthExpenditurePreviewReducer,
   expenditureAvgByCategory: monthlyCategoryExpAggregateReducer,
   expensePlotData: scatterPlotExpenseDataReducer,

@@ -32,16 +32,20 @@ export function fetchCategories(): AppThunk {
   return async (dispatch) => {
     let data: any;
     try {
-      setIsLoading(true);
+      dispatch(setIsLoading(true));
       data = await Promise.all([list('categories'), list('categories/by/user')]);
     } catch (error) {
-      setIsLoading(false);
+      dispatch(setIsLoading(false));
       dispatch(setServerError(error.toString()));
 
       return;
     }
-    setIsLoading(false);
-    dispatch(fetchCategoriesSuccessful(data));
+    dispatch(setIsLoading(false));
+    if (data[0].success) {
+      dispatch(fetchCategoriesSuccessful(data));
+    } else {
+      localStorage.removeItem('authData');
+    }
   };
 }
 
