@@ -44,8 +44,8 @@ export function createExpense(expenseData: IExpense, cb: Function): AppThunk {
 
     dispatch(setIsSaving(false));
     if (data.success) {
-      dispatch(reset(initialCreateExpenseState));
       dispatch(createExpenseSuccessful(true));
+      dispatch(reset(initialCreateExpenseState));
       cb();
     } else {
       // in case of bad request errors

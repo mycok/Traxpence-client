@@ -12,6 +12,7 @@ import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
 import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
 import { setDidFinishDateRangeSearch } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
+import { onCategoryValueChange, createCategory } from '../../redux/reducers/category/createCategory';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -45,6 +46,13 @@ function NewExpense({ history }: RouteProps) {
   const { isLoading, categories } = useSelector(
     (state: RootState) => state.categories,
   );
+  const {
+    title: categoryTitle,
+    isSavingCategory,
+    didFinishCreatingCategory,
+  } = useSelector(
+    (state: RootState) => state.createCategory,
+  );
   const { didFinishDateRangeSearch } = useSelector(
     (state: RootState) => state.fetchOrDeleteExpenses,
   );
@@ -59,18 +67,16 @@ function NewExpense({ history }: RouteProps) {
 
   useEffect(() => {
     dispatch(fetchCategories());
-  }, [dispatch]);
+  }, [dispatch, didFinishCreatingCategory]);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { name, value } } = event;
 
-    if (name && value) {
-      if (name === 'category') {
-        const selectedCategory = categories.find((cat: Category) => cat.title === value);
-        dispatch(onValueChange({ name, value: selectedCategory }));
-      } else {
-        dispatch(onValueChange({ name, value }));
-      }
+    if (name === 'category' && value) {
+      const selectedCategory = categories.find((cat: Category) => cat.title === value);
+      dispatch(onValueChange({ name, value: selectedCategory }));
+    } else {
+      dispatch(onValueChange({ name, value }));
     }
   }
 
@@ -98,11 +104,11 @@ function NewExpense({ history }: RouteProps) {
   function handleNewCategoryOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { target: { value } } = event;
 
-    console.log('new-category-title', value);
+    dispatch(onCategoryValueChange({ value }));
   }
 
   function handleSaveNewCategory() {
-    console.log('saving-new-category');
+    dispatch(createCategory({ title: categoryTitle }, handleCloseNewCategoryDialog));
   }
 
   function handleCloseNewCategoryDialog() {
@@ -134,8 +140,8 @@ function NewExpense({ history }: RouteProps) {
       </Paper>
       <AddCategoryDialog
         open={open}
-        isSaving={false}
-        value=""
+        isSaving={isSavingCategory}
+        value={categoryTitle}
         handleOnChange={handleNewCategoryOnChange}
         handleSave={handleSaveNewCategory}
         handleClose={handleCloseNewCategoryDialog}

@@ -83,7 +83,7 @@ function AddCategoryDialog({
       open={open}
     >
       <DialogTitle id="add-category-dialog" className={classes.dialogTitle}>
-        Create New Category
+        Add New Category
       </DialogTitle>
       <DialogContent>
         <TextField

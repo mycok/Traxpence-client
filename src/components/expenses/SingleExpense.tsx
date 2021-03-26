@@ -108,7 +108,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
               <>
                 <CustomFieldTypography
                   value={expense?.title}
-                  classes={classes}
+                  classes={classes.typographyValues}
                 />
                 <Chip
                   variant="outlined"
