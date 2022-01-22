@@ -26,25 +26,26 @@ import { Category } from './ExpenseForm';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
-    paddingTop: 20,
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
     flexDirection: 'column',
-    height: '90vh',
+    // height: '650px',
+    overflow: 'auto',
+    [theme.breakpoints.down('sm')]: {
+      height: '450px',
+    },
   },
   container: {
     display: 'flex',
-    alignItems: 'center',
     flexDirection: 'column',
-    height: '100vh',
-    justifyContent: 'center',
+    marginTop: '10px',
   },
   dateContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
     width: '100%',
+    marginBottom: '8px',
   },
   backButton: {
     color: theme.palette.common.black,

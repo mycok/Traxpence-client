@@ -3,7 +3,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Typography, Button, Divider } from '@material-ui/core';
 import { grey } from '@material-ui/core/colors';
 
-import { ReactComponent as Wallet } from '../images/wallet.svg';
+import { ReactComponent as CashWallet } from '../images/wallet-with-cash.svg';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -65,13 +65,15 @@ function Home({ history }: HomeProps) {
     <div className={classes.container}>
       <div className={classes.innerContainer}>
         <div className={classes.child}>
-          <Typography className={classes.headerText} variant="subtitle2" align="center">
+          <Typography
+            className={classes.headerText}
+            variant="subtitle2"
+            align="center"
+          >
             Traxpense
           </Typography>
         </div>
-        <div>
-          <Wallet />
-        </div>
+        <CashWallet title="wallet-image" color="primary" />
         <div className={classes.child}>
           <Typography className={classes.text} variant="caption" align="center">
             Expenditure tracking at your finger tips

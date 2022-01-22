@@ -4,13 +4,13 @@ import { ThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 
 import './css/index.css';
-import { theme } from './theme';
+import { CustomTheme } from './theme';
 import App from './App';
 import { store } from './redux/store';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={CustomTheme}>
       <Provider store={store}>
         <App />
       </Provider>

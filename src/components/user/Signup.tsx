@@ -78,6 +78,7 @@ function Signup({ elevation, history }: SignupProps) {
   }
 
   async function handleSignup(e: React.FormEvent) {
+    // TODO: add check for empty sign-in fields, disable signin button if all fields are empty
     e.preventDefault();
 
     dispatch(signupAction({ username, email, password }));

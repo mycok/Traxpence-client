@@ -19,7 +19,6 @@ const useStyles = makeStyles(() => createStyles({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '5px solid #ffa500',
     borderRadius: '50%',
     boxShadow: '2px 2px 2px 2px rgba(0,0,0,0.6)',
     margin: 20,
@@ -49,10 +48,6 @@ const useStyles = makeStyles(() => createStyles({
   text: {
     padding: 10,
     fontWeight: 900,
-  },
-  text1: {
-    color: 'gray',
-    fontStyle: 'italic',
   },
   text2: {
     fontFamily: 'Raleway',
@@ -114,7 +109,7 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
                 isNumericString
                 prefix={`${currency} ` ?? '$ '}
               />
-              <Typography component="span" className={classes.text1}> today</Typography>
+              <Typography component="span" className={classes.summaryTotalText}> today</Typography>
             </Typography>
           </div>
           <div className={classes.textBox}>
@@ -127,9 +122,9 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
                 value={expensePreview?.yesterday?.totalSpent ?? 0.0}
                 displayType="text"
                 thousandSeparator
-                prefix={`${currency} ` ?? '$ '}
+                prefix={`${currency} ` ?? '$'}
               />
-              <Typography component="span" className={classes.text1}> yesterday</Typography>
+              <Typography component="span" className={classes.summaryTotalText}> yesterday</Typography>
             </Typography>
           </div>
         </div>

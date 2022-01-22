@@ -3,7 +3,7 @@ import NumberFormat from 'react-number-format';
 import { useHistory } from 'react-router-dom';
 
 import {
-  Card, CardHeader, CardContent, IconButton, Typography, Chip,
+  Card, CardHeader, CardContent, IconButton, Typography, Chip, Box,
 } from '@material-ui/core';
 import AccBalanceWallet from '@material-ui/icons/AccountBalanceWalletSharp';
 import { EditSharp, DeleteSharp } from '@material-ui/icons';
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => createStyles({
     marginLeft: 10,
   },
   deleteButton: {
-    color: theme.palette.secondary.main,
+    color: theme.palette.error.main,
   },
   cardContent: {
     marginLeft: 50,
@@ -41,7 +41,9 @@ const useStyles = makeStyles((theme) => createStyles({
     justifyContent: 'space-between',
   },
   incurredOn: {
-    fontWeight: 'bold',
+    fontWeight: 'bolder',
+    fontFamily: 'Roboto Mono',
+    fontSize: '14px',
   },
   customFieldTypographyContainer: {
     display: 'flex',
@@ -49,7 +51,7 @@ const useStyles = makeStyles((theme) => createStyles({
     alignItems: 'center',
   },
   typographyValues: {
-    marginLeft: 4,
+    fontSize: '16px',
   },
 }));
 
@@ -69,11 +71,11 @@ function capitalizeString(txt: string) {
 
 function CustomFieldTypography({ value, classes }: CustomFieldTypographyProps) {
   return (
-    <div className={classes.customFieldTypographyContainer}>
-      <Typography variant="subtitle1" className={classes.typographyValues}>
+    <Box className={classes.customFieldTypographyContainer}>
+      <Typography className={classes.typographyValues}>
         {capitalizeString(value)}
       </Typography>
-    </div>
+    </Box>
   );
 }
 
@@ -104,20 +106,18 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
             <AccBalanceWallet fontSize="large" />
           }
           title={(
-            <div className={classes.titleContainer}>
-              <>
-                <CustomFieldTypography
-                  value={expense?.title}
-                  classes={classes.typographyValues}
-                />
-                <Chip
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  label={expense?.category?.title}
-                />
-              </>
-            </div>
+            <Box className={classes.titleContainer}>
+              <CustomFieldTypography
+                value={expense?.title}
+                classes={classes}
+              />
+              <Chip
+                variant="outlined"
+                color="secondary"
+                size="small"
+                label={expense?.category?.title}
+              />
+            </Box>
           )}
           subheader={(
             <>
