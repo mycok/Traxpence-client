@@ -1,4 +1,6 @@
 import React from 'react';
+import { Box } from '@material-ui/core';
+import { grey } from '@material-ui/core/colors';
 import ContentLoader from 'react-content-loader';
 
 function ExpenseLoader(props: any) {
@@ -8,8 +10,8 @@ function ExpenseLoader(props: any) {
       width={400}
       height={260}
       viewBox="0 0 400 260"
-      backgroundColor="#817e7e"
-      foregroundColor="#4c4848"
+      backgroundColor={grey[300]}
+      foregroundColor={grey[300]}
       {...props}
     >
       <rect x="0" y="8" rx="3" ry="3" width="88" height="6" />
@@ -24,13 +26,19 @@ function ExpenseLoader(props: any) {
 
 export function ExpensesLoader() {
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
-    }}
+    <Box
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '85px',
+
+      }}
     >
       <ExpenseLoader />
       <ExpenseLoader />
       <ExpenseLoader />
-    </div>
+    </Box>
   );
 }

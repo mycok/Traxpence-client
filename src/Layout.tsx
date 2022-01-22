@@ -11,9 +11,10 @@ import {
   ListItemIcon,
   Fab,
   Badge,
+  Box,
 } from '@material-ui/core';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Account from '@material-ui/icons/AccountCircleSharp';
+import Dashboard from '@material-ui/icons/DashboardSharp';
 import AccBalanceWallet from '@material-ui/icons/AccountBalanceWalletSharp';
 import ScatterPlot from '@material-ui/icons/ScatterPlotSharp';
 import BarChart from '@material-ui/icons/BarChartSharp';
@@ -27,13 +28,16 @@ import CustomTooltip from './shared/CustomTooltip';
 import { isAuthenticated } from './api/auth';
 import { RootState } from './redux/store';
 import { IExpense } from './components/expenses/IExpense';
+import Wallet from './components/wallet';
 
 const useStyles = makeStyles((theme) => createStyles({
   paper: {
     display: 'flex',
     justifyContent: 'center',
-    height: '100vh',
     width: '100%',
+    '&.MuiPaper-root': {
+      height: '91vh',
+    },
   },
   drawer: {
     width: 140,
@@ -80,7 +84,7 @@ const useStyles = makeStyles((theme) => createStyles({
     bottom: 30,
   },
   addButton: {
-    color: theme.palette.common.black,
+    color: theme.palette.common.white,
     backgroundColor: theme.palette.secondary.main,
     '&:hover': {
       backgroundColor: theme.palette.secondary.dark,
@@ -93,7 +97,7 @@ const useStyles = makeStyles((theme) => createStyles({
 
 type RenderListProps = {
   classes: any;
-  itemList: Array<any>;
+  itemList: IconListProps[];
   selected?: string;
   expenses: IExpense[];
   selectionHandler: React.Dispatch<React.SetStateAction<string>>;
@@ -103,7 +107,13 @@ type AddButtonProps = {
   classes: any;
 };
 
-const iconList = [
+type IconListProps = {
+  name: string
+  to: string
+  icon: any
+}
+
+const iconList: IconListProps[] = [
   {
     name: 'categories',
     to: '/exps-avg-by-category',
@@ -114,7 +124,7 @@ const iconList = [
     to: '/expenses',
     icon: (expenses: IExpense[], selected: string) => (
       <Badge
-        color="primary"
+        color="secondary"
         badgeContent={expenses.length}
         invisible={expenses.length === 0 || selected !== 'expenses'}
         max={99}
@@ -150,7 +160,7 @@ function RenderList({
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
       {isAuthenticated() && (
-        <CustomTooltip title="profile / signout" placement="right">
+        <CustomTooltip title="user dashboard" placement="right">
           <Link to="/profile" className={classes.link}>
             <ListItem
               classes={{
@@ -162,9 +172,9 @@ function RenderList({
               onClick={() => selectionHandler('profile')}
             >
               <ListItemIcon
-                style={{ color: selected === 'profile' ? 'orange' : 'white' }}
+                style={{ color: selected === 'profile' ? '#0da86c' : '' }}
               >
-                <Account fontSize="large" />
+                <Dashboard fontSize="large" />
               </ListItemIcon>
             </ListItem>
           </Link>
@@ -185,7 +195,7 @@ function RenderList({
                 onClick={() => selectionHandler(name)}
               >
                 <ListItemIcon
-                  style={{ color: selected === name ? 'orange' : 'white' }}
+                  style={{ color: selected === name ? '#0da86c' : '' }}
                 >
                   {name === 'expenses' ? icon(expenses, selected) : icon}
                 </ListItemIcon>
@@ -199,7 +209,7 @@ function RenderList({
 
 function AddButton({ classes }: AddButtonProps) {
   return (
-    <div className={classes.addButtonContainer}>
+    <Box className={classes.addButtonContainer}>
       <CustomTooltip title="New Expense" placement="right">
         <Link to="/new-expense">
           <Fab aria-label="add new expense" className={classes.addButton}>
@@ -207,13 +217,13 @@ function AddButton({ classes }: AddButtonProps) {
           </Fab>
         </Link>
       </CustomTooltip>
-    </div>
+    </Box>
   );
 }
 
 function Layout() {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<string>('Expenses');
+  const [selected, setSelected] = React.useState<string>('profile');
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
@@ -252,10 +262,13 @@ function Layout() {
           </Grid>
         )}
         <Grid item xs={isAuthenticated() ? 11 : 12}>
+          <Wallet />
           <Paper className={classes.paper}>
-            <AppRouter
-              selectionHandler={setSelected}
-            />
+            <>
+              <AppRouter
+                selectionHandler={setSelected}
+              />
+            </>
           </Paper>
         </Grid>
       </Grid>

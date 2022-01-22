@@ -10,7 +10,7 @@ import CircularLoader from './CircularLoader';
 
 const useStyles = makeStyles((theme) => createStyles({
   searchButton: {
-    color: theme.palette.common.black,
+    color: theme.palette.common.white,
     backgroundColor: theme.palette.secondary.main,
     '&:hover': {
       backgroundColor: theme.palette.secondary.dark,

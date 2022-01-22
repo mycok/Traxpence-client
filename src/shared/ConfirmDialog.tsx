@@ -8,7 +8,7 @@ import { green } from '@material-ui/core/colors';
 
 import CircularLoader from './CircularLoader';
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   buttonProgress: {
     color: green[500],
     position: 'absolute',
@@ -20,17 +20,24 @@ const useStyles = makeStyles(() => createStyles({
     position: 'relative',
     height: 25,
   },
+  deleteButton: {
+    color: theme.palette.common.white,
+    backgroundColor: theme.palette.error.main,
+  },
 }));
 
 type ConfirmDialogProps = {
-    open: boolean,
-    isDeleting: boolean,
-    handleClose(): void,
-    handleDelete(): void
-}
+  open: boolean;
+  isDeleting: boolean;
+  handleClose(): void;
+  handleDelete(): void;
+};
 
 function ConfirmDialog({
-  open, isDeleting, handleClose, handleDelete,
+  open,
+  isDeleting,
+  handleClose,
+  handleDelete,
 }: ConfirmDialogProps) {
   const classes = useStyles();
 
@@ -42,17 +49,15 @@ function ConfirmDialog({
       aria-labelledby="confirm-delete-dialog"
       open={open}
     >
-      <DialogTitle
-        id="confirm-delete-dialog"
-      >
+      <DialogTitle id="confirm-delete-dialog">
         Are you sure you want to delete this record?
       </DialogTitle>
       <DialogActions>
         <>
           <Button
+            className={classes.deleteButton}
             autoFocus
             variant="contained"
-            color="secondary"
             disabled={isDeleting}
             onClick={handleDelete}
           >

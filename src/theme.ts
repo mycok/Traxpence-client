@@ -1,17 +1,35 @@
-import { green } from '@material-ui/core/colors';
-import { createMuiTheme } from '@material-ui/core/styles';
+// import { green, deepOrange } from '@material-ui/core/colors';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
-export const theme = createMuiTheme({
+let theme = createMuiTheme({
   palette: {
-    type: 'dark',
     primary: {
-      main: green[400],
+      main: '#33859e',
     },
     secondary: {
-      main: '#ffa500',
+      main: '#0da86c',
     },
-    info: {
-      main: '#000000',
+    background: {
+      paper: '#eff0f2',
+    },
+  },
+  shape: {
+    borderRadius: 3,
+  },
+});
+
+theme = responsiveFontSizes(theme);
+
+theme = createMuiTheme(theme, {
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: theme.shape.borderRadius,
+        },
+      },
     },
   },
 });
+
+export const CustomTheme = theme;

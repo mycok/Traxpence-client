@@ -83,6 +83,7 @@ function Signin({ elevation, history, location }: SigninProps) {
   }
 
   async function handleSignin(e: React.FormEvent) {
+    // TODO:-add check for empty sign-in fields, disable signin button if all fields are empty
     e.preventDefault();
 
     if (authError) {
