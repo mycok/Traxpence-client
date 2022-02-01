@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => createStyles({
     fontWeight: 'bolder',
   },
   typographyText: {
-    color: '#fff',
+    color: theme.palette.text.primary,
   },
   link: {
     textDecoration: 'none',
