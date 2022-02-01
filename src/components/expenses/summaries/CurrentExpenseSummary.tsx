@@ -1,12 +1,14 @@
 import React from 'react';
 import NumberFormat from 'react-number-format';
 
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
-import { ExpensePreview } from '../../../redux/reducers/expenses/currentMonthPreview';
 
-const useStyles = makeStyles(() => createStyles({
+import { ExpensePreview } from '../../../redux/reducers/expenses/currentMonthPreview';
+import Wallet from '../../wallet';
+
+const useStyles = makeStyles((theme) => createStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
@@ -30,9 +32,9 @@ const useStyles = makeStyles(() => createStyles({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-evenly',
-    margin: 20,
-    padding: 20,
+    justifyContent: 'space-between',
+    margin: 10,
+    padding: 10,
   },
   summaryTotalText: {
     marginTop: 10,
@@ -41,9 +43,9 @@ const useStyles = makeStyles(() => createStyles({
     fontStyle: 'italic',
   },
   textBox: {
-    border: `2px solid ${grey[500]}`,
-    borderRadius: '8%',
-    width: 150,
+    borderRadius: theme.shape.borderRadius * 2,
+    width: 300,
+    boxShadow: '1px 1px 1px 1px rgba(0,0,0,0.6)',
   },
   text: {
     padding: 10,
@@ -66,8 +68,8 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <div>
+    <Box className={classes.root}>
+      <Box>
         <Typography
           variant="h6"
           color="textPrimary"
@@ -76,9 +78,9 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
         >
           You spent
         </Typography>
-      </div>
-      <div className={classes.summaryContainer}>
-        <div className={classes.leftSummary}>
+      </Box>
+      <Box className={classes.summaryContainer}>
+        <Box className={classes.leftSummary}>
           <Typography
             component="span"
             align="center"
@@ -93,10 +95,11 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
             />
             <Typography className={classes.summaryTotalText}>this month</Typography>
           </Typography>
-        </div>
+        </Box>
 
-        <div className={classes.rightSummary}>
-          <div className={classes.textBox}>
+        <Box className={classes.rightSummary}>
+          <Wallet />
+          <Box className={classes.textBox}>
             <Typography
               className={classes.text}
               align="center"
@@ -111,8 +114,8 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
               />
               <Typography component="span" className={classes.summaryTotalText}> today</Typography>
             </Typography>
-          </div>
-          <div className={classes.textBox}>
+          </Box>
+          <Box className={classes.textBox}>
             <Typography
               className={classes.text}
               align="center"
@@ -126,11 +129,10 @@ function CurrentExpenseSummary({ currency, expensePreview }: CurrentExpenseSumma
               />
               <Typography component="span" className={classes.summaryTotalText}> yesterday</Typography>
             </Typography>
-          </div>
-        </div>
-
-      </div>
-    </div>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 

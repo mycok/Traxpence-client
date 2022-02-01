@@ -13,6 +13,7 @@ import {
   TextField,
   MenuItem,
   Button,
+  Box,
 } from '@material-ui/core';
 import { EditSharp, CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -20,6 +21,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
 import CustomTooltip from '../../shared/CustomTooltip';
+
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signout } from '../../api/auth';
 import { signOut } from '../../redux/actions/auth';
@@ -112,7 +114,7 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
   const { data } = useSelector((state: RootState) => state.currentMonthExpPreview);
 
   useEffect(() => {
-    selectionHandler('profile');
+    selectionHandler('Profile');
   }, [selectionHandler]);
 
   useEffect(() => {
@@ -136,16 +138,18 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
   }
 
   return (
-    <div className={classes.container}>
-      <ProfileCard
-        classes={classes}
-        user={userData.user}
-        currency={currency}
-        expensePreview={data}
-        handleCurrencyChange={handleCurrencyChange}
-        handleSignout={handleSignout}
-      />
-    </div>
+    <>
+      <Box className={classes.container}>
+        <ProfileCard
+          classes={classes}
+          user={userData.user}
+          currency={currency}
+          expensePreview={data}
+          handleCurrencyChange={handleCurrencyChange}
+          handleSignout={handleSignout}
+        />
+      </Box>
+    </>
   );
 }
 
@@ -177,9 +181,9 @@ function ProfileCard({
           </>
         )}
         title={(
-          <div className={classes.titleContainer}>
+          <Box className={classes.titleContainer}>
             <Typography variant="h6">{user?.username}</Typography>
-          </div>
+          </Box>
         )}
         subheader={<Typography color="primary">{user?.email}</Typography>}
       />

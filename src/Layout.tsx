@@ -1,11 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import {
   Grid,
   Drawer,
-  Paper,
   List,
   ListItem,
   ListItemIcon,
@@ -31,13 +30,17 @@ import { IExpense } from './components/expenses/IExpense';
 import Wallet from './components/wallet';
 
 const useStyles = makeStyles((theme) => createStyles({
-  paper: {
+  mainContentContainer: {
     display: 'flex',
     justifyContent: 'center',
     width: '100%',
-    '&.MuiPaper-root': {
-      height: '91vh',
-    },
+    height: '90vh',
+  },
+  appBar: {
+    display: 'flex',
+    alignItems: 'center',
+    marginLeft: 20,
+    height: 80,
   },
   drawer: {
     width: 140,
@@ -113,38 +116,42 @@ type IconListProps = {
   icon: any
 }
 
+type AppBarProps = {
+  classes: any
+}
+
 const iconList: IconListProps[] = [
   {
-    name: 'categories',
+    name: 'Categories',
     to: '/exps-avg-by-category',
     icon: <Categories fontSize="large" />,
   },
   {
-    name: 'expenses',
+    name: 'Expenses',
     to: '/expenses',
     icon: (expenses: IExpense[], selected: string) => (
       <Badge
         color="secondary"
         badgeContent={expenses.length}
-        invisible={expenses.length === 0 || selected !== 'expenses'}
-        max={99}
+        invisible={expenses.length === 0 || selected !== 'Expenses'}
+        max={999}
       >
         <AccBalanceWallet fontSize="large" />
       </Badge>
     ),
   },
   {
-    name: 'scatterPlot',
+    name: 'ScatterPlot',
     to: '/scatter-graph-chart',
     icon: <ScatterPlot fontSize="large" />,
   },
   {
-    name: 'barChart',
+    name: 'BarChart',
     to: '/bar-graph-chart',
     icon: <BarChart fontSize="large" />,
   },
   {
-    name: 'pieChart',
+    name: 'PieChart',
     to: '/pie-graph-chart',
     icon: <PieChart fontSize="large" />,
   },
@@ -160,7 +167,7 @@ function RenderList({
   return (
     <List id="drawer-icon-list" className={classes.drawerList}>
       {isAuthenticated() && (
-        <CustomTooltip title="user dashboard" placement="right">
+        <CustomTooltip title="User Dashboard" placement="right">
           <Link to="/profile" className={classes.link}>
             <ListItem
               classes={{
@@ -168,11 +175,11 @@ function RenderList({
                 selected: classes.selected,
               }}
               button
-              selected={selected === 'profile'}
-              onClick={() => selectionHandler('profile')}
+              selected={selected === 'Profile'}
+              onClick={() => selectionHandler('Profile')}
             >
               <ListItemIcon
-                style={{ color: selected === 'profile' ? '#0da86c' : '' }}
+                style={{ color: selected === 'Profile' ? '#0da86c' : '' }}
               >
                 <Dashboard fontSize="large" />
               </ListItemIcon>
@@ -197,7 +204,7 @@ function RenderList({
                 <ListItemIcon
                   style={{ color: selected === name ? '#0da86c' : '' }}
                 >
-                  {name === 'expenses' ? icon(expenses, selected) : icon}
+                  {name === 'Expenses' ? icon(expenses, selected) : icon}
                 </ListItemIcon>
               </ListItem>
             </Link>
@@ -221,9 +228,19 @@ function AddButton({ classes }: AddButtonProps) {
   );
 }
 
+function AppBar({ classes }: AppBarProps) {
+  const location = useLocation();
+
+  return isAuthenticated() && (location.pathname !== '/profile') ? (
+    <Box className={classes.appBar}><Wallet /></Box>
+  ) : (
+    <Box className={classes.appBar} />
+  );
+}
+
 function Layout() {
   const classes = useStyles();
-  const [selected, setSelected] = React.useState<string>('profile');
+  const [selected, setSelected] = React.useState<string>('Profile');
   const { signupSuccessful } = useSelector((state: RootState) => state.signup);
   const { signinSuccessful } = useSelector((state: RootState) => state.signin);
   const { didSignout } = useSelector((state: RootState) => state.signout);
@@ -262,14 +279,14 @@ function Layout() {
           </Grid>
         )}
         <Grid item xs={isAuthenticated() ? 11 : 12}>
-          <Wallet />
-          <Paper className={classes.paper}>
+          <AppBar classes={classes} />
+          <Box className={classes.mainContentContainer}>
             <>
               <AppRouter
                 selectionHandler={setSelected}
               />
             </>
-          </Paper>
+          </Box>
         </Grid>
       </Grid>
     </Router>

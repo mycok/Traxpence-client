@@ -1,4 +1,3 @@
-// import { green, deepOrange } from '@material-ui/core/colors';
 import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 
 let theme = createMuiTheme({
@@ -13,9 +12,6 @@ let theme = createMuiTheme({
       paper: '#eff0f2',
     },
   },
-  shape: {
-    borderRadius: 3,
-  },
 });
 
 theme = responsiveFontSizes(theme);
@@ -25,7 +21,7 @@ theme = createMuiTheme(theme, {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: theme.shape.borderRadius * 2,
         },
       },
     },
