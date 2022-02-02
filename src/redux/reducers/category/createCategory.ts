@@ -4,7 +4,7 @@ import { create } from '../../../api';
 import { AppThunk } from '../../store';
 
 export type Category = {
-  _id: string;
+  _id?: string;
   title: string;
 };
 
@@ -38,15 +38,15 @@ const initialCategoryState: CategoryState = {
 };
 
 export function createCategory(
-  categoryData: Pick<Category, 'title'>,
+  categoryData: Category,
   cb: Function,
 ): AppThunk {
   return async (dispatch) => {
     let data: CategoryDataResponse;
     try {
       dispatch(setIsSaving(true));
-      data = await create('categories', categoryData);
-    } catch (error) {
+      data = await create<Category>('categories', categoryData);
+    } catch (error: any) {
       dispatch(setIsSaving(false));
       dispatch(setServerError(error.toString()));
 

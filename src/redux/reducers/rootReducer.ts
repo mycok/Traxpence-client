@@ -13,7 +13,7 @@ import {
   fetchCategoriesReducer,
   createCategoryReducer,
 } from './category';
-import { fetchWalletReducer } from './wallet';
+import { fetchWalletReducer, updateWalletReducer } from './wallet';
 
 const rootReducer = combineReducers({
   signup,
@@ -29,6 +29,7 @@ const rootReducer = combineReducers({
   expensePlotData: scatterPlotExpenseDataReducer,
   annualExpenseData: annualExpenseDataReducer,
   userWallet: fetchWalletReducer,
+  updateWallet: updateWalletReducer,
 });
 
 export default rootReducer;

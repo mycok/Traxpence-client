@@ -48,8 +48,8 @@ export function editExpense(expenseId: string, expenseData: IExpense, cb: Functi
     let data: EditExpenseResponse;
     try {
       dispatch(setIsSaving(true));
-      data = await update('expenses', expenseId, expenseData);
-    } catch (error) {
+      data = await update<IExpense>('expenses', expenseId, expenseData);
+    } catch (error: any) {
       dispatch(setIsSaving(false));
       dispatch(setServerError(error.toString()));
 

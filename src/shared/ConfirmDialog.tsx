@@ -9,6 +9,10 @@ import { green } from '@material-ui/core/colors';
 import CircularLoader from './CircularLoader';
 
 const useStyles = makeStyles((theme) => createStyles({
+  dialogTitle: {
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.common.white,
+  },
   buttonProgress: {
     color: green[500],
     position: 'absolute',
@@ -23,6 +27,9 @@ const useStyles = makeStyles((theme) => createStyles({
   deleteButton: {
     color: theme.palette.common.white,
     backgroundColor: theme.palette.error.main,
+    '&:hover': {
+      backgroundColor: theme.palette.error.dark,
+    },
   },
 }));
 
@@ -49,7 +56,7 @@ function ConfirmDialog({
       aria-labelledby="confirm-delete-dialog"
       open={open}
     >
-      <DialogTitle id="confirm-delete-dialog">
+      <DialogTitle id="confirm-delete-dialog" className={classes.dialogTitle}>
         Are you sure you want to delete this record?
       </DialogTitle>
       <DialogActions>
