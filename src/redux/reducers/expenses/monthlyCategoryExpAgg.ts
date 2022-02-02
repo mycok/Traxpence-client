@@ -35,7 +35,7 @@ export function fetchMonthlyCategoryExpenditureAggregate(): AppThunk {
     try {
       dispatch(setLoading(true));
       data = await list('expenses/by/category');
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setLoading(false));
       dispatch(setServerError(error.toString()));
 

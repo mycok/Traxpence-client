@@ -13,6 +13,7 @@ import {
   fetchCategoriesReducer,
   createCategoryReducer,
 } from './category';
+import { fetchWalletReducer } from './wallet';
 
 const rootReducer = combineReducers({
   signup,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   expenditureAvgByCategory: monthlyCategoryExpAggregateReducer,
   expensePlotData: scatterPlotExpenseDataReducer,
   annualExpenseData: annualExpenseDataReducer,
+  userWallet: fetchWalletReducer,
 });
 
 export default rootReducer;
