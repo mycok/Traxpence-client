@@ -34,7 +34,7 @@ export function fetchCategories(): AppThunk {
     try {
       dispatch(setIsLoading(true));
       data = await Promise.all([list('categories'), list('categories/by/user')]);
-    } catch (error) {
+    } catch (error: any) {
       dispatch(setIsLoading(false));
       dispatch(setServerError(error.toString()));
 

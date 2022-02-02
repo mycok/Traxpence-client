@@ -46,7 +46,7 @@ export function fetchExpenses({ startDate, endDate, cursor }: FetchExpensesParam
       if (cursor) dispatch(setIsCursorActive(true));
       dispatch(setLoading(true));
       data = await listExpenses({ startDate, endDate, cursor });
-    } catch (error) {
+    } catch (error: any) {
       // for generic server errors
       dispatch(setLoading(false));
       dispatch(setServerError(error.toString()));
@@ -76,7 +76,7 @@ export function deleteExpense(expenseId: string, cb: Function): AppThunk {
     try {
       dispatch(setDeleting(true));
       data = await remove('expenses', expenseId);
-    } catch (error) {
+    } catch (error: any) {
       // for generic server errors
       dispatch(setDeleting(false));
       dispatch(setServerError(error.toString()));
