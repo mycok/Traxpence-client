@@ -32,10 +32,11 @@ const initialCreateExpenseState: NewExpenseState = {
 export function createExpense(expenseData: IExpense, cb: Function): AppThunk {
   return async (dispatch) => {
     let data: any;
+
     try {
       dispatch(setIsSaving(true));
-      data = await create('expenses', expenseData);
-    } catch (error) {
+      data = await create<IExpense>('expenses', expenseData);
+    } catch (error: any) {
       dispatch(setIsSaving(false));
       dispatch(setServerError(error.toString()));
 

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { Fab } from '@material-ui/core';
+import { Fab, Box } from '@material-ui/core';
 
 import ExpenseList from './ExpenseList';
 import DateRangeSearch from './shared/DateRangeSearch';
@@ -169,8 +169,8 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   }
 
   return (
-    <div className={classes.container}>
-      <div className={classes.dateContainer}>
+    <Box className={classes.container}>
+      <Box className={classes.dateContainer}>
         {
           isBackButtonShown && (
             <CustomTooltip title="back to expenses">
@@ -195,8 +195,8 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
           selectToDate={selectToDate}
           dateRangeSearchHandler={handleDateRangeSearch}
         />
-      </div>
-      <div className={classes.root}>
+      </Box>
+      <Box className={classes.root}>
         <ConfirmDialog
           open={open}
           isDeleting={isDeleting}
@@ -210,7 +210,7 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
           handleOpen={handleOpen}
           handleShowMore={handleShowMore}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }

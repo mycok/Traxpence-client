@@ -6,7 +6,7 @@ import {
   TextField, Paper, Button,
   MenuItem, InputAdornment,
 } from '@material-ui/core';
-import { AddCircle } from '@material-ui/icons';
+import { Add } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -72,6 +72,13 @@ const useStyles = makeStyles((theme) => createStyles({
   addNewCategory: {
     display: 'flex',
     justifyContent: 'center',
+    backgroundColor: theme.palette.secondary.light,
+    '&:hover': {
+      backgroundColor: theme.palette.secondary.dark,
+    },
+  },
+  addNewCategoryIcon: {
+    color: theme.palette.common.white,
   },
   circularLoaderContainer: {
     display: 'flex',
@@ -191,7 +198,7 @@ function ExpenseForm({
                 className={classes.addNewCategory}
                 onClick={handleShowAddCategoryDialog}
               >
-                <AddCircle fontSize="large" color="secondary" />
+                <Add fontSize="large" className={classes.addNewCategoryIcon} />
               </MenuItem>
             )
           }

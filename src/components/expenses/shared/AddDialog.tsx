@@ -12,7 +12,7 @@ import {
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
-import CircularLoader from '../../shared/CircularLoader';
+import CircularLoader from '../../../shared/CircularLoader';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
@@ -45,6 +45,8 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   dialogTitle: {
     textAlign: 'center',
+    backgroundColor: theme.palette.secondary.light,
+    color: theme.palette.common.white,
   },
   circularLoaderContainer: {
     display: 'flex',
@@ -55,23 +57,27 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-type ConfirmDialogProps = {
+type AddDialogProps = {
   open: boolean;
+  label: string;
+  dialogTitle: string;
   isSaving: boolean;
-  value: string;
+  value: string | number;
   handleClose(): void;
   handleSave(): void;
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void;
 };
 
-function AddCategoryDialog({
+function AddDialog({
   open,
+  label,
+  dialogTitle,
   isSaving,
   value,
   handleClose,
   handleSave,
   handleOnChange,
-}: ConfirmDialogProps) {
+}: AddDialogProps) {
   const classes = useStyles();
 
   return (
@@ -83,15 +89,16 @@ function AddCategoryDialog({
       open={open}
     >
       <DialogTitle id="add-category-dialog" className={classes.dialogTitle}>
-        Add New Category
+        {dialogTitle}
       </DialogTitle>
       <DialogContent>
+        {/* TODO: Add error text component and serverErr prop */}
         <TextField
-          id="title"
-          name="title"
+          id={label}
+          name={label}
           className={classes.root}
           variant="outlined"
-          label="Title"
+          label={label}
           value={value}
           required
           onChange={handleOnChange}
@@ -124,4 +131,4 @@ function AddCategoryDialog({
   );
 }
 
-export default AddCategoryDialog;
+export default AddDialog;

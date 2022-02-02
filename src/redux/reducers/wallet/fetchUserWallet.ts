@@ -62,7 +62,7 @@ export function fetchWallet(): AppThunk {
   };
 }
 
-const walletSlice = createSlice({
+const fetchWalletSlice = createSlice({
   name: 'fetchWallet',
   initialState: initialWalletState,
   reducers: {
@@ -79,6 +79,6 @@ const walletSlice = createSlice({
   },
 });
 
-export const { setIsLoading, setServerError, fetchWalletSuccessful } = walletSlice.actions;
+export const { setIsLoading, setServerError, fetchWalletSuccessful } = fetchWalletSlice.actions;
 
-export const fetchWalletReducer = walletSlice.reducer;
+export const fetchWalletReducer = fetchWalletSlice.reducer;

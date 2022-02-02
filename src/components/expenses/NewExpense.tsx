@@ -6,7 +6,7 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { Paper } from '@material-ui/core';
 
 import ExpenseForm from './ExpenseForm';
-import AddCategoryDialog from '../categories/AddCategoryDialog';
+import AddCategoryDialog from './shared/AddDialog';
 
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
@@ -141,6 +141,8 @@ function NewExpense({ history }: RouteProps) {
       <AddCategoryDialog
         open={open}
         isSaving={isSavingCategory}
+        label="Title"
+        dialogTitle="Add New Category"
         value={categoryTitle}
         handleOnChange={handleNewCategoryOnChange}
         handleSave={handleSaveNewCategory}
