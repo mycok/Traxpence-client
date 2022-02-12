@@ -1,31 +1,36 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
   TextField, Paper, Button,
   MenuItem, InputAdornment,
+  Typography, Box,
 } from '@material-ui/core';
-import { Add } from '@material-ui/icons';
+import { Add, TodaySharp } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 import DateFnsUtils from '@date-io/date-fns';
-import NumberFormat from 'react-number-format';
 
 import { IExpense } from './IExpense';
 import CircularLoader from '../../shared/CircularLoader';
+import NumberFormatterInput from '../../shared/NumberFormatterInput';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
+    '& .MuiInputLabel-outlined': {
+      color: theme.palette.grey[600],
+    },
     '& label.Mui-focused': {
-      color: theme.palette.primary.main,
+      color: theme.palette.common.white,
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: theme.palette.primary.main,
     },
     '& .MuiOutlinedInput-root': {
+      color: theme.palette.common.white,
       '& fieldset': {
         borderColor: theme.palette.primary.main,
       },
@@ -46,6 +51,9 @@ const useStyles = makeStyles((theme) => createStyles({
     alignItems: 'center',
   },
   textField: {
+    '& .MuiSelect-icon': {
+      color: theme.palette.common.white,
+    },
     margin: 10,
     width: 400,
   },
@@ -87,6 +95,12 @@ const useStyles = makeStyles((theme) => createStyles({
     position: 'relative',
     height: 25,
   },
+  inputAdornment: {
+    color: theme.palette.common.white,
+  },
+  listItem: {
+    color: theme.palette.common.white,
+  },
 }));
 
 export type Category = {
@@ -102,16 +116,11 @@ type ExpenseFormComponentProps = {
   categories: Category[],
   selectedDate: Date,
   path?: string,
+  handleCancel?: () => void,
   handleShowAddCategoryDialog?: () => void,
   handleOnSubmit(event: React.FormEvent<HTMLFormElement>): void,
   handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void,
   handleDateSelection(date: any, value?: string | null): void
-}
-
-type NumberFormatInputProps = {
-  inputRef: (instance: NumberFormat | null) => void,
-  onChange: (event: { target: { name: string; value: string } }) => void,
-  name: string,
 }
 
 function ExpenseForm({
@@ -122,12 +131,20 @@ function ExpenseForm({
   categories,
   selectedDate,
   path,
+  handleCancel,
   handleOnSubmit,
   handleOnChange,
   handleDateSelection,
   handleShowAddCategoryDialog,
 }: ExpenseFormComponentProps) {
   const classes = useStyles();
+  const titleInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    if (titleInputRef?.current) {
+      titleInputRef.current.focus();
+    }
+  }, [titleInputRef]);
 
   return (
     <form
@@ -141,6 +158,7 @@ function ExpenseForm({
           id="title"
           name="title"
           className={classes.textField}
+          inputRef={titleInputRef}
           variant="outlined"
           label="Title"
           value={state?.title}
@@ -158,7 +176,13 @@ function ExpenseForm({
           required
           InputProps={{
             inputComponent: NumberFormatterInput as any,
-            startAdornment: <InputAdornment position="start">{prefCurrency ?? '$'}</InputAdornment>,
+            startAdornment: (
+              <InputAdornment position="start">
+                <Typography className={classes.inputAdornment}>
+                  {prefCurrency ?? '$'}
+                </Typography>
+              </InputAdornment>
+            ),
 
           }}
           onChange={handleOnChange}
@@ -186,6 +210,7 @@ function ExpenseForm({
                   id="category"
                   key={cat?._id}
                   value={cat?.title}
+                  className={classes.listItem}
                 >
                   {cat?.title}
                 </MenuItem>
@@ -229,25 +254,25 @@ function ExpenseForm({
             format="dd/MM/yyyy"
             autoOk
             disableFuture
+            keyboardIcon={(<TodaySharp className={classes.inputAdornment} />)}
             PopoverProps={{
               anchorReference: 'anchorPosition',
               anchorPosition: {
                 top: 500,
-                left: 650,
-
+                left: 770,
               },
               anchorOrigin: {
                 vertical: 'center',
-                horizontal: 'right',
+                horizontal: 'center',
               },
               transformOrigin: {
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: 'center',
+                horizontal: 'center',
               },
             }}
           />
         </MuiPickersUtilsProvider>
-        <div className={classes.buttonContainer}>
+        <Box className={classes.buttonContainer}>
           <>
             <Button
               id="save-button"
@@ -259,9 +284,9 @@ function ExpenseForm({
               className={classes.submitButton}
             >
               {isSaving ? (
-                <div className={classes.circularLoaderContainer}>
+                <Box className={classes.circularLoaderContainer}>
                   <CircularLoader styleClass={classes.buttonProgress} />
-                </div>
+                </Box>
               ) : 'Save'}
             </Button>
           </>
@@ -278,34 +303,14 @@ function ExpenseForm({
               fullWidth
               color="primary"
               className={classes.cancelButton}
+              onClick={handleCancel}
             >
               Cancel
             </Button>
           </Link>
-        </div>
+        </Box>
       </Paper>
     </form>
-  );
-}
-
-function NumberFormatterInput(props: NumberFormatInputProps) {
-  const { inputRef, onChange, ...other } = props;
-
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      onValueChange={(values) => {
-        onChange({
-          target: {
-            name: props.name,
-            value: values.value,
-          },
-        });
-      }}
-      thousandSeparator
-      isNumericString
-    />
   );
 }
 

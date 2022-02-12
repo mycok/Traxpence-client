@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import {
   Dialog,
@@ -8,21 +8,29 @@ import {
   DialogActions,
   Button,
   TextField,
+  InputAdornment,
+  Typography,
+  Box,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
 import CircularLoader from '../../../shared/CircularLoader';
+import NumberFormatterInput from '../../../shared/NumberFormatterInput';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
+    '& .MuiInputLabel-outlined': {
+      color: theme.palette.common.white,
+    },
     '& label.Mui-focused': {
-      color: theme.palette.primary.main,
+      color: theme.palette.common.white,
     },
     '& .MuiInput-underline:after': {
       borderBottomColor: theme.palette.primary.main,
     },
     '& .MuiOutlinedInput-root': {
+      color: theme.palette.common.white,
       '& fieldset': {
         borderColor: theme.palette.primary.main,
       },
@@ -55,6 +63,9 @@ const useStyles = makeStyles((theme) => createStyles({
     position: 'relative',
     height: 25,
   },
+  inputAdornment: {
+    color: theme.palette.common.white,
+  },
 }));
 
 type AddDialogProps = {
@@ -63,9 +74,10 @@ type AddDialogProps = {
   dialogTitle: string;
   isSaving: boolean;
   value: string | number;
+  inputType: string;
   handleClose(): void;
   handleSave(): void;
-  handleOnChange(event: React.ChangeEvent<HTMLInputElement>): void;
+  handleOnChange(event: React.ChangeEvent<HTMLTextAreaElement>): void;
 };
 
 function AddDialog({
@@ -74,11 +86,20 @@ function AddDialog({
   dialogTitle,
   isSaving,
   value,
+  inputType,
   handleClose,
   handleSave,
   handleOnChange,
 }: AddDialogProps) {
   const classes = useStyles();
+  const addInputRef = useRef<HTMLInputElement | null>(null);
+  const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
+
+  useEffect(() => {
+    if (addInputRef?.current) {
+      addInputRef.current.focus();
+    }
+  }, [addInputRef]);
 
   return (
     <Dialog
@@ -93,16 +114,45 @@ function AddDialog({
       </DialogTitle>
       <DialogContent>
         {/* TODO: Add error text component and serverErr prop */}
-        <TextField
-          id={label}
-          name={label}
-          className={classes.root}
-          variant="outlined"
-          label={label}
-          value={value}
-          required
-          onChange={handleOnChange}
-        />
+        {
+          inputType === 'text' ? (
+            <TextField
+              id={label}
+              name={label}
+              inputRef={addInputRef}
+              className={classes.root}
+              variant="outlined"
+              label={label}
+              value={value}
+              required
+              InputProps={{
+                autoFocus: true,
+              }}
+              onChange={handleOnChange}
+            />
+          ) : (
+            <TextField
+              id={label}
+              name={label}
+              inputRef={addInputRef}
+              variant="outlined"
+              className={classes.root}
+              label={label}
+              value={value}
+              required
+              InputProps={{
+                autoFocus: true,
+                inputComponent: NumberFormatterInput as any,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Typography className={classes.inputAdornment}>{prefCurrency ?? '$'}</Typography>
+                  </InputAdornment>
+                ),
+              }}
+              onChange={handleOnChange}
+            />
+          )
+        }
       </DialogContent>
       <DialogActions>
         <>
@@ -115,9 +165,9 @@ function AddDialog({
             onClick={handleSave}
           >
             {isSaving ? (
-              <div className={classes.circularLoaderContainer}>
+              <Box className={classes.circularLoaderContainer}>
                 <CircularLoader styleClass={classes.buttonProgress} />
-              </div>
+              </Box>
             ) : (
               'Save'
             )}

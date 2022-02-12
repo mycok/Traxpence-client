@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   editButton: {
     marginLeft: 10,
+    color: theme.palette.common.white,
   },
   deleteButton: {
     color: theme.palette.error.main,
@@ -30,6 +31,7 @@ const useStyles = makeStyles((theme) => createStyles({
   cardContent: {
     marginLeft: 50,
     marginRight: 50,
+    color: theme.palette.grey[400],
   },
   categoryLabel: {
     marginRight: 15,
@@ -44,6 +46,7 @@ const useStyles = makeStyles((theme) => createStyles({
     fontWeight: 'bolder',
     fontFamily: 'Roboto Mono',
     fontSize: '14px',
+    color: theme.palette.common.white,
   },
   customFieldTypographyContainer: {
     display: 'flex',
@@ -52,6 +55,10 @@ const useStyles = makeStyles((theme) => createStyles({
   },
   typographyValues: {
     fontSize: '16px',
+    color: theme.palette.common.white,
+  },
+  avatarIcon: {
+    color: theme.palette.common.white,
   },
 }));
 
@@ -103,7 +110,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
       <Card className={classes.root} elevation={5}>
         <CardHeader
           avatar={
-            <AccBalanceWallet fontSize="large" />
+            <AccBalanceWallet fontSize="large" className={classes.avatarIcon} />
           }
           title={(
             <Box className={classes.titleContainer}>

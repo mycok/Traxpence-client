@@ -9,7 +9,8 @@ let theme = createMuiTheme({
       main: '#0da86c',
     },
     background: {
-      paper: '#eff0f2',
+      paper: '#392B43',
+      // paper: '#2C1F35',
     },
   },
 });
@@ -22,6 +23,13 @@ theme = createMuiTheme(theme, {
       styleOverrides: {
         root: {
           borderRadius: theme.shape.borderRadius * 2,
+        },
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          color: theme.palette.common.white,
         },
       },
     },

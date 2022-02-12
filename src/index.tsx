@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { ThemeProvider } from '@material-ui/core';
 import { Provider } from 'react-redux';
 
-import './css/index.css';
 import { CustomTheme } from './theme';
 import App from './App';
 import { store } from './redux/store';

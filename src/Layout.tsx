@@ -15,9 +15,7 @@ import {
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Dashboard from '@material-ui/icons/DashboardSharp';
 import AccBalanceWallet from '@material-ui/icons/AccountBalanceWalletSharp';
-import ScatterPlot from '@material-ui/icons/ScatterPlotSharp';
 import BarChart from '@material-ui/icons/BarChartSharp';
-import PieChart from '@material-ui/icons/PieChartSharp';
 import Categories from '@material-ui/icons/CategorySharp';
 import Add from '@material-ui/icons/Add';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -30,6 +28,11 @@ import { IExpense } from './components/expenses/IExpense';
 import Wallet from './components/wallet';
 
 const useStyles = makeStyles((theme) => createStyles({
+  layoutContainer: {
+    backgroundColor: 'rgb(94,57,89)',
+    width: '100%',
+    height: '100vh',
+  },
   mainContentContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -43,14 +46,12 @@ const useStyles = makeStyles((theme) => createStyles({
     height: 80,
   },
   drawer: {
-    width: 140,
     flexShrink: 0,
     zIndex: 10,
   },
   drawerPaper: {
     display: 'flex',
     alignItems: 'center',
-    width: 140,
     zIndex: 20,
   },
   drawerList: {
@@ -59,23 +60,13 @@ const useStyles = makeStyles((theme) => createStyles({
     marginTop: 50,
     backgroundColor: theme.palette.background.paper,
   },
-  root: {
-    margin: 20,
-    width: 70,
-    '&$selected': {
-      backgroundColor: 'transparent',
-      color: theme.palette.primary.main,
-    },
-    '&$selected:hover': {
-      backgroundColor: 'transparent',
-      color: 'white',
-    },
-    '&:hover': {
-      backgroundColor: 'transparent',
-      color: 'white',
-    },
+  listItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 120,
+    marginTop: 40,
   },
-  selected: {},
   menu: {
     zIndex: 30,
     margin: 10,
@@ -101,7 +92,7 @@ const useStyles = makeStyles((theme) => createStyles({
 type RenderListProps = {
   classes: any;
   itemList: IconListProps[];
-  selected?: string;
+  selected: string;
   expenses: IExpense[];
   selectionHandler: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -122,11 +113,6 @@ type AppBarProps = {
 
 const iconList: IconListProps[] = [
   {
-    name: 'Categories',
-    to: '/exps-avg-by-category',
-    icon: <Categories fontSize="large" />,
-  },
-  {
     name: 'Expenses',
     to: '/expenses',
     icon: (expenses: IExpense[], selected: string) => (
@@ -136,24 +122,32 @@ const iconList: IconListProps[] = [
         invisible={expenses.length === 0 || selected !== 'Expenses'}
         max={999}
       >
-        <AccBalanceWallet fontSize="large" />
+        <AccBalanceWallet
+          fontSize="large"
+          htmlColor={selected === 'Expenses' ? '#0da86c' : '#fff'}
+        />
       </Badge>
     ),
   },
   {
-    name: 'ScatterPlot',
-    to: '/scatter-graph-chart',
-    icon: <ScatterPlot fontSize="large" />,
+    name: 'Categories',
+    to: '/exps-avg-by-category',
+    icon: (selected: string) => (
+      <Categories
+        fontSize="large"
+        htmlColor={selected === 'Categories' ? '#0da86c' : '#fff'}
+      />
+    ),
   },
   {
-    name: 'BarChart',
-    to: '/bar-graph-chart',
-    icon: <BarChart fontSize="large" />,
-  },
-  {
-    name: 'PieChart',
-    to: '/pie-graph-chart',
-    icon: <PieChart fontSize="large" />,
+    name: 'Charts',
+    to: '/charts',
+    icon: (selected: string) => (
+      <BarChart
+        fontSize="large"
+        htmlColor={selected === 'Charts' ? '#0da86c' : '#fff'}
+      />
+    ),
   },
 ];
 
@@ -171,17 +165,14 @@ function RenderList({
           <Link to="/profile" className={classes.link}>
             <ListItem
               classes={{
-                root: classes.root,
-                selected: classes.selected,
+                root: classes.listItem,
               }}
               button
               selected={selected === 'Profile'}
               onClick={() => selectionHandler('Profile')}
             >
-              <ListItemIcon
-                style={{ color: selected === 'Profile' ? '#0da86c' : '' }}
-              >
-                <Dashboard fontSize="large" />
+              <ListItemIcon>
+                <Dashboard fontSize="large" htmlColor={selected === 'Profile' ? '#0da86c' : '#fff'} />
               </ListItemIcon>
             </ListItem>
           </Link>
@@ -193,7 +184,7 @@ function RenderList({
             <Link key={name} to={to} className={classes.link}>
               <ListItem
                 classes={{
-                  root: classes.root,
+                  root: classes.listItem,
                   selected: classes.selected,
                 }}
                 button
@@ -201,10 +192,8 @@ function RenderList({
                 selected={selected === name}
                 onClick={() => selectionHandler(name)}
               >
-                <ListItemIcon
-                  style={{ color: selected === name ? '#0da86c' : '' }}
-                >
-                  {name === 'Expenses' ? icon(expenses, selected) : icon}
+                <ListItemIcon>
+                  {name === 'Expenses' ? icon(expenses, selected) : icon(selected)}
                 </ListItemIcon>
               </ListItem>
             </Link>
@@ -257,7 +246,7 @@ function Layout() {
 
   return (
     <Router>
-      <Grid container>
+      <Grid container className={classes.layoutContainer}>
         <CssBaseline />
         {isAuthenticated() && (
           <Grid item xs={1}>

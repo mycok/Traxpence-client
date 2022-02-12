@@ -3,7 +3,6 @@ import NumberFormat from 'react-number-format';
 
 import { Typography, Box } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { grey } from '@material-ui/core/colors';
 
 import { ExpensePreview } from '../../../redux/reducers/expenses/currentMonthPreview';
 import Wallet from '../../wallet';
@@ -39,8 +38,8 @@ const useStyles = makeStyles((theme) => createStyles({
   summaryTotalText: {
     marginTop: 10,
     fontWeight: 900,
-    color: grey[600],
     fontStyle: 'italic',
+    color: theme.palette.common.white,
   },
   textBox: {
     borderRadius: theme.shape.borderRadius * 2,
@@ -56,6 +55,7 @@ const useStyles = makeStyles((theme) => createStyles({
     fontSize: 30,
     fontWeight: 900,
     letterSpacing: 0.6,
+    color: theme.palette.common.white,
   },
 }));
 

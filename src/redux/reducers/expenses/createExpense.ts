@@ -15,7 +15,7 @@ type NewExpenseState = {
     serverError: string | null,
 } & IExpense
 
-const initialCreateExpenseState: NewExpenseState = {
+export const initialCreateExpenseState: NewExpenseState = {
   title: '',
   amount: 0,
   category: {
