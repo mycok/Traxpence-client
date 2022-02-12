@@ -15,19 +15,18 @@ import {
   Button,
   Box,
 } from '@material-ui/core';
-import { EditSharp, CloseRounded } from '@material-ui/icons';
+import { CloseRounded } from '@material-ui/icons';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 import { IUser } from '../user';
 import CurrentExpenseSummary from '../expenses/summaries/CurrentExpenseSummary';
-import CustomTooltip from '../../shared/CustomTooltip';
 
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signout } from '../../api/auth';
 import { signOut } from '../../redux/actions/auth';
 import { fetchCurrentMonthExpenditurePreview, ExpensePreview } from '../../redux/reducers/expenses/currentMonthPreview';
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   root: {
     margin: 5,
     width: 700,
@@ -40,6 +39,7 @@ const useStyles = makeStyles(() => createStyles({
   },
   editButton: {
     marginTop: 12,
+    color: theme.palette.common.white,
   },
   cardContent: {
     display: 'flex',
@@ -52,12 +52,34 @@ const useStyles = makeStyles(() => createStyles({
     justifyContent: 'space-between',
   },
   textField: {
+    '& .MuiInput-root': {
+      color: theme.palette.common.white,
+      width: 100,
+      '& .MuiSelect-icon': {
+        color: theme.palette.common.white,
+      },
+    },
     margin: 10,
     width: 400,
+  },
+  title: {
+    color: theme.palette.common.white,
+  },
+  listItem: {
+    color: theme.palette.common.white,
   },
   expenseTotals: {
     marginLeft: 10,
     fontWeight: 800,
+  },
+  selectCurrencyContainer: {
+    display: 'flex',
+    padding: 1,
+    alignItems: 'center',
+  },
+  selectCurrency: {
+    marginLeft: 10,
+    width: 120,
   },
   signoutButton: {
     width: 180,
@@ -166,23 +188,15 @@ function ProfileCard({
       <CardHeader
         avatar={<Avatar src={user?.avatar ?? ''} />}
         action={(
-          <>
-            <CustomTooltip title="Edit" placement="bottom">
-              <IconButton aria-label="edit" className={classes.editButton}>
-                <EditSharp />
-              </IconButton>
-            </CustomTooltip>
-
-            <Link to="/expenses">
-              <IconButton aria-label="close" className={classes.editButton}>
-                <CloseRounded />
-              </IconButton>
-            </Link>
-          </>
+          <Link to="/expenses">
+            <IconButton aria-label="close" className={classes.editButton}>
+              <CloseRounded />
+            </IconButton>
+          </Link>
         )}
         title={(
           <Box className={classes.titleContainer}>
-            <Typography variant="h6">{user?.username}</Typography>
+            <Typography variant="h6" className={classes.title}>{user?.username}</Typography>
           </Box>
         )}
         subheader={<Typography color="primary">{user?.email}</Typography>}
@@ -221,23 +235,25 @@ function SettingsCard({
 }: Partial<ProfileCardProps>) {
   return (
     <CardContent className={classes.cardContent}>
-      <>
-        <Typography>Select Currency</Typography>
-        <TextField
-          id="category"
-          variant="standard"
-          className={classes.textField}
-          value={currency ?? ''}
-          select
-          onChange={handleCurrencyChange}
-        >
-          {currencies.map((curr) => (
-            <MenuItem key={curr?.label} value={curr?.label}>
-              {curr?.label}
-            </MenuItem>
-          ))}
-        </TextField>
-      </>
+      <Box className={classes.selectCurrencyContainer}>
+        <Typography className={classes.title}>Select Currency</Typography>
+        <Box className={classes.selectCurrency}>
+          <TextField
+            id="category"
+            variant="standard"
+            className={classes.textField}
+            value={currency ?? ''}
+            select
+            onChange={handleCurrencyChange}
+          >
+            {currencies.map((curr) => (
+              <MenuItem key={curr?.label} value={curr?.label} className={classes.listItem}>
+                {curr?.label}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Box>
+      </Box>
     </CardContent>
   );
 }

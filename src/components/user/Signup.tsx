@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => createStyles({
     cursor: 'pointer',
   },
   textSpan: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontWeight: 'bolder',
   },
   typographyText: {
-    color: theme.palette.text.primary,
+    color: theme.palette.common.white,
   },
   link: {
     textDecoration: 'none',

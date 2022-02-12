@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     justifyContent: 'center',
     flexDirection: 'column',
-    // height: '650px',
     overflow: 'auto',
     [theme.breakpoints.down('sm')]: {
       height: '450px',
@@ -44,7 +43,7 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
-    width: '100%',
+    width: '700px',
     marginBottom: '8px',
   },
   backButton: {
@@ -94,6 +93,10 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   }, [selectionHandler]);
 
   useEffect(() => {
+    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
+  }, []);
+
+  useEffect(() => {
     /** Use cases for condition check one:
        * when saving a newly created expense
        * when saving an edited expense
@@ -101,7 +104,7 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
        * on router push to the expenses page from another page
      */
 
-    if (!location?.state && !didFinishDateRangeSearch) {
+    if (location?.state?.from) {
       dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
     }
 

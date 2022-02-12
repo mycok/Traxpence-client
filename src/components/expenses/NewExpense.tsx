@@ -10,7 +10,9 @@ import AddCategoryDialog from './shared/AddDialog';
 
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
-import { onValueChange, createExpense } from '../../redux/reducers/expenses/createExpense';
+import {
+  onValueChange, createExpense, initialCreateExpenseState, reset,
+} from '../../redux/reducers/expenses/createExpense';
 import { setDidFinishDateRangeSearch } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
 import { onCategoryValueChange, createCategory } from '../../redux/reducers/category/createCategory';
 
@@ -100,10 +102,8 @@ function NewExpense({ history }: RouteProps) {
   }
 
   // new category functionality
-
-  function handleNewCategoryOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleNewCategoryOnChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const { target: { value } } = event;
-
     dispatch(onCategoryValueChange({ value }));
   }
 
@@ -119,8 +119,11 @@ function NewExpense({ history }: RouteProps) {
     setOpen(true);
   }
 
-  // TODO: add functionality to display toast with server error
+  function handleCancel() {
+    dispatch(reset(initialCreateExpenseState));
+  }
 
+  // TODO: add functionality to display toast with server error
   return (
     <div className={classes.container}>
       <Paper elevation={5}>
@@ -132,6 +135,7 @@ function NewExpense({ history }: RouteProps) {
           categories={categories}
           path="new-expense"
           selectedDate={selectedDate}
+          handleCancel={handleCancel}
           handleOnSubmit={handleOnSubmit}
           handleOnChange={handleOnChange}
           handleDateSelection={handleDateSelection}
@@ -144,6 +148,7 @@ function NewExpense({ history }: RouteProps) {
         label="Title"
         dialogTitle="Add New Category"
         value={categoryTitle}
+        inputType="text"
         handleOnChange={handleNewCategoryOnChange}
         handleSave={handleSaveNewCategory}
         handleClose={handleCloseNewCategoryDialog}

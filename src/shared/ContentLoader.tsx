@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors';
 import ContentLoader from 'react-content-loader';
 
 function ExpenseLoader(props: any) {
@@ -10,8 +9,8 @@ function ExpenseLoader(props: any) {
       width={400}
       height={260}
       viewBox="0 0 400 260"
-      backgroundColor={grey[300]}
-      foregroundColor={grey[300]}
+      backgroundColor="#392B43"
+      foregroundColor="#392B43"
       {...props}
     >
       <rect x="0" y="8" rx="3" ry="3" width="88" height="6" />

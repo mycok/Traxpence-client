@@ -8,19 +8,24 @@ import {
   IconButton,
   Typography,
   CircularProgress,
+  Box,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { grey, green } from '@material-ui/core/colors';
+import { green } from '@material-ui/core/colors';
 import {
   VisibilityOff, Visibility, CheckCircle,
 } from '@material-ui/icons';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
+    '& .MuiInputLabel-outlined': {
+      color: theme.palette.common.white,
+    },
     '& label.Mui-focused': {
-      color: grey[200],
+      color: theme.palette.common.white,
     },
     '& .MuiOutlinedInput-root': {
+      color: theme.palette.common.white,
       '& fieldset': {
         borderColor: theme.palette.primary.main,
       },
@@ -41,6 +46,7 @@ const useStyles = makeStyles((theme) => createStyles({
   textField: {
     margin: theme.spacing(1),
     width: 400,
+    color: theme.palette.common.white,
   },
   submitButton: {
     width: 180,
@@ -57,6 +63,9 @@ const useStyles = makeStyles((theme) => createStyles({
   wrapper: {
     margin: theme.spacing(1),
     position: 'relative',
+  },
+  adornmentIcons: {
+    color: theme.palette.common.white,
   },
 }));
 
@@ -118,7 +127,7 @@ function Form({
                 endAdornment: (
                   inputError?.username && (
                     <InputAdornment position="end">
-                      <CheckCircle color="primary" fontSize="small" />
+                      <CheckCircle color="secondary" fontSize="small" />
                     </InputAdornment>
                   )
                 ),
@@ -148,7 +157,7 @@ function Form({
             endAdornment: (
               inputError?.email && (
                 <InputAdornment position="end">
-                  <CheckCircle color="primary" fontSize="small" />
+                  <CheckCircle color="secondary" fontSize="small" />
                 </InputAdornment>
               )
             ),
@@ -176,13 +185,13 @@ function Form({
               <>
                 <InputAdornment position="end">
                   <IconButton onClick={toggleVisibility}>
-                    {visible ? <Visibility fontSize="small" /> : <VisibilityOff fontSize="small" />}
+                    {visible ? <Visibility className={classes.adornmentIcons} fontSize="small" /> : <VisibilityOff className={classes.adornmentIcons} fontSize="small" />}
                   </IconButton>
                 </InputAdornment>
                 {
                   inputError?.password && (
                     <InputAdornment position="end">
-                      <CheckCircle color="primary" fontSize="small" />
+                      <CheckCircle color="secondary" fontSize="small" />
                     </InputAdornment>
                     )
                 }
@@ -191,7 +200,7 @@ function Form({
           }}
           onChange={handleOnChange}
         />
-        <div className={classes.wrapper}>
+        <Box className={classes.wrapper}>
           <Button
             variant="contained"
             fullWidth
@@ -203,7 +212,7 @@ function Form({
             {fields === 3 ? 'Sign Up' : 'Sign In'}
           </Button>
           {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
-        </div>
+        </Box>
       </Paper>
     </form>
   );
