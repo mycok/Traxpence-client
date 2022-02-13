@@ -3,10 +3,11 @@ import { useSelector } from 'react-redux';
 import { RouteChildrenProps } from 'react-router-dom';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
+import { Paper, Box } from '@material-ui/core';
 
 import ExpenseForm from './ExpenseForm';
 import AddCategoryDialog from './shared/AddDialog';
+import ErrorAlert from '../../shared/ErrorAlert';
 
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
@@ -34,6 +35,8 @@ function NewExpense({ history }: RouteProps) {
   const [selectedDate, selectDate] = useState<Date>(new Date());
   const [prefCurrency] = useState<string | null>(localStorage.getItem('currency'));
   const [open, setOpen] = useState(false);
+  const [insuffCashBalanceErr, setInsuffCashBalanceErr] = useState<string | null>(null);
+  const { wallet } = useSelector((state: RootState) => state.userWallet);
   const dispatch = useAppDispatch();
   const {
     title,
@@ -97,6 +100,14 @@ function NewExpense({ history }: RouteProps) {
       incurredOn: selectedDate,
     };
 
+    if (newExpense.amount <= 0) return;
+
+    if (wallet?.currentBalance as number < newExpense.amount) {
+      setInsuffCashBalanceErr('Insufficient Cash Balance');
+
+      return;
+    }
+
     if (didFinishDateRangeSearch) dispatch(setDidFinishDateRangeSearch(false));
     dispatch(createExpense(newExpense, () => history.push('/expenses')));
   }
@@ -123,9 +134,13 @@ function NewExpense({ history }: RouteProps) {
     dispatch(reset(initialCreateExpenseState));
   }
 
+  function handleErrAlertClose() {
+    setInsuffCashBalanceErr(null);
+  }
+
   // TODO: add functionality to display toast with server error
   return (
-    <div className={classes.container}>
+    <Box className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
           state={expenseFormState}
@@ -153,7 +168,12 @@ function NewExpense({ history }: RouteProps) {
         handleSave={handleSaveNewCategory}
         handleClose={handleCloseNewCategoryDialog}
       />
-    </div>
+      <ErrorAlert
+        open={!!insuffCashBalanceErr}
+        message={insuffCashBalanceErr as string}
+        onClose={handleErrAlertClose}
+      />
+    </Box>
   );
 }
 

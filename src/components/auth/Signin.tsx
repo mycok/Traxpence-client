@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, RouteChildrenProps } from 'react-router-dom';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 import Form from './AuthForm';
 import { emailRegex, passwordRegex } from '../../utils/authValidation';
-import ServerMessage from '../../shared/ServerMessage';
+import ErrorAlert from '../../shared/ErrorAlert';
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signinAction, onChange, setServerError } from '../../redux/actions/auth';
 import { setAuthError } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
@@ -92,18 +92,18 @@ function Signin({ elevation, history, location }: SigninProps) {
     dispatch(signinAction({ email, password }));
   }
 
-  function hideServerMessage() {
+  function handleErrAlertClose() {
     dispatch(setServerError(''));
   }
 
   return (
     <>
-      <ServerMessage
+      <ErrorAlert
         open={!!serverError}
         message={serverError}
-        onClose={hideServerMessage}
+        onClose={handleErrAlertClose}
       />
-      <div className={classes.root}>
+      <Box className={classes.root}>
         <Form
           elevation={elevation}
           fields={2}
@@ -114,7 +114,7 @@ function Signin({ elevation, history, location }: SigninProps) {
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignin}
         />
-        <div className={classes.switchTextDiv}>
+        <Box className={classes.switchTextDiv}>
           <Link to="/signup" className={classes.link}>
             <Typography variant="subtitle2" className={classes.typographyText}>
               Don't have an account?
@@ -124,8 +124,8 @@ function Signin({ elevation, history, location }: SigninProps) {
               </span>
             </Typography>
           </Link>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </>
   );
 }

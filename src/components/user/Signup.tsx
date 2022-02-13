@@ -2,10 +2,10 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
 import Form from '../auth/AuthForm';
-import ServerMessage from '../../shared/ServerMessage';
+import ErrorAlert from '../../shared/ErrorAlert';
 import { emailRegex, passwordRegex, usernameLength } from '../../utils/authValidation';
 import { useAppDispatch, RootState } from '../../redux/store';
 import { signupAction, onChange, setServerError } from '../../redux/actions/auth';
@@ -84,18 +84,18 @@ function Signup({ elevation, history }: SignupProps) {
     dispatch(signupAction({ username, email, password }));
   }
 
-  function hideServerMessage() {
+  function handleErrAlertClose() {
     dispatch(setServerError(''));
   }
 
   return (
     <>
-      <ServerMessage
+      <ErrorAlert
         open={!!serverError}
         message={serverError}
-        onClose={hideServerMessage}
+        onClose={handleErrAlertClose}
       />
-      <div className={classes.root}>
+      <Box className={classes.root}>
         <Form
           elevation={elevation}
           fields={3}
@@ -107,7 +107,7 @@ function Signup({ elevation, history }: SignupProps) {
           handleOnChange={handleOnChange}
           handleOnSubmit={handleSignup}
         />
-        <div className={classes.switchTextDiv}>
+        <Box className={classes.switchTextDiv}>
           <Link to="/signin" className={classes.link}>
             <Typography className={classes.typographyText} variant="subtitle2">
               Already have an account?
@@ -117,8 +117,8 @@ function Signup({ elevation, history }: SignupProps) {
               </span>
             </Typography>
           </Link>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </>
   );
 }
