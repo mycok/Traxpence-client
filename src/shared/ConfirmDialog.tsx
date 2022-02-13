@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Dialog, DialogTitle, DialogActions, Button,
+  Box,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
@@ -69,9 +70,9 @@ function ConfirmDialog({
             onClick={handleDelete}
           >
             {isDeleting ? (
-              <div className={classes.circularLoaderContainer}>
+              <Box className={classes.circularLoaderContainer}>
                 <CircularLoader styleClass={classes.buttonProgress} />
-              </div>
+              </Box>
             ) : (
               'Delete'
             )}

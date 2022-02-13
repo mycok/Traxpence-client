@@ -1,6 +1,6 @@
-import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
+import { responsiveFontSizes, createTheme } from '@material-ui/core/styles';
 
-let theme = createMuiTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: '#33859e',
@@ -17,7 +17,7 @@ let theme = createMuiTheme({
 
 theme = responsiveFontSizes(theme);
 
-theme = createMuiTheme(theme, {
+theme = createTheme(theme, {
   components: {
     MuiButton: {
       styleOverrides: {
@@ -30,6 +30,18 @@ theme = createMuiTheme(theme, {
       styleOverrides: {
         root: {
           color: theme.palette.common.white,
+        },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: false,
+        component: 'button',
+      },
+      styleOverrides: {
+        root: {
+          color: theme.palette.common.white,
+          textDecoration: 'none',
         },
       },
     },

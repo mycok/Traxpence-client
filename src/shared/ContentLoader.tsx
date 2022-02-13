@@ -13,12 +13,12 @@ function ExpenseLoader(props: any) {
       foregroundColor="#392B43"
       {...props}
     >
-      <rect x="0" y="8" rx="3" ry="3" width="88" height="6" />
-      <rect x="0" y="26" rx="3" ry="3" width="52" height="6" />
-      <rect x="300" y="8" rx="3" ry="3" width="88" height="6" />
-      <rect x="0" y="56" rx="3" ry="3" width="650" height="6" />
-      <rect x="0" y="72" rx="3" ry="3" width="650" height="6" />
-      <rect x="0" y="88" rx="3" ry="3" width="178" height="6" />
+      <rect x="0" y="8" rx="3" ry="3" width="88" height="8" />
+      <rect x="0" y="26" rx="3" ry="3" width="52" height="8" />
+      <rect x="300" y="8" rx="3" ry="3" width="88" height="12" />
+      <rect x="0" y="56" rx="3" ry="3" width="650" height="20" />
+      <rect x="0" y="72" rx="3" ry="3" width="650" height="20" />
+      <rect x="0" y="88" rx="3" ry="3" width="178" height="20" />
     </ContentLoader>
   );
 }

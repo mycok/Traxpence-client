@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core';
+import { Button, Box } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 
 import { IExpense } from './IExpense';
@@ -46,7 +46,7 @@ function ExpenseList({
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
       {expenses?.map((exp) => (
         <SingleExpense
           key={exp?._id}
@@ -71,7 +71,7 @@ function ExpenseList({
           )
         )
       }
-    </div>
+    </Box>
   );
 }
 

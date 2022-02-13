@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => createStyles({
     marginBottom: '8px',
   },
   backButton: {
-    color: theme.palette.common.black,
+    color: theme.palette.common.white,
     backgroundColor: theme.palette.secondary.main,
     '&:hover': {
       backgroundColor: theme.palette.secondary.dark,
@@ -89,28 +89,26 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   );
 
   useEffect(() => {
-    selectionHandler('expenses');
+    selectionHandler('Expenses');
   }, [selectionHandler]);
 
   useEffect(() => {
-    dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
-  }, []);
+    dispatch(fetchExpenses({}));
+  }, [dispatch]);
 
   useEffect(() => {
     /** Use cases for condition check one:
-       * when saving a newly created expense
-       * when saving an edited expense
-       * on initial render of the expenses page
-       * on router push to the expenses page from another page
+       * After saving a newly created expense.
+       * After saving an edited expense.
+       * Router push to the expenses page from another page using the Link component.
      */
-
     if (location?.state?.from) {
-      dispatch(fetchExpenses({ startDate: undefined, endDate: undefined, cursor: undefined }));
+      dispatch(fetchExpenses({}));
     }
 
-    if (didFinishDateRangeSearch) {
-      setShowBackButton(true);
-    }
+    // if (didFinishDateRangeSearch) {
+    //   setShowBackButton(false);
+    // }
 
     if (didFinishEditingExpense) {
       const editedExpenseCategory = categories.find(
@@ -123,7 +121,7 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   }, [
     dispatch,
     location,
-    didFinishDateRangeSearch,
+    // didFinishDateRangeSearch,
     didFinishEditingExpense,
     editedExpense,
     categories,
@@ -157,11 +155,18 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
     setShowBackButton(false);
     dispatch(setDidFinishEditingExpense(false));
     dispatch(setDidFinishDateRangeSearch(false));
+    dispatch(fetchExpenses({}));
   }
 
   if ((isLoading && count === 0) || (isLoading && !isBackButtonShown && !hasNextPage)) {
     return (
       <ExpensesLoader />
+    );
+  }
+
+  if (expenses.length === 0 && didFinishDateRangeSearch) {
+    return (
+      <NoExpenses didPerformSearch />
     );
   }
 
@@ -176,9 +181,9 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
       <Box className={classes.dateContainer}>
         {
           isBackButtonShown && (
-            <CustomTooltip title="back to expenses">
+            <CustomTooltip title="Back To Expenses">
               <Fab
-                aria-label="search"
+                aria-label="back-button"
                 className={classes.backButton}
                 size="small"
                 disabled={isLoading}
