@@ -1,10 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Typography } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 
-import { ReactComponent as Wallet } from '../../images/wallet.svg';
+import { ReactComponent as NoExpensesIllustration } from '../../images/no_records.svg';
 
-const useStyles = makeStyles(() => createStyles({
+const useStyles = makeStyles((theme) => createStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
@@ -19,33 +20,74 @@ const useStyles = makeStyles(() => createStyles({
     fontFamily: 'Raleway',
     fontSize: 20,
     letterSpacing: 0.6,
+    color: theme.palette.common.white,
+  },
+  subText: {
+    fontFamily: 'Raleway',
+    fontSize: 20,
+    letterSpacing: 0.6,
+    color: theme.palette.secondary.main,
+  },
+  link: {
+    textDecoration: 'none',
   },
 }));
 
-function NoExpenses() {
+type NoExpensesProps = {
+  didPerformSearch?: boolean
+}
+
+function NoExpenses({ didPerformSearch }: NoExpensesProps) {
   const classes = useStyles();
+
   return (
-    <div className={classes.container}>
-      <div>
-        <Wallet />
-      </div>
-      <div className={classes.child}>
-        <Typography className={classes.text} variant="h4" align="center">
-          You currently have no expenses recorded!
-        </Typography>
-        <Typography className={classes.text} variant="h4" align="center">
-          Use the
-          {' '}
-          {' '}
-          <Typography className={classes.text} variant="h4" align="center" color="secondary" component="span">
-            + / add
-            {' '}
-            {' '}
-          </Typography>
-          button to record an expense
-        </Typography>
-      </div>
-    </div>
+    <Box className={classes.container}>
+      <Box>
+        <NoExpensesIllustration />
+      </Box>
+      <Box className={classes.child}>
+        {
+          didPerformSearch ? (
+            <>
+              <Typography className={classes.text} variant="h4" align="center">
+                No records found!
+              </Typography>
+              <Link
+                className={classes.link}
+                to={{ pathname: '/expenses', state: { from: {} } }}
+              >
+                <Typography
+                  className={classes.subText}
+                  align="center"
+                  color="secondary"
+                  component="span"
+                >
+                  {' '}
+                  Click to go back to the expense list
+                </Typography>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Typography className={classes.text} variant="h4" align="center">
+                You currently have no expenses recorded!
+              </Typography>
+              <Typography className={classes.text} variant="h4" align="center">
+                Use the
+                {' '}
+                {' '}
+                <Typography className={classes.subText} align="center" color="secondary" component="span">
+                  + / add
+                  {' '}
+                  {' '}
+                </Typography>
+                button to record an expense
+              </Typography>
+            </>
+          )
+        }
+      </Box>
+    </Box>
   );
 }
 

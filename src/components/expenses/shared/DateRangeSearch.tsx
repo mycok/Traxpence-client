@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { memo } from 'react';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { Box } from '@material-ui/core';
 
 import MultipleDateRange from '../../../shared/dates/MultipleDateRange';
 import SearchButton from '../../../shared/SearchButton';
@@ -38,7 +39,7 @@ function DateRangeSearch({
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
       <MultipleDateRange
         fromDate={fromDate}
         toDate={toDate}
@@ -50,8 +51,8 @@ function DateRangeSearch({
         isBackButtonShown={isBackButtonShown}
         dateRangeSearchHandler={dateRangeSearchHandler}
       />
-    </div>
+    </Box>
   );
 }
 
-export default DateRangeSearch;
+export default memo(DateRangeSearch);
