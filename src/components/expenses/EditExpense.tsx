@@ -3,10 +3,10 @@ import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
+import { Paper, Box } from '@material-ui/core';
 
 import ExpenseForm from './ExpenseForm';
-import ServerMessage from '../../shared/ServerMessage';
+import ErrorAlert from '../../shared/ErrorAlert';
 
 import { useAppDispatch, RootState } from '../../redux/store';
 import { fetchCategories, Category } from '../../redux/reducers/category/fetchCategories';
@@ -54,7 +54,7 @@ function EditExpense({ history }: RouteComponentProps) {
     selectDate(date);
   }
 
-  function hideServerMessage() {
+  function handleErrAlertClose() {
     dispatch(setServerError(undefined));
   }
 
@@ -81,7 +81,7 @@ function EditExpense({ history }: RouteComponentProps) {
   }
 
   return (
-    <div className={classes.container}>
+    <Box className={classes.container}>
       <Paper elevation={5}>
         <ExpenseForm
           state={expenseToEdit}
@@ -96,12 +96,12 @@ function EditExpense({ history }: RouteComponentProps) {
           handleDateSelection={handleDateSelection}
         />
       </Paper>
-      <ServerMessage
+      <ErrorAlert
         open={!!serverError}
         message={serverError as string}
-        onClose={hideServerMessage}
+        onClose={handleErrAlertClose}
       />
-    </div>
+    </Box>
   );
 }
 

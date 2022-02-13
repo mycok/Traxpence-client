@@ -1,12 +1,16 @@
 import React from 'react';
 
-import { Snackbar } from '@material-ui/core';
+import { Snackbar, IconButton } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme) => createStyles({
   error: {
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
+  },
+  closeIcon: {
+    color: theme.palette.common.white,
   },
 }));
 
@@ -16,7 +20,7 @@ type SnackbarProps = {
     onClose(): void,
 }
 
-function ServerMessage({ open, message, onClose }: SnackbarProps) {
+function ErrorAlert({ open, message, onClose }: SnackbarProps) {
   const classes = useStyles();
 
   return (
@@ -35,8 +39,20 @@ function ServerMessage({ open, message, onClose }: SnackbarProps) {
         vertical: 'top',
         horizontal: 'right',
       }}
+      action={(
+        <>
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={onClose}
+          >
+            <CloseIcon fontSize="small" className={classes.closeIcon} />
+          </IconButton>
+        </>
+      )}
     />
   );
 }
 
-export default ServerMessage;
+export default ErrorAlert;
