@@ -30,22 +30,20 @@ const initialCategoriesState: CategoriesState = {
 
 export function fetchCategories(): AppThunk {
   return async (dispatch) => {
-    let data: any;
-    try {
-      dispatch(setIsLoading(true));
-      data = await Promise.all([list('categories'), list('categories/by/user')]);
-    } catch (error: any) {
-      dispatch(setIsLoading(false));
-      dispatch(setServerError(error.toString()));
-
-      return;
-    }
-    dispatch(setIsLoading(false));
-    if (data[0].success) {
-      dispatch(fetchCategoriesSuccessful(data));
-    } else {
-      localStorage.removeItem('authData');
-    }
+    dispatch(setIsLoading(true));
+    await Promise.all([list('categories'), list('categories/by/user')])
+      .then((data: any) => {
+        dispatch(setIsLoading(false));
+        if (data[0].success) {
+          dispatch(fetchCategoriesSuccessful(data));
+        } else {
+          localStorage.removeItem('authData');
+        }
+      })
+      .catch((err: any) => {
+        dispatch(setIsLoading(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
