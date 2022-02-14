@@ -18,7 +18,6 @@ import { setDidFinishDateRangeSearch } from '../../redux/reducers/expenses/fetch
 import {
   onCategoryValueChange,
   createCategory,
-  reset as resetCategoryState,
 } from '../../redux/reducers/category/createCategory';
 
 const useStyles = makeStyles(() => createStyles({
@@ -58,6 +57,7 @@ function NewExpense({ history }: RouteProps) {
   const {
     title: categoryTitle,
     isSavingCategory,
+    createdCategory,
     didFinishCreatingCategory,
   } = useSelector(
     (state: RootState) => state.createCategory,
@@ -116,7 +116,7 @@ function NewExpense({ history }: RouteProps) {
     dispatch(createExpense(newExpense, () => history.push('/expenses')));
   }
 
-  // new category functionality
+  // Add new category functionality
   function handleNewCategoryOnChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const { target: { value } } = event;
     dispatch(onCategoryValueChange({ value }));
@@ -130,7 +130,6 @@ function NewExpense({ history }: RouteProps) {
 
   function handleCloseNewCategoryDialog() {
     setOpen(false);
-    dispatch(resetCategoryState());
   }
 
   function handleOpenNewCategoryDialog() {
@@ -154,6 +153,7 @@ function NewExpense({ history }: RouteProps) {
           isLoading={isLoading}
           isSaving={isSaving}
           prefCurrency={prefCurrency}
+          createdCategory={createdCategory}
           categories={categories}
           path="new-expense"
           selectedDate={selectedDate}
