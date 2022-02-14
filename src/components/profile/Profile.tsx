@@ -133,7 +133,7 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
     JSON.parse(localStorage.getItem('authData') as string),
   );
 
-  const { data } = useSelector((state: RootState) => state.currentMonthExpPreview);
+  const { expensePreview } = useSelector((state: RootState) => state.currentMonthExpPreview);
 
   useEffect(() => {
     selectionHandler('Profile');
@@ -166,7 +166,7 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
           classes={classes}
           user={userData.user}
           currency={currency}
-          expensePreview={data}
+          expensePreview={expensePreview}
           handleCurrencyChange={handleCurrencyChange}
           handleSignout={handleSignout}
         />
