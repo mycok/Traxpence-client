@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import {
   TextField, Paper, Button,
@@ -138,6 +138,7 @@ function ExpenseForm({
   handleShowAddCategoryDialog,
 }: ExpenseFormComponentProps) {
   const classes = useStyles();
+  const location = useLocation();
   const titleInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -201,9 +202,9 @@ function ExpenseForm({
         >
           {
             isLoading ? (
-              <div className={classes.circularLoaderContainer}>
+              <Box className={classes.circularLoaderContainer}>
                 <CircularLoader styleClass={classes.buttonProgress} />
-              </div>
+              </Box>
             ) : (
               categories.map((cat) => (
                 <MenuItem
@@ -218,7 +219,7 @@ function ExpenseForm({
             )
           }
           {
-            !isLoading && (
+            !isLoading && location.pathname === '/new-expense' && (
               <MenuItem
                 className={classes.addNewCategory}
                 onClick={handleShowAddCategoryDialog}
