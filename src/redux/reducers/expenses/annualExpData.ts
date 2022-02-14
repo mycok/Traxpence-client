@@ -9,46 +9,38 @@ export type AnnualExpenseData = {
     y: number,
 };
 
-type AnnualExpenseDataState = {
-  isLoading: boolean,
-  serverError: string | undefined,
-  annualExpData: {x: number, y: number}[],
+type AnnualExpenseDataResponse = {
+  success: boolean,
+  annualExpData: AnnualExpenseData[],
 };
 
-export type AnnualExpenseDataResponse = {
-  success: false,
-  message?: string,
-  annualExpData: AnnualExpenseData[],
+type AnnualExpenseDataState = {
+  isLoading: boolean,
+  serverError: string | null,
+  annualExpData: {x: number, y: number}[],
 };
 
 const initialAnnualExpenseDataState: AnnualExpenseDataState = {
   isLoading: false,
-  serverError: undefined,
+  serverError: null,
   annualExpData: [],
 };
 
 export function fetchAnnualExpenseData(year: any): AppThunk {
   return async (dispatch) => {
-    let data: AnnualExpenseDataResponse;
-    try {
-      dispatch(setLoading(true));
-      data = await list(`expenses/annual?year=${year}`);
-    } catch (error) {
-      dispatch(setLoading(false));
-      dispatch(setServerError(error.toString()));
+    dispatch(setLoading(true));
 
-      return;
-    }
-
-    dispatch(setLoading(false));
-    if (data.success) {
-      dispatch(
-        fetchAnnualExpenseDataSuccessful(data.annualExpData as AnnualExpenseData[]),
-      );
-    } else {
-      // in case of bad request errors
-      dispatch(setServerError(data.message));
-    }
+    await list(`expenses/annual?year=${year}`)
+      .then((res: AnnualExpenseDataResponse) => {
+        dispatch(setLoading(false));
+        dispatch(
+          fetchAnnualExpenseDataSuccessful(res.annualExpData as AnnualExpenseData[]),
+        );
+      })
+      .catch((err: any) => {
+        dispatch(setLoading(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -59,7 +51,7 @@ const annualExpenseDataSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setServerError(state, action: PayloadAction<string | undefined>) {
+    setServerError(state, action: PayloadAction<string | null>) {
       state.serverError = action.payload;
     },
     fetchAnnualExpenseDataSuccessful(state, action: PayloadAction<AnnualExpenseData[]>) {
