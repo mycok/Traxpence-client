@@ -41,6 +41,7 @@ export function fetchCurrentMonthExpenditurePreview(): AppThunk {
 
     await list('expenses/current')
       .then((res: CurrentMonthExpenditurePreviewResponse) => {
+        dispatch(setLoading(false));
         dispatch(
           fetchCurrentMonthExpenditurePreviewSuccessful(res.expensePreview),
         );

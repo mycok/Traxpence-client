@@ -83,7 +83,7 @@ function MonthlyExpAvgByCategory() {
   const currency = localStorage.getItem('currency');
 
   const { categories } = useSelector((state: RootState) => state.categories);
-  const { isLoading, data } = useSelector(
+  const { isLoading, categoryExpAggregates } = useSelector(
     (state: RootState) => state.expenditureAvgByCategory,
   );
 
@@ -96,23 +96,23 @@ function MonthlyExpAvgByCategory() {
     return <ExpensesLoader />;
   }
 
-  if (data.length === 0) {
+  if (categoryExpAggregates.length === 0) {
     return <NoExpenses />;
   }
 
   return (
     <Box className={classes.root}>
-      {data.map((item) => {
+      {categoryExpAggregates.map((expenditureAgg) => {
         const matchedCategory = categories.find(
-          (cat: Category) => cat._id === item._id,
+          (cat: Category) => cat._id === expenditureAgg._id,
         );
         return (
           <CategoryAvgExpenditure
-            key={item._id}
+            key={expenditureAgg._id}
             classes={classes}
             currency={currency}
             category={matchedCategory as Category}
-            expenditureAggData={item}
+            expenditureAggData={expenditureAgg}
           />
         );
       })}
