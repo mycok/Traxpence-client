@@ -15,7 +15,11 @@ import {
   onValueChange, createExpense, initialCreateExpenseState, reset,
 } from '../../redux/reducers/expenses/createExpense';
 import { setDidFinishDateRangeSearch } from '../../redux/reducers/expenses/fetchOrDeleteExpenses';
-import { onCategoryValueChange, createCategory } from '../../redux/reducers/category/createCategory';
+import {
+  onCategoryValueChange,
+  createCategory,
+  reset as resetCategoryState,
+} from '../../redux/reducers/category/createCategory';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -119,11 +123,14 @@ function NewExpense({ history }: RouteProps) {
   }
 
   function handleSaveNewCategory() {
-    dispatch(createCategory({ title: categoryTitle }, handleCloseNewCategoryDialog));
+    dispatch(createCategory({
+      title: categoryTitle.charAt(0).toUpperCase() + categoryTitle.substring(1),
+    }, handleCloseNewCategoryDialog));
   }
 
   function handleCloseNewCategoryDialog() {
     setOpen(false);
+    dispatch(resetCategoryState());
   }
 
   function handleOpenNewCategoryDialog() {
