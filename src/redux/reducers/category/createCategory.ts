@@ -37,30 +37,24 @@ const initialCategoryState: CategoryState = {
   serverError: null,
 };
 
-export function createCategory(
-  categoryData: Category,
-  cb: Function,
-): AppThunk {
+export function createCategory(categoryData: Category, cb: Function): AppThunk {
   return async (dispatch) => {
-    let data: CategoryDataResponse;
-    try {
-      dispatch(setIsSaving(true));
-      data = await create<Category>('categories', categoryData);
-    } catch (error: any) {
-      dispatch(setIsSaving(false));
-      dispatch(setServerError(error.toString()));
-
-      return;
-    }
-
-    dispatch(setIsSaving(false));
-    if (data.success) {
-      dispatch(createCategorySuccessful(data.category));
-      // dispatch(reset());
-      cb();
-    } else {
-      dispatch(setServerError(data.message as string));
-    }
+    dispatch(setIsSaving(true));
+    await create<Category>('categories', categoryData)
+      .then((resp: CategoryDataResponse) => {
+        dispatch(setIsSaving(false));
+        if (resp.success) {
+          dispatch(createCategorySuccessful(resp.category));
+          dispatch(reset());
+          cb();
+        } else {
+          dispatch(setServerError(resp.message as string));
+        }
+      })
+      .catch((err: any) => {
+        dispatch(setIsSaving(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -82,8 +76,9 @@ const createCategorySlice = createSlice({
       state.didFinishCreatingCategory = true;
       state.createdCategory = action.payload;
     },
-    reset() {
-      return initialCategoryState;
+    reset(state) {
+      state.title = '';
+      state.didFinishCreatingCategory = false;
     },
   },
 });

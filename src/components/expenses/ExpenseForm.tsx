@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme) => createStyles({
 }));
 
 export type Category = {
-  _id: string,
+  _id?: string,
   title: string
 }
 
@@ -113,6 +113,7 @@ type ExpenseFormComponentProps = {
   isSaving: boolean,
   isLoading: boolean,
   prefCurrency: string | null,
+  createdCategory?: Category,
   categories: Category[],
   selectedDate: Date,
   path?: string,
@@ -128,6 +129,7 @@ function ExpenseForm({
   isSaving,
   isLoading,
   prefCurrency,
+  createdCategory,
   categories,
   selectedDate,
   path,
@@ -195,7 +197,7 @@ function ExpenseForm({
           variant="outlined"
           className={classes.textField}
           label="Select Category"
-          value={state?.category?.title ?? ''}
+          value={state?.category?.title ?? createdCategory?.title ?? ''}
           required
           select
           onChange={handleOnChange}
