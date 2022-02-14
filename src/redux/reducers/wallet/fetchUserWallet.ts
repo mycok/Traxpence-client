@@ -3,31 +3,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { read } from '../../../api';
 import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
-
-export type Wallet = {
-  _id: string;
-  type: string;
-  initialAmount: Number;
-  currentBalance: Number;
-  owner: {
-    _id: string;
-    username: string;
-    email: string;
-  };
-};
+import { Wallet, ServerErrResponse, WalletDataResponse } from './types';
 
 type WalletState = {
   isLoading: boolean;
   wallet: Wallet | null;
   serverError: string | null;
-};
-
-type ServerErrResponse = {
-    args: any[]
-    failedOperation: string
-    message: string
-    status: number
-    success: boolean
 };
 
 const initialWalletState: WalletState = {
@@ -41,13 +22,13 @@ export function fetchWallet(): AppThunk {
     dispatch(setIsLoading(true));
 
     await read('wallet', isAuthenticated().user._id)
-      .then((res: Wallet | ServerErrResponse) => {
+      .then((res: WalletDataResponse | ServerErrResponse) => {
         dispatch(setIsLoading(false));
 
         if ((res as ServerErrResponse).message) {
           dispatch(setServerError((res as ServerErrResponse).message));
         } else {
-          dispatch(fetchWalletSuccessful(res as Wallet));
+          dispatch(fetchWalletSuccessful(res as WalletDataResponse));
         }
       })
       .catch((err: any) => {
@@ -67,9 +48,9 @@ const fetchWalletSlice = createSlice({
     setServerError(state, action: PayloadAction<string>) {
       state.serverError = action.payload;
     },
-    fetchWalletSuccessful(state, action: PayloadAction<Wallet>) {
+    fetchWalletSuccessful(state, action: PayloadAction<WalletDataResponse>) {
       state.serverError = null;
-      state.wallet = action.payload;
+      state.wallet = action.payload.wallet;
     },
   },
 });
