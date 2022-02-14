@@ -13,46 +13,36 @@ export type MonthlyCategoryExpAggregate = {
 
 type MonthlyCategoryExpenditureAggregateState = {
   isLoading: boolean;
-  serverError: string | undefined;
-  data: MonthlyCategoryExpAggregate[];
+  serverError: string | null;
+  categoryExpAggregates: MonthlyCategoryExpAggregate[];
 };
 
 type MonthlyCategoryExpenditureAggregateResponse = {
   success: false;
-  categoryExpAggregates?: MonthlyCategoryExpAggregate[];
-  message?: string;
+  categoryExpAggregates: MonthlyCategoryExpAggregate[];
 };
 
 const initialMonthlyCategoryExpenditureAggregateState: MonthlyCategoryExpenditureAggregateState = {
   isLoading: false,
-  serverError: undefined,
-  data: [],
+  serverError: null,
+  categoryExpAggregates: [],
 };
 
 export function fetchMonthlyCategoryExpenditureAggregate(): AppThunk {
   return async (dispatch) => {
-    let data: MonthlyCategoryExpenditureAggregateResponse;
-    try {
-      dispatch(setLoading(true));
-      data = await list('expenses/by/category');
-    } catch (error: any) {
-      dispatch(setLoading(false));
-      dispatch(setServerError(error.toString()));
+    dispatch(setLoading(true));
 
-      return;
-    }
-
-    dispatch(setLoading(false));
-    if (data.success) {
-      dispatch(
-        fetchMonthlyCategoryExpenditureAggregateSuccessful(
-          data.categoryExpAggregates as MonthlyCategoryExpAggregate[],
-        ),
-      );
-    } else {
-      // in case of bad request errors
-      dispatch(setServerError(data.message));
-    }
+    await list('expenses/by/category')
+      .then((res: MonthlyCategoryExpenditureAggregateResponse) => {
+        dispatch(setLoading(false));
+        dispatch(
+          fetchMonthlyCategoryExpenditureAggregateSuccessful(res.categoryExpAggregates),
+        );
+      })
+      .catch((err: any) => {
+        dispatch(setLoading(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -63,14 +53,14 @@ const monthlyCategoryExpenditureAggregateSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setServerError(state, action: PayloadAction<string | undefined>) {
+    setServerError(state, action: PayloadAction<string | null>) {
       state.serverError = action.payload;
     },
     fetchMonthlyCategoryExpenditureAggregateSuccessful(
       state,
       action: PayloadAction<MonthlyCategoryExpAggregate[]>,
     ) {
-      state.data = action.payload;
+      state.categoryExpAggregates = action.payload;
     },
   },
 });
