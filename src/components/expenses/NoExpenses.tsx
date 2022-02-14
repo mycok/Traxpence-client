@@ -63,7 +63,7 @@ function NoExpenses({ didPerformSearch }: NoExpensesProps) {
                   component="span"
                 >
                   {' '}
-                  Click to go back to the expense list
+                  Click here to go back to the expense list
                 </Typography>
               </Link>
             </>

@@ -18,47 +18,37 @@ export type ExpensePreview = {
   };
 };
 
-type CurrentMonthExpenditurePreviewState = {
-  isLoading: boolean;
-  serverError: string | undefined;
-  data: ExpensePreview;
+type CurrentMonthExpenditurePreviewResponse = {
+  success: boolean;
+  expensePreview: ExpensePreview;
 };
 
-type CurrentMonthExpenditurePreviewResponse = {
-  success: false;
-  expensePreview?: ExpensePreview;
-  message?: string;
+type CurrentMonthExpenditurePreviewState = {
+  isLoading: boolean; // Not very sure it's needed.
+  serverError: string | null;
+  expensePreview: ExpensePreview;
 };
 
 const initialCurrentMonthExpenditurePreviewState: CurrentMonthExpenditurePreviewState = {
   isLoading: false,
-  serverError: undefined,
-  data: {},
+  serverError: null,
+  expensePreview: {},
 };
 
 export function fetchCurrentMonthExpenditurePreview(): AppThunk {
   return async (dispatch) => {
-    let data: CurrentMonthExpenditurePreviewResponse;
-    try {
-      dispatch(setLoading(true));
-      data = await list('expenses/current');
-    } catch (error) {
-      dispatch(setLoading(false));
-      dispatch(setServerError(error.toString()));
+    dispatch(setLoading(true));
 
-      return;
-    }
-
-    dispatch(setLoading(false));
-    if (data.success) {
-      dispatch(
-        fetchCurrentMonthExpenditurePreviewSuccessful(data.expensePreview),
-      );
-    } else {
-      // in case of bad request errors
-      localStorage.removeItem('authData');
-      dispatch(setServerError(data.message));
-    }
+    await list('expenses/current')
+      .then((res: CurrentMonthExpenditurePreviewResponse) => {
+        dispatch(
+          fetchCurrentMonthExpenditurePreviewSuccessful(res.expensePreview),
+        );
+      })
+      .catch((err: any) => {
+        dispatch(setLoading(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -69,14 +59,14 @@ const currentMonthExpenditurePreviewSlice = createSlice({
     setLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
     },
-    setServerError(state, action: PayloadAction<string | undefined>) {
+    setServerError(state, action: PayloadAction<string | null>) {
       state.serverError = action.payload;
     },
     fetchCurrentMonthExpenditurePreviewSuccessful(
       state,
-      action: PayloadAction<any>,
+      action: PayloadAction<ExpensePreview>,
     ) {
-      state.data = action.payload;
+      state.expensePreview = action.payload;
     },
   },
 });
