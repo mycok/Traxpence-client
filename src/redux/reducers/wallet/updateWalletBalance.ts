@@ -3,18 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { update } from '../../../api';
 import { isAuthenticated } from '../../../api/auth';
 import { AppThunk } from '../../store';
-
-export type Wallet = {
-  _id: string;
-  type: string;
-  initialAmount: Number;
-  currentBalance: Number;
-  owner: {
-    _id: string;
-    username: string;
-    email: string;
-  };
-};
+import { Wallet, ServerErrResponse, WalletDataResponse } from './types';
 
 type WalletState = {
   isSaving: boolean;
@@ -26,10 +15,6 @@ type UpdateWalletData = {
     currentBalance: number
 };
 
-type WalletDataResponse = {
-    success: boolean
-} & Wallet
-
 const initialWalletState: WalletState = {
   isSaving: false,
   updatedWallet: null,
@@ -38,26 +23,23 @@ const initialWalletState: WalletState = {
 
 export function updateWallet(updateData: UpdateWalletData, cb: Function): AppThunk {
   return async (dispatch) => {
-    let data: any;
+    dispatch(setIsSaving(true));
 
-    try {
-      dispatch(setIsSaving(true));
-      data = await update<UpdateWalletData>('wallet', isAuthenticated().user._id, updateData);
-    } catch (error: any) {
-      dispatch(setIsSaving(false));
-      dispatch(setServerError(error.toString()));
+    await update<UpdateWalletData>('wallet', isAuthenticated().user._id, updateData)
+      .then((res: WalletDataResponse | ServerErrResponse) => {
+        dispatch(setIsSaving(false));
 
-      return;
-    }
-
-    dispatch(setIsSaving(false));
-
-    if (data?.success === false) {
-      dispatch(setServerError(data.message));
-    } else {
-      dispatch(updateWalletSuccessful(data as WalletDataResponse));
-      cb();
-    }
+        if ((res as ServerErrResponse).message) {
+          dispatch(setServerError((res as ServerErrResponse).message));
+        } else {
+          dispatch(updateWalletSuccessful(res as WalletDataResponse));
+          cb();
+        }
+      })
+      .catch((err: any) => {
+        dispatch(setIsSaving(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -73,7 +55,7 @@ const updateWalletSlice = createSlice({
     },
     updateWalletSuccessful(state, action: PayloadAction<WalletDataResponse>) {
       state.updateServerError = null;
-      state.updatedWallet = action.payload;
+      state.updatedWallet = action.payload.wallet;
     },
   },
 });
