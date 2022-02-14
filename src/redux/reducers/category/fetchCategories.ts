@@ -31,6 +31,7 @@ const initialCategoriesState: CategoriesState = {
 export function fetchCategories(): AppThunk {
   return async (dispatch) => {
     dispatch(setIsLoading(true));
+
     await Promise.all([list('categories'), list('categories/by/user')])
       .then((data: any) => {
         dispatch(setIsLoading(false));

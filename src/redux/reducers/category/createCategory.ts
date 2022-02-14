@@ -40,6 +40,7 @@ const initialCategoryState: CategoryState = {
 export function createCategory(categoryData: Category, cb: Function): AppThunk {
   return async (dispatch) => {
     dispatch(setIsSaving(true));
+
     await create<Category>('categories', categoryData)
       .then((resp: CategoryDataResponse) => {
         dispatch(setIsSaving(false));

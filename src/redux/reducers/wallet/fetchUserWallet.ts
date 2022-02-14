@@ -22,15 +22,13 @@ type WalletState = {
   serverError: string | null;
 };
 
-// type ServerErrResponse = {
-//     args: []
-//     failedOperation: string
-//     message: string
-//     status: number
-//     success: boolean
-// };
-
-type WalletDataResponse = Wallet
+type ServerErrResponse = {
+    args: any[]
+    failedOperation: string
+    message: string
+    status: number
+    success: boolean
+};
 
 const initialWalletState: WalletState = {
   isLoading: false,
@@ -40,25 +38,22 @@ const initialWalletState: WalletState = {
 
 export function fetchWallet(): AppThunk {
   return async (dispatch) => {
-    let data: any;
+    dispatch(setIsLoading(true));
 
-    try {
-      dispatch(setIsLoading(true));
-      data = await read('wallet', isAuthenticated().user._id);
-    } catch (error: any) {
-      dispatch(setIsLoading(false));
-      dispatch(setServerError(error.toString()));
+    await read('wallet', isAuthenticated().user._id)
+      .then((res: Wallet | ServerErrResponse) => {
+        dispatch(setIsLoading(false));
 
-      return;
-    }
-
-    dispatch(setIsLoading(false));
-
-    if (data?.success === false) {
-      dispatch(setServerError(data.message));
-    } else {
-      dispatch(fetchWalletSuccessful(data as WalletDataResponse));
-    }
+        if ((res as ServerErrResponse).message) {
+          dispatch(setServerError((res as ServerErrResponse).message));
+        } else {
+          dispatch(fetchWalletSuccessful(res as Wallet));
+        }
+      })
+      .catch((err: any) => {
+        dispatch(setIsLoading(false));
+        dispatch(setServerError(err.toString()));
+      });
   };
 }
 
@@ -72,7 +67,7 @@ const fetchWalletSlice = createSlice({
     setServerError(state, action: PayloadAction<string>) {
       state.serverError = action.payload;
     },
-    fetchWalletSuccessful(state, action: PayloadAction<WalletDataResponse>) {
+    fetchWalletSuccessful(state, action: PayloadAction<Wallet>) {
       state.serverError = null;
       state.wallet = action.payload;
     },
