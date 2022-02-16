@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => createStyles({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 300,
+    minWidth: 300,
     paddingLeft: 10,
     paddingRight: 10,
     marginTop: theme.spacing(1),
@@ -76,7 +76,8 @@ function Wallet() {
   const [open, setOpen] = useState(false);
   const [newWalletBalance, setWalletBalance] = useState(0);
   const { serverError, wallet } = useSelector((state: RootState) => state.userWallet);
-  const { isExpenseSuccessfullyCreated } = useSelector((state: RootState) => state.createExpense);
+  const { didFinishCreatingExpense } = useSelector((state: RootState) => state.createExpense);
+  const { didFinishEditingExpense } = useSelector((state: RootState) => state.editExpense);
   const show = Boolean(anchorEl);
   // TODO: pick updateServerErr field and pass it to the NewWalletBalanceDialog text-field.
   const {
@@ -86,7 +87,7 @@ function Wallet() {
 
   useEffect(() => {
     dispatch(fetchWallet());
-  }, [dispatch, updatedWallet, isExpenseSuccessfullyCreated]);
+  }, [dispatch, updatedWallet, didFinishCreatingExpense, didFinishEditingExpense]);
 
   function handleOpen() {
     setOpen(true);
