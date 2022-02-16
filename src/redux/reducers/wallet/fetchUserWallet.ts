@@ -26,6 +26,7 @@ export function fetchWallet(): AppThunk {
         dispatch(setIsLoading(false));
 
         if ((res as ServerErrResponse).message) {
+          localStorage.removeItem('authData');
           dispatch(setServerError((res as ServerErrResponse).message));
         } else {
           dispatch(fetchWalletSuccessful(res as WalletDataResponse));

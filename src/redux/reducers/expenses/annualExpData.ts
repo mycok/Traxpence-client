@@ -17,7 +17,7 @@ type AnnualExpenseDataResponse = {
 type AnnualExpenseDataState = {
   isLoading: boolean,
   serverError: string | null,
-  annualExpData: {x: number, y: number}[],
+  annualExpData: {m: string, x: number, y: number}[],
 };
 
 const initialAnnualExpenseDataState: AnnualExpenseDataState = {
@@ -26,7 +26,12 @@ const initialAnnualExpenseDataState: AnnualExpenseDataState = {
   annualExpData: [],
 };
 
-export function fetchAnnualExpenseData(year: any): AppThunk {
+const months = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+];
+
+export function fetchAnnualExpenseData(year: number): AppThunk {
   return async (dispatch) => {
     dispatch(setLoading(true));
 
@@ -55,7 +60,9 @@ const annualExpenseDataSlice = createSlice({
       state.serverError = action.payload;
     },
     fetchAnnualExpenseDataSuccessful(state, action: PayloadAction<AnnualExpenseData[]>) {
+      // TODO: Fix the month name to month number mapping for accurate chart data.
       const modifiedData = [...action.payload].map((obj: AnnualExpenseData) => ({
+        m: months[obj.x - 1],
         x: obj.x,
         y: obj.y,
       }));

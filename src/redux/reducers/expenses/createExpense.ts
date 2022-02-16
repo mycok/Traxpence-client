@@ -10,7 +10,7 @@ type OnchangePayloadType = {
 }
 
 type NewExpenseState = {
-    isExpenseSuccessfullyCreated: boolean,
+    didFinishCreatingExpense: boolean,
     isSaving: boolean,
     serverError: string | null,
 } & IExpense
@@ -24,7 +24,7 @@ export const initialCreateExpenseState: NewExpenseState = {
   },
   notes: '',
   incurredOn: Date.now(),
-  isExpenseSuccessfullyCreated: false,
+  didFinishCreatingExpense: false,
   isSaving: false,
   serverError: null,
 };
@@ -70,7 +70,7 @@ const createExpenseSlice = createSlice({
       state.serverError = action.payload;
     },
     createExpenseSuccessful(state, action: PayloadAction<boolean>) {
-      state.isExpenseSuccessfullyCreated = action.payload;
+      state.didFinishCreatingExpense = action.payload;
     },
     reset(state, action: PayloadAction<NewExpenseState>) {
       return action.payload;
