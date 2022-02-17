@@ -2,7 +2,10 @@ import React from 'react';
 
 import { Grid } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import AnnualTotalExpByMonth from './BarGraph';
+import BarGraph from './BarGraph';
+import PieGraph from './PieGraph';
+import ScatterPlotGraph from './ScatterPlot';
+import RadialBarGraph from './RadialBarChart';
 
 const useStyles = makeStyles(() => createStyles({
   container: {
@@ -16,13 +19,13 @@ const useStyles = makeStyles(() => createStyles({
   gridContainer: {
     display: 'flex',
     width: '100%',
-    height: '50%',
+    // height: '50%',
     // border: '2px solid green',
   },
   item: {
     width: '100%',
     height: '100%',
-    border: '2px solid pink',
+    // border: '2px solid pink',
   },
 }));
 
@@ -30,21 +33,21 @@ function Charts() {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.container}>
+    <Grid container spacing={0} className={classes.container}>
       <Grid item container xs={12} className={classes.gridContainer}>
         <Grid item xs={6} className={classes.item}>
-          <AnnualTotalExpByMonth />
+          <BarGraph />
         </Grid>
         <Grid item xs={6} className={classes.item}>
-          <AnnualTotalExpByMonth />
+          <PieGraph />
         </Grid>
       </Grid>
       <Grid item container xs={12} className={classes.gridContainer}>
         <Grid item xs={6} className={classes.item}>
-          <AnnualTotalExpByMonth />
+          <ScatterPlotGraph />
         </Grid>
         <Grid item xs={6} className={classes.item}>
-          <AnnualTotalExpByMonth />
+          <RadialBarGraph />
         </Grid>
       </Grid>
     </Grid>

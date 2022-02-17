@@ -49,3 +49,13 @@ theme = createTheme(theme, {
 });
 
 export const CustomTheme = theme;
+
+// export const colors = [
+//   theme.palette.success.light,
+//   theme.palette.error.light,
+//   theme.palette.primary.light,
+//   theme.palette.secondary.light,
+//   theme.palette.action.focus,
+// ];
+
+export const colors = ['#FFBB28', '#FF8042', '#0088FE', '#00C49F'];

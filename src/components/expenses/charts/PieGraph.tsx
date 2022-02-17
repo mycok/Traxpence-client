@@ -1,9 +1,11 @@
-import React from 'react';
-import { VictoryPie, VictoryTheme, VictoryLabel } from 'victory';
+import React, { useState } from 'react';
+import {
+  PieChart, Pie, ResponsiveContainer,
+  Sector, Cell,
+} from 'recharts';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
-
-import DateRangeSearch from '../shared/DateRangeSearch';
+import { Paper, Box } from '@material-ui/core';
+import { colors } from '../../../theme';
 
 const pieData = [
   {
@@ -28,65 +30,98 @@ const useStyles = makeStyles(() => createStyles({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    width: 650,
+    width: '630px',
+    height: '360px',
+  },
+  paper: {
+    width: '100%',
+    height: '100%',
   },
 }));
 
-function AvgExpByCategory() {
+function PieGraph() {
   const classes = useStyles();
-  const [data] = React.useState(pieData);
-  const [fromDate, selectFromDate] = React.useState(new Date());
-  const [toDate, selectToDate] = React.useState(new Date());
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  function handleDateRangeSearch() {
-    console.log('date-range-search', fromDate, toDate);
+  function onPieEnter(_, index: number) {
+    setActiveIndex(index);
   }
 
   return (
-    <div className={classes.root}>
-      <DateRangeSearch
-        isBackButtonShown={false}
-        isLoading={false}
-        fromDate={fromDate}
-        toDate={toDate}
-        selectFromDate={selectFromDate}
-        selectToDate={selectToDate}
-        dateRangeSearchHandler={handleDateRangeSearch}
-      />
-      <Paper elevation={0}>
-        <svg viewBox="0 0 400 400">
-          <VictoryPie
-            standalone={false}
-            innerRadius={50}
-            data={data}
-            width={400}
-            height={400}
-            theme={VictoryTheme.material}
-            padAngle={5}
-            labelPosition="centroid"
-            labelPlacement="perpendicular"
-            labelComponent={(
-              <VictoryLabel
-                style={[
-                  { fontSize: 10, fill: '#ffffff' },
-                  { fontSize: 10, fill: '#ffa500' },
-                ]}
-                text={({ datum }) => `${datum.x}\n $ ${datum.y}`}
-              />
-              )}
-          />
-          <VictoryLabel
-            textAnchor="middle"
-            style={{ fontSize: 12, fill: '#8b8b8b' }}
-            x={200}
-            y={198}
-            text={'Spent \nper category'}
-          />
-        </svg>
+    <Box className={classes.root}>
+      <Paper elevation={0} className={classes.paper}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart width={630} height={360}>
+            <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              data={pieData}
+              cx="50%"
+              cy="50%"
+              innerRadius={100}
+              outerRadius={120}
+              fill="#0da86c"
+              dataKey="y"
+              onMouseEnter={onPieEnter}
+            >
+              {pieData.map((entry, index) => (
+                <Cell key={`cell-${entry.x}`} fill={colors[index % colors.length]} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
       </Paper>
-    </div>
+    </Box>
   );
 }
 
-export default AvgExpByCategory;
+export default PieGraph;
+
+const renderActiveShape = (props: any) => {
+  const currency = localStorage.getItem('currency') ?? '$';
+  const RADIAN = Math.PI / 180;
+  const {
+    cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, y,
+  } = props;
+  const sin = Math.sin(-RADIAN * midAngle);
+  const cos = Math.cos(-RADIAN * midAngle);
+  const sx = cx + (outerRadius + 10) * cos;
+  const sy = cy + (outerRadius + 10) * sin;
+  const mx = cx + (outerRadius + 30) * cos;
+  const my = cy + (outerRadius + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  const textAnchor = cos >= 0 ? 'start' : 'end';
+
+  return (
+    <g>
+      <text x={cx} y={cy} dy={8} textAnchor="middle" fill="#fff">
+        {payload.x}
+      </text>
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={outerRadius + 6}
+        outerRadius={outerRadius + 10}
+        fill={fill}
+      />
+      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
+      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#fff">{`${currency} ${y}`}</text>
+      <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="#33859e">
+        {`(${(percent * 100).toFixed(2)}%)`}
+      </text>
+    </g>
+  );
+};
