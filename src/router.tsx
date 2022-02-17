@@ -9,9 +9,6 @@ import Expenses from './components/expenses';
 import Profile from './components/profile/Profile';
 import EditExpense from './components/expenses/EditExpense';
 import MonthlyExpAvgByCategory from './components/expenses/summaries/ExpAvgByCategory';
-import MonthlyExpScatterPlot from './components/expenses/charts/ScatterPlot';
-import AnnualTotalExpByMonth from './components/expenses/charts/BarGraph';
-import AvgExpByCategory from './components/expenses/charts/PieGraph';
 import Charts from './components/expenses/charts';
 import ProtectedRoute from './shared/ProtectedRoute';
 import { isAuthenticated } from './api/auth';
@@ -47,9 +44,6 @@ function AppRouter({ selectionHandler }: AppRouterProps) {
         <ProtectedRoute exact path="/edit-expense" component={EditExpense} />
         <ProtectedRoute exact path="/exps-avg-by-category" component={MonthlyExpAvgByCategory} />
         <ProtectedRoute exact path="/charts" component={Charts} />
-        <ProtectedRoute exact path="/scatter-graph-chart" component={MonthlyExpScatterPlot} />
-        <ProtectedRoute exact path="/bar-graph-chart" component={AnnualTotalExpByMonth} />
-        <ProtectedRoute exact path="/pie-graph-chart" component={AvgExpByCategory} />
       </Switch>
     </>
   );

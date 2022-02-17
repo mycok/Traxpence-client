@@ -1,101 +1,96 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import {
-  VictoryChart, VictoryScatter, VictoryTheme, VictoryLabel, VictoryTooltip,
-} from 'victory';
+import React, { useState } from 'react';
+// import { useSelector } from 'react-redux';
 
+import {
+  ScatterChart, Scatter, XAxis, YAxis,
+  Tooltip, Cell, ResponsiveContainer,
+} from 'recharts';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { Paper } from '@material-ui/core';
+import { Paper, Box } from '@material-ui/core';
 
 import SingleDateRange from '../../../shared/dates/SingleDateRange';
-import { RootState, useAppDispatch } from '../../../redux/store';
-import { fetchScatterPlotExpenseData } from '../../../redux/reducers/expenses/scatterplot';
+// import { RootState, useAppDispatch } from '../../../redux/store';
+// import { fetchScatterPlotExpenseData } from '../../../redux/reducers/expenses/scatterplot';
+import { colors } from '../../../theme';
 
-// const data = [
-//   {
-//     x: 10,
-//     y: 34,
-//   },
-//   {
-//     x: 11,
-//     y: 25,
-//   },
-//   {
-//     x: 12,
-//     y: 0,
-//   },
-//   {
-//     x: 20,
-//     y: 1000,
-//   },
-// ];
+const data = [
+  {
+    x: 7,
+    y: 34,
+  },
+  {
+    x: 11,
+    y: 25,
+  },
+  {
+    x: 1,
+    y: 0,
+  },
+  {
+    x: 3,
+    y: 1000,
+  },
+];
 
 const useStyles = makeStyles(() => createStyles({
   root: {
     display: 'flex',
+    width: '630px',
+    height: '360px',
+  },
+  paper: {
+    display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
   },
 }));
 
-function MonthlyExpScatterPlot() {
+function ScatterPlotGraph() {
   const classes = useStyles();
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   const [selectedDate, selectDate] = useState(new Date());
 
-  const { plotData } = useSelector((state: RootState) => state.expensePlotData);
+  // const { plotData } = useSelector((state: RootState) => state.expensePlotData);
 
-  useEffect(() => {
-    dispatch(fetchScatterPlotExpenseData(selectedDate));
-  }, [dispatch, selectedDate]);
+  // useEffect(() => {
+  //   dispatch(fetchScatterPlotExpenseData(selectedDate));
+  // }, [dispatch, selectedDate]);
 
   return (
-    <div className={classes.root}>
-      <SingleDateRange
-        views={['month', 'year']}
-        selectedDate={selectedDate}
-        selectDate={selectDate}
-      />
-      <Paper elevation={0}>
-        <VictoryChart
-          theme={VictoryTheme.grayscale}
-          height={300}
-          width={350}
-          domainPadding={30}
-          style={{ parent: { width: 850 } }}
-        >
-          <VictoryScatter
-            style={{
-              data: { fill: '#ffa500', stroke: '#c43a31', strokeWidth: 1 },
-              labels: { fill: '#66bb6a', fontSize: 10, padding: 2 },
+    <Box className={classes.root}>
+      <Paper elevation={0} className={classes.paper}>
+        <SingleDateRange
+          views={['month', 'year']}
+          selectedDate={selectedDate}
+          selectDate={selectDate}
+        />
+        <ResponsiveContainer width="100%" height="100%">
+          <ScatterChart
+            width={630}
+            height={360}
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20,
             }}
-            bubbleProperty="y"
-            maxBubbleSize={15}
-            minBubbleSize={3}
-            labels={({ datum }) => `$ ${datum.y} on ${datum.x}th`}
-            labelComponent={<VictoryTooltip />}
-            data={plotData}
-            domain={{ x: [0, 31] }}
-          />
-          <VictoryLabel
-            textAnchor="middle"
-            style={{ fontSize: 10, fill: '#8b8b8b' }}
-            x={310}
-            y={290}
-            text="Day of month"
-          />
-          <VictoryLabel
-            textAnchor="middle"
-            style={{ fontSize: 0, fill: '#8b8b8b' }}
-            x={28}
-            y={40}
-            text="Amount $"
-          />
-        </VictoryChart>
+          >
+            <XAxis type="number" dataKey="x" name="Months" />
+            <YAxis type="number" dataKey="y" name="Expenditure" unit="$" />
+            <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+            <Scatter name="A school" data={data} fill="#8884d8">
+              {data.map((entry, index) => (
+                <Cell key={`cell-${entry.y}`} fill={colors[index % colors.length]} />
+              ))}
+            </Scatter>
+          </ScatterChart>
+        </ResponsiveContainer>
       </Paper>
-    </div>
+    </Box>
   );
 }
 
-export default MonthlyExpScatterPlot;
+export default ScatterPlotGraph;
