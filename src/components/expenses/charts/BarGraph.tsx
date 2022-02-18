@@ -12,6 +12,7 @@ import { Paper, Box } from '@material-ui/core';
 
 import SingleDateRange from '../../../shared/dates/SingleDateRange';
 import { ExpensesLoader } from '../../../shared/ContentLoader';
+import NoGraphData from './NoGraphData';
 
 import { useAppDispatch, RootState } from '../../../redux/store';
 import { fetchAnnualExpenseData } from '../../../redux/reducers/expenses/annualExpData';
@@ -49,6 +50,12 @@ function BarGraph() {
     );
   }
 
+  if (annualExpData.length === 0) {
+    return (
+      <NoGraphData />
+    );
+  }
+
   return (
     <Box className={classes.root}>
       <Paper elevation={0} className={classes.paper}>
@@ -69,7 +76,7 @@ function BarGraph() {
               bottom: 5,
             }}
           >
-            <XAxis dataKey="m" />
+            <XAxis dataKey="x" />
             <YAxis dataKey="y" />
             <Bar
               dataKey="y"

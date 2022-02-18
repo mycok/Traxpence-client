@@ -4,9 +4,9 @@ import { list } from '../../../api';
 import { AppThunk } from '../../store';
 
 export type AnnualExpenseData = {
-    _id: number,
     x: number,
     y: number,
+    count: number,
 };
 
 type AnnualExpenseDataResponse = {
@@ -17,7 +17,7 @@ type AnnualExpenseDataResponse = {
 type AnnualExpenseDataState = {
   isLoading: boolean,
   serverError: string | null,
-  annualExpData: {m: string, x: number, y: number}[],
+  annualExpData: { x: string, y: number, count: number }[],
 };
 
 const initialAnnualExpenseDataState: AnnualExpenseDataState = {
@@ -61,11 +61,13 @@ const annualExpenseDataSlice = createSlice({
     },
     fetchAnnualExpenseDataSuccessful(state, action: PayloadAction<AnnualExpenseData[]>) {
       // TODO: Fix the month name to month number mapping for accurate chart data.
-      const modifiedData = [...action.payload].map((obj: AnnualExpenseData) => ({
-        m: months[obj.x - 1],
-        x: obj.x,
-        y: obj.y,
-      }));
+      const modifiedData = [...action.payload]
+        .sort((a, b) => a.x - b.x)
+        .map((obj: AnnualExpenseData) => ({
+          x: months[(obj.x) - 1],
+          y: obj.y,
+          count: obj.count,
+        }));
       state.annualExpData = modifiedData;
     },
   },

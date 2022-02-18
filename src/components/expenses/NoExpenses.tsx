@@ -81,7 +81,7 @@ function NoExpenses({ didPerformSearch }: NoExpensesProps) {
                   {' '}
                   {' '}
                 </Typography>
-                button to record an expense
+                button to add expenses
               </Typography>
             </>
           )
