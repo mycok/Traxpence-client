@@ -131,7 +131,7 @@ const iconList: IconListProps[] = [
   },
   {
     name: 'Categories',
-    to: '/exps-avg-by-category',
+    to: '/current-month-avg-and-total-exp-by-category',
     icon: (selected: string) => (
       <Categories
         fontSize="large"

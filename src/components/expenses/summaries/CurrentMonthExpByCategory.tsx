@@ -10,9 +10,9 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 
 import {
-  fetchMonthlyCategoryExpenditureAggregate,
-  MonthlyCategoryExpAggregate,
-} from '../../../redux/reducers/expenses/monthlyCategoryExpAgg';
+  fetchCurrentMonthAvgTotalExpenditureByCategory,
+  CurrentMonthAvgTotalExpByCategory,
+} from '../../../redux/reducers/expenses/currentMonthExpByCategory';
 import { useAppDispatch, RootState } from '../../../redux/store';
 import {
   fetchCategories,
@@ -67,52 +67,52 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-type ExpSummByCategoryProps = {
+type CategoryAvgAndTotalExpenditureProps = {
   classes: any;
   currency: string | null;
   category: {
     _id: string;
     title: string;
   };
-  expenditureAggData: MonthlyCategoryExpAggregate;
+  currentMonthAvgAndTotalExpByCategory: CurrentMonthAvgTotalExpByCategory;
 };
 
-function MonthlyExpAvgByCategory() {
+function CurrentMonthAvgAndTotalExpByCategory() {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const currency = localStorage.getItem('currency');
 
   const { categories } = useSelector((state: RootState) => state.categories);
-  const { isLoading, categoryExpAggregates } = useSelector(
-    (state: RootState) => state.expenditureAvgByCategory,
+  const { isLoading, currentMonthAvgTotalExpByCategory } = useSelector(
+    (state: RootState) => state.currentMonthAvgTotalExpByCategory,
   );
 
   useEffect(() => {
     if (categories.length === 0) dispatch(fetchCategories());
-    dispatch(fetchMonthlyCategoryExpenditureAggregate());
+    dispatch(fetchCurrentMonthAvgTotalExpenditureByCategory());
   }, [categories, dispatch]);
 
   if (isLoading) {
     return <ExpensesLoader />;
   }
 
-  if (categoryExpAggregates.length === 0) {
+  if (currentMonthAvgTotalExpByCategory.length === 0) {
     return <NoExpenses />;
   }
 
   return (
     <Box className={classes.root}>
-      {categoryExpAggregates.map((expenditureAgg) => {
+      {currentMonthAvgTotalExpByCategory.map((expenditureAgg) => {
         const matchedCategory = categories.find(
           (cat: Category) => cat._id === expenditureAgg._id,
         );
         return (
-          <CategoryAvgExpenditure
+          <CategoryTotalAndAvgExpenditure
             key={expenditureAgg._id}
             classes={classes}
             currency={currency}
             category={matchedCategory as Category}
-            expenditureAggData={expenditureAgg}
+            currentMonthAvgAndTotalExpByCategory={expenditureAgg}
           />
         );
       })}
@@ -120,12 +120,12 @@ function MonthlyExpAvgByCategory() {
   );
 }
 
-function CategoryAvgExpenditure({
+function CategoryTotalAndAvgExpenditure({
   classes,
   category,
   currency,
-  expenditureAggData,
-}: ExpSummByCategoryProps) {
+  currentMonthAvgAndTotalExpByCategory,
+}: CategoryAvgAndTotalExpenditureProps) {
   return (
     <Paper elevation={4} className={classes.paper}>
       <Box className={classes.categoryHeaderContainer}>
@@ -147,9 +147,9 @@ function CategoryAvgExpenditure({
         </Box>
         <Box className={classes.aggHeaders}>
           <Typography className={classes.headerText}>
-            {expenditureAggData.mergedValues.total
-            && expenditureAggData.mergedValues.total
-              - expenditureAggData.mergedValues.average
+            {currentMonthAvgAndTotalExpByCategory.mergedValues.total
+            && currentMonthAvgAndTotalExpByCategory.mergedValues.total
+              - currentMonthAvgAndTotalExpByCategory.mergedValues.average
               > 0
               ? 'Spent Extra'
               : 'Saved'}
@@ -161,7 +161,7 @@ function CategoryAvgExpenditure({
         <Box className={classes.aggHeaders}>
           <Typography align="center" className={classes.text}>
             <NumberFormat
-              value={Math.round(expenditureAggData.mergedValues.average)}
+              value={Math.round(currentMonthAvgAndTotalExpByCategory.mergedValues.average)}
               displayType="text"
               thousandSeparator
               prefix={`${currency} ` ?? '$ '}
@@ -172,7 +172,7 @@ function CategoryAvgExpenditure({
           <Typography align="center" className={classes.text}>
             <NumberFormat
               value={Math.round(
-                (expenditureAggData.mergedValues.total as number) ?? 0.0,
+                (currentMonthAvgAndTotalExpByCategory.mergedValues.total as number) ?? 0.0,
               )}
               displayType="text"
               thousandSeparator
@@ -184,14 +184,14 @@ function CategoryAvgExpenditure({
           <Typography align="center" className={classes.text}>
             <NumberFormat
               value={
-                expenditureAggData.mergedValues?.total
+                currentMonthAvgAndTotalExpByCategory.mergedValues?.total
                   ? Math.round(
                     Math.abs(
-                      expenditureAggData.mergedValues.total
-                          - expenditureAggData.mergedValues.average,
+                      currentMonthAvgAndTotalExpByCategory.mergedValues.total
+                          - currentMonthAvgAndTotalExpByCategory.mergedValues.average,
                     ),
                   )
-                  : Math.round(expenditureAggData.mergedValues.average)
+                  : Math.round(currentMonthAvgAndTotalExpByCategory.mergedValues.average)
               }
               displayType="text"
               thousandSeparator
@@ -204,4 +204,4 @@ function CategoryAvgExpenditure({
   );
 }
 
-export default MonthlyExpAvgByCategory;
+export default CurrentMonthAvgAndTotalExpByCategory;
