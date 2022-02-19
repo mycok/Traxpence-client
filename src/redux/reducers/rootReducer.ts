@@ -5,7 +5,7 @@ import {
   createExpenseReducer,
   editExpenseReducer,
   currentMonthExpenditurePreviewReducer,
-  monthlyCategoryExpAggregateReducer,
+  currentMonthAvgTotalExpByCategoryReducer,
   scatterPlotExpenseDataReducer,
   annualExpenseDataReducer,
 } from './expenses';
@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
   categories: fetchCategoriesReducer,
   createCategory: createCategoryReducer,
   currentMonthExpPreview: currentMonthExpenditurePreviewReducer,
-  expenditureAvgByCategory: monthlyCategoryExpAggregateReducer,
+  currentMonthAvgTotalExpByCategory: currentMonthAvgTotalExpByCategoryReducer,
   expensePlotData: scatterPlotExpenseDataReducer,
   annualExpenseData: annualExpenseDataReducer,
   userWallet: fetchWalletReducer,
