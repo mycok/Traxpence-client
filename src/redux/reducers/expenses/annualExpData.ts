@@ -17,7 +17,7 @@ type AnnualExpenseDataResponse = {
 type AnnualExpenseDataState = {
   isLoading: boolean,
   serverError: string | null,
-  annualExpData: { x: string, y: number, count: number }[],
+  annualExpData: { month: string, amount: number, numOfExpenses: number }[],
 };
 
 const initialAnnualExpenseDataState: AnnualExpenseDataState = {
@@ -64,9 +64,9 @@ const annualExpenseDataSlice = createSlice({
       const modifiedData = [...action.payload]
         .sort((a, b) => a.x - b.x)
         .map((obj: AnnualExpenseData) => ({
-          x: months[(obj.x) - 1],
-          y: obj.y,
-          count: obj.count,
+          month: months[(obj.x) - 1],
+          amount: obj.y,
+          numOfExpenses: obj.count,
         }));
       state.annualExpData = modifiedData;
     },
