@@ -20,19 +20,19 @@ export type ExpensePreview = {
 
 type CurrentMonthExpenditurePreviewResponse = {
   success: boolean;
-  expensePreview: ExpensePreview;
+  currentMonthExpenditurePreview: ExpensePreview;
 };
 
 type CurrentMonthExpenditurePreviewState = {
   isLoading: boolean; // Not very sure it's needed.
   serverError: string | null;
-  expensePreview: ExpensePreview;
+  currentMonthExpenditurePreview: ExpensePreview;
 };
 
 const initialCurrentMonthExpenditurePreviewState: CurrentMonthExpenditurePreviewState = {
   isLoading: false,
   serverError: null,
-  expensePreview: {},
+  currentMonthExpenditurePreview: {},
 };
 
 export function fetchCurrentMonthExpenditurePreview(): AppThunk {
@@ -43,7 +43,7 @@ export function fetchCurrentMonthExpenditurePreview(): AppThunk {
       .then((res: CurrentMonthExpenditurePreviewResponse) => {
         dispatch(setLoading(false));
         dispatch(
-          fetchCurrentMonthExpenditurePreviewSuccessful(res.expensePreview),
+          fetchCurrentMonthExpenditurePreviewSuccessful(res.currentMonthExpenditurePreview),
         );
       })
       .catch((err: any) => {
@@ -67,7 +67,7 @@ const currentMonthExpenditurePreviewSlice = createSlice({
       state,
       action: PayloadAction<ExpensePreview>,
     ) {
-      state.expensePreview = action.payload;
+      state.currentMonthExpenditurePreview = action.payload;
     },
   },
 });

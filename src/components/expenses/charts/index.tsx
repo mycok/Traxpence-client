@@ -36,10 +36,10 @@ function Charts() {
     <Grid container spacing={0} className={classes.container}>
       <Grid item container xs={12} className={classes.gridContainer}>
         <Grid item xs={6} className={classes.item}>
-          <BarGraph />
+          <PieGraph />
         </Grid>
         <Grid item xs={6} className={classes.item}>
-          <PieGraph />
+          <RadialBarGraph />
         </Grid>
       </Grid>
       <Grid item container xs={12} className={classes.gridContainer}>
@@ -47,7 +47,7 @@ function Charts() {
           <ScatterPlotGraph />
         </Grid>
         <Grid item xs={6} className={classes.item}>
-          <RadialBarGraph />
+          <BarGraph />
         </Grid>
       </Grid>
     </Grid>

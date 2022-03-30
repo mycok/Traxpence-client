@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import {
   BarChart, Bar, XAxis, YAxis, Cell,
-  ResponsiveContainer, LabelProps,
+  ResponsiveContainer, LabelProps, Tooltip,
 } from 'recharts';
 
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -76,14 +76,15 @@ function BarGraph() {
               bottom: 5,
             }}
           >
-            <XAxis dataKey="x" />
-            <YAxis dataKey="y" />
+            <XAxis dataKey="month" name="month" />
+            <YAxis dataKey="amount" name="amount" />
+            <Tooltip />
             <Bar
-              dataKey="y"
+              dataKey="amount"
               fill="#0da86c"
               barSize={40}
               shape={<TriangleBar />}
-              label={{ position: 'top', fill: '#fff' }}
+              // label={{ position: 'top', fill: '#fff' }}
             >
               {annualExpData.map((exp, index) => (
                 <Cell key={`cell-${index}`} fill={colors[index % 20]} />

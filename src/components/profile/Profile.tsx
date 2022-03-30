@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => createStyles({
   },
 }));
 
-interface ProfileCardProps {
+type ProfileCardProps = {
   user: Partial<IUser>
   classes: any
   currency: string | null
@@ -133,7 +133,9 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
     JSON.parse(localStorage.getItem('authData') as string),
   );
 
-  const { expensePreview } = useSelector((state: RootState) => state.currentMonthExpPreview);
+  const {
+    currentMonthExpenditurePreview,
+  } = useSelector((state: RootState) => state.currentMonthExpPreview);
 
   useEffect(() => {
     selectionHandler('Profile');
@@ -166,7 +168,7 @@ function Profile({ selectionHandler }: Pick<ProfileCardProps, 'selectionHandler'
           classes={classes}
           user={userData.user}
           currency={currency}
-          expensePreview={expensePreview}
+          expensePreview={currentMonthExpenditurePreview}
           handleCurrencyChange={handleCurrencyChange}
           handleSignout={handleSignout}
         />

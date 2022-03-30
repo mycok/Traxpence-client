@@ -18,8 +18,9 @@ import CustomTooltip from '../../shared/CustomTooltip';
 
 const useStyles = makeStyles((theme) => createStyles({
   root: {
-    width: 650,
-    margin: 5,
+    width: 670,
+    marginBottom: 5,
+    paddingBottom: 2,
   },
   editButton: {
     marginLeft: 10,
@@ -29,8 +30,10 @@ const useStyles = makeStyles((theme) => createStyles({
     color: theme.palette.error.main,
   },
   cardContent: {
-    marginLeft: 50,
+    marginLeft: 62,
     marginRight: 50,
+    padding: 0,
+    minHeight: 5,
     color: theme.palette.grey[400],
   },
   categoryLabel: {
@@ -170,7 +173,7 @@ function SingleExpense({ expense, handleOpen }: ExpenseComponentProps) {
         {
           expense?.notes && (
             <CardContent className={classes.cardContent}>
-              <Typography>{capitalizeString(expense?.notes)}</Typography>
+              <Typography component="div">{capitalizeString(expense?.notes)}</Typography>
             </CardContent>
           )
         }

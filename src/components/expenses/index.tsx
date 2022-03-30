@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
@@ -37,14 +37,13 @@ const useStyles = makeStyles((theme) => createStyles({
   container: {
     display: 'flex',
     flexDirection: 'column',
-    marginTop: '10px',
+    marginTop: 2,
   },
   dateContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-around',
-    width: '700px',
-    marginBottom: '8px',
+    marginBottom: 2,
   },
   backButton: {
     color: theme.palette.common.white,
@@ -63,6 +62,8 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
   const classes = useStyles();
   const dispatch = useAppDispatch();
 
+  const expenseListRef = useRef<HTMLDivElement | null>(null);
+  const [yScrollPos, setYScrollPos] = useState(sessionStorage.getItem('yScrollPos') ?? 0);
   const [open, setOpen] = useState(false);
   const [isBackButtonShown, setShowBackButton] = useState(false);
   const [fromDate, selectFromDate] = useState(new Date());
@@ -126,6 +127,20 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
     editedExpense,
     categories,
   ]);
+
+  // Handle functionality to remember expenseList scroll position.
+  useEffect(() => {
+    let ref: any;
+    if (expenseListRef.current) {
+      ref = expenseListRef.current;
+      setYScrollPos(expenseListRef.current.scrollTop);
+      expenseListRef.current.scrollBy({ top: Number(yScrollPos), left: 0, behavior: 'smooth' });
+    }
+
+    return () => {
+      sessionStorage.setItem('yScrollPos', String(ref?.scrollTop));
+    };
+  }, [yScrollPos]);
 
   function handleOpen(expense: IExpense) {
     setExpenseToDelete(expense);
@@ -212,6 +227,7 @@ export default function ({ location, selectionHandler }: ExpenseProps) {
           handleDelete={handleDelete}
         />
         <ExpenseList
+          reference={expenseListRef}
           isLoading={isLoading}
           expenses={expenses}
           hasMore={hasNextPage}
