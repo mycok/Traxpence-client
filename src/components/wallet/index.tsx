@@ -13,7 +13,7 @@ import CustomTooltip from '../../shared/CustomTooltip';
 import { RootState, useAppDispatch } from '../../redux/store';
 import { fetchWallet } from '../../redux/reducers/wallet/fetchUserWallet';
 import { updateWallet } from '../../redux/reducers/wallet/updateWalletBalance';
-import NewWalletBalanceDialog from '../expenses/shared/AddDialog';
+import EditWalletBalanceDialog from '../expenses/shared/AddDialog';
 
 const useStyles = makeStyles((theme) => createStyles({
   container: {
@@ -75,6 +75,7 @@ function Wallet() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [open, setOpen] = useState(false);
   const [newWalletBalance, setWalletBalance] = useState(0);
+  const [checkd, setChecked] = useState(false);
   const { serverError, wallet } = useSelector((state: RootState) => state.userWallet);
   const { didFinishCreatingExpense } = useSelector((state: RootState) => state.createExpense);
   const { didFinishEditingExpense } = useSelector((state: RootState) => state.editExpense);
@@ -97,6 +98,7 @@ function Wallet() {
   function handleClose() {
     setOpen(false);
     setWalletBalance(0);
+    setChecked(false);
   }
 
   function toggleShow(e: React.MouseEvent<HTMLElement>) {
@@ -117,7 +119,14 @@ function Wallet() {
   }
 
   function handleSave() {
-    dispatch(updateWallet({ currentBalance: newWalletBalance }, handleClose));
+    dispatch(updateWallet(
+      { currentBalance: newWalletBalance, shouldDeductBalance: checkd },
+      handleClose,
+    ));
+  }
+
+  function handleCheckboxOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setChecked(event.target.checked);
   }
 
   if (serverError) return null;
@@ -199,16 +208,18 @@ function Wallet() {
           }
         </Box>
       </Box>
-      <NewWalletBalanceDialog
+      <EditWalletBalanceDialog
         open={open}
         label="Amount"
-        dialogTitle="Update Cash Balance"
+        dialogTitle="Edit Cash Balance"
         isSaving={isSaving}
         value={newWalletBalance}
+        checked={checkd}
         inputType="number"
         handleOnChange={handleOnChange}
         handleSave={handleSave}
         handleClose={handleClose}
+        handleCheckboxOnChange={handleCheckboxOnChange}
       />
     </>
   );

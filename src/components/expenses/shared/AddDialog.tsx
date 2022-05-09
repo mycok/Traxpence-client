@@ -11,6 +11,8 @@ import {
   InputAdornment,
   Typography,
   Box,
+  Checkbox,
+  FormControlLabel,
 } from '@material-ui/core';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
@@ -66,6 +68,23 @@ const useStyles = makeStyles((theme) => createStyles({
   inputAdornment: {
     color: theme.palette.common.white,
   },
+  checkboxContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'space-between',
+  },
+  formControl: {
+    borderRadius: theme.shape.borderRadius * 2,
+    marginLeft: 10,
+    marginRight: 10,
+    color: 'white',
+  },
+  checkbox: {
+    color: 'white',
+    '&.Mui-checked': {
+      color: theme.palette.secondary,
+    },
+  },
 }));
 
 type AddDialogProps = {
@@ -74,10 +93,12 @@ type AddDialogProps = {
   dialogTitle: string;
   isSaving: boolean;
   value: string | number;
+  checked?: boolean;
   inputType: string;
   handleClose(): void;
   handleSave(): void;
   handleOnChange(event: React.ChangeEvent<HTMLTextAreaElement>): void;
+  handleCheckboxOnChange?(event: React.ChangeEvent<HTMLInputElement>): void;
 };
 
 function AddDialog({
@@ -87,9 +108,11 @@ function AddDialog({
   isSaving,
   value,
   inputType,
+  checked,
   handleClose,
   handleSave,
   handleOnChange,
+  handleCheckboxOnChange,
 }: AddDialogProps) {
   const classes = useStyles();
   const addInputRef = useRef<HTMLInputElement | null>(null);
@@ -131,26 +154,39 @@ function AddDialog({
               onChange={handleOnChange}
             />
           ) : (
-            <TextField
-              id={label}
-              name={label}
-              inputRef={addInputRef}
-              variant="outlined"
-              className={classes.root}
-              label={label}
-              value={value}
-              required
-              InputProps={{
-                autoFocus: true,
-                inputComponent: NumberFormatterInput as any,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Typography className={classes.inputAdornment}>{prefCurrency ?? '$'}</Typography>
-                  </InputAdornment>
-                ),
-              }}
-              onChange={handleOnChange}
-            />
+            <Box className={classes.checkboxContainer}>
+              <TextField
+                id={label}
+                name={label}
+                inputRef={addInputRef}
+                variant="outlined"
+                className={classes.root}
+                label={label}
+                value={value}
+                required
+                InputProps={{
+                  autoFocus: true,
+                  inputComponent: NumberFormatterInput as any,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Typography className={classes.inputAdornment}>{prefCurrency ?? '$'}</Typography>
+                    </InputAdornment>
+                  ),
+                }}
+                onChange={handleOnChange}
+              />
+              <FormControlLabel
+                className={classes.formControl}
+                control={(
+                  <Checkbox
+                    className={classes.checkbox}
+                    checked={checked}
+                    onChange={handleCheckboxOnChange}
+                  />
+              )}
+                label="Deduct From Balance"
+              />
+            </Box>
           )
         }
       </DialogContent>

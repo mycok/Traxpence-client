@@ -220,10 +220,8 @@ function AddButton({ classes }: AddButtonProps) {
 function AppBar({ classes }: AppBarProps) {
   const location = useLocation();
 
-  return isAuthenticated() && (location.pathname !== '/profile') ? (
+  return isAuthenticated() && (location.pathname !== '/profile') && (
     <Box className={classes.appBar}><Wallet /></Box>
-  ) : (
-    <Box className={classes.appBar} />
   );
 }
 
@@ -270,11 +268,9 @@ function Layout() {
         <Grid item xs={isAuthenticated() ? 11 : 12}>
           <AppBar classes={classes} />
           <Box className={classes.mainContentContainer}>
-            <>
-              <AppRouter
-                selectionHandler={setSelected}
-              />
-            </>
+            <AppRouter
+              selectionHandler={setSelected}
+            />
           </Box>
         </Grid>
       </Grid>

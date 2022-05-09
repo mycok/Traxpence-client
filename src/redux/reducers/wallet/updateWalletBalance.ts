@@ -13,6 +13,7 @@ type WalletState = {
 
 type UpdateWalletData = {
     currentBalance: number
+    shouldDeductBalance: boolean
 };
 
 const initialWalletState: WalletState = {
